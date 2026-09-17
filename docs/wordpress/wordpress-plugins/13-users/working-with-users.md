@@ -2,41 +2,113 @@
 
 Reference: <https://developer.wordpress.org/plugins/users/working-with-users/>
 
-## Overview
-
-This guide covers three primary operations for managing WordPress users:
-
-- Adding Users
-- Updating Users
-- Deleting Users
-
 ## Adding Users
 
-Two functions enable user creation:
+To add a user you can use `wp_create_user()` or `wp_insert_user()`.
 
-**wp_create_user()** — A simplified approach accepting only username, password, and email parameters. It uses `wp_slash()` to escape the values and leverages the `compact()` function internally.
+`wp_create_user()` creates a user using only the username, password and email parameters while `wp_insert_user()` accepts an array or object describing the user and its properties.
 
-**wp_insert_user()** — A more flexible method accepting an array or object with comprehensive user properties.
+### Create User
 
-### Creating Users
+`wp_create_user()` allows you to create a new WordPress user.
 
-The `wp_create_user()` function streamlines user creation. Here's the recommended workflow:
+It uses `wp_slash()` to escape the values. The PHP `compact()` function to create an array with these values. The `wp_insert_user()` to perform the insert operation.
 
-1. Verify the username isn't already registered
-2. Confirm the email address is available
-3. Generate a secure password
-4. Create the user account
+Please refer to the Function Reference about `wp_create_user()` for full explanation about the used parameters.
 
-### Inserting Users
+#### Example Create
 
-The `wp_insert_user()` function triggers filters for predefined properties. When creating new users, it executes the `user_register` action; when modifying existing accounts, it performs the `profile_update` action.
+```php
+// check if the username is taken
+$user_id = username_exists( $user_name );
+
+// check that the email address does not belong to a registered user
+if ( ! $user_id && email_exists( $user_email ) === false ) {
+	// create a random password
+	$random_password = wp_generate_password( 12, false );
+	// create the user
+	$user_id = wp_create_user(
+		$user_name,
+		$random_password,
+		$user_email
+	);
+}
+```
+
+### Insert User
+
+```php
+wp_insert_user( $userdata );
+```
+
+The function calls a filter for most predefined properties.
+
+The function performs the action `user_register` when creating a user (user ID does not exist).
+
+The function performs the action `profile_update` when updating the user (user ID exists).
+
+Please refer to the Function Reference about `wp_insert_user()` for full explanation about the used parameters.
+
+#### Example Insert
+
+Below is an example showing how to insert a new user with the website profile field filled in.
+
+```php
+$username  = $_POST['username'];
+$password  = $_POST['password'];
+$website   = $_POST['website'];
+$user_data = [
+	'user_login' => $username,
+	'user_pass'  => $password,
+	'user_url'   => $website,
+];
+
+$user_id = wp_insert_user( $user_data );
+
+// success
+if ( ! is_wp_error( $user_id ) ) {
+	echo 'User created: ' . $user_id;
+}
+```
 
 ## Updating Users
 
-The `wp_update_user()` function modifies existing user records via the `$userdata` array/object. For updating individual metadata fields, use `update_user_meta()` instead.
+`wp_update_user()` Updates a single user in the database. The update data is passed along in the `$userdata` array/object.
 
-Updating a current user's password will clear all authentication cookies.
+To update a single piece of user meta data, use `update_user_meta()` instead. To create a new user, use `wp_insert_user()` instead.
+
+If current user's password is being updated, then the cookies will be cleared!
+
+Please refer to the Function Reference about `wp_update_user()` for full explanation about the used parameters.
+
+### Example Update
+
+Below is an example showing how to update a user's website profile field.
+
+```php
+$user_id = 1;
+$website = 'https://wordpress.org';
+
+$user_id = wp_update_user(
+	array(
+		'ID'       => $user_id,
+		'user_url' => $website,
+	)
+);
+
+if ( is_wp_error( $user_id ) ) {
+	// error
+} else {
+	// success
+}
+```
 
 ## Deleting Users
 
-The `wp_delete_user()` function removes users and optionally reassigns their associated content to another user. Without a valid reassignment, all content belonging to the deleted user will be permanently removed. The function executes the `deleted_user` action upon completion.
+`wp_delete_user()` deletes the user and optionally reassign associated entities to another user ID.
+
+The function performs the action `deleted_user` after the user have been deleted.
+
+If the `$reassign` parameter is not set to a valid user ID, then all entities belonging to the deleted user will be deleted!
+
+Please refer to the Function Reference about `wp_delete_user()` for full explanation about the used parameters.

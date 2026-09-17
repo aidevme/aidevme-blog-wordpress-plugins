@@ -2,13 +2,15 @@
 
 Reference: <https://developer.wordpress.org/plugins/users/roles-and-capabilities/>
 
-## Overview
+Roles and capabilities are two important aspects of WordPress that allow you to control user privileges.
 
-WordPress implements two key user management features: roles and capabilities. These control user privileges by determining what users can see and do within their dashboard and across the site.
+WordPress stores the Roles and their Capabilities in the options table under the `user_roles` key.
 
 ## Roles
 
-A role represents a collection of permissions assigned to users. WordPress includes six default roles:
+A role defines a set of capabilities for a user. For example, what the user may see and do in his dashboard.
+
+By default, WordPress have six roles:
 
 - Super Admin
 - Administrator
@@ -17,30 +19,145 @@ A role represents a collection of permissions assigned to users. WordPress inclu
 - Contributor
 - Subscriber
 
-### Adding Custom Roles
+More roles can be added and the default roles can be removed.
 
-The `add_role()` function creates new roles with assigned capabilities. However, sequential calls will do nothing, including modifications to capability lists. To update capabilities, you must remove and recreate the role.
+### Adding Roles
+
+Add new roles and assign capabilities to them with `add_role()`.
+
+```php
+function wporg_simple_role() {
+	add_role(
+		'simple_role',
+		'Simple Role',
+		array(
+			'read'         => true,
+			'edit_posts'   => true,
+			'upload_files' => true,
+		),
+	);
+}
+
+// Add the simple_role.
+add_action( 'init', 'wporg_simple_role' );
+```
+
+After the first call to `add_role()`, the Role and it's Capabilities will be stored in the database!
+
+Sequential calls will do nothing: including altering the capabilities list, which might not be the behavior that you're expecting.
+
+To alter the capabilities list in bulk: remove the role using `remove_role()` and add it again using `add_role()` with the new capabilities.
+
+Make sure to do it only if the capabilities differ from what you're expecting (i.e. condition this) or you'll degrade performance considerably!
 
 ### Removing Roles
 
-Use `remove_role()` to delete roles from the database. Avoid removing the Administrator and Super Admin roles, and update the default role setting if removing the Subscriber role.
+Remove roles with `remove_role()`.
+
+```php
+function wporg_simple_role_remove() {
+	remove_role( 'simple_role' );
+}
+
+// Remove the simple_role.
+add_action( 'init', 'wporg_simple_role_remove' );
+```
+
+After the first call to `remove_role()`, the Role and it's Capabilities will be removed from the database!
+
+Sequential calls will do nothing.
+
+If you're removing the default roles:
+
+- We advise against removing the Administrator and Super Admin roles!
+- Make sure to keep the code in your plugin/theme as future WordPress updates may add these roles again.
+- Run `update_option('default_role', YOUR_NEW_DEFAULT_ROLE)` since you'll be deleting subscriber which is WP's default role.
 
 ## Capabilities
 
-Capabilities define specific actions — such as editing or publishing posts — that roles can perform. Custom capabilities can be assigned to roles even if they don't affect the default WordPress dashboard.
+Capabilities define what a role can and can not do: edit posts, publish posts, etc.
 
-### Managing Capabilities
+Custom post types can require a certain set of Capabilities.
 
-Add capabilities using `get_role()` combined with the `add_cap()` method. Remove them similarly using `remove_cap()`.
+### Adding Capabilities
 
-## Checking Permissions
+You may define new capabilities for a role.
 
-Three functions check user permissions:
+Use `get_role()` to get the role object, then use the `add_cap()` method of that object to add a new capability.
 
-- **get_role()**: Retrieves a role object with its capabilities
-- **user_can()**: Tests if a specific user has a capability or role
-- **current_user_can()**: Tests the logged-in user's permissions
+```php
+function wporg_simple_role_caps() {
+	// Gets the simple_role role object.
+	$role = get_role( 'simple_role' );
+
+	// Add a new capability.
+	$role->add_cap( 'edit_others_posts', true );
+}
+
+// Add simple_role capabilities, priority must be after the initial role definition.
+add_action( 'init', 'wporg_simple_role_caps', 11 );
+```
+
+It's possible to add custom capabilities to any role.
+
+Under the default WordPress admin, they would have no effect, but they can be used for custom admin screen and front-end areas.
+
+### Removing Capabilities
+
+You may remove capabilities from a role.
+
+The implementation is similar to Adding Capabilities with the difference being the use of `remove_cap()` method for the role object.
+
+## Using Roles and Capabilities
+
+### Get Role
+
+Get the role object including all of it's capabilities with `get_role()`.
+
+```php
+get_role( $role );
+```
+
+### User Can
+
+Check if a user have a specified role or capability with `user_can()`.
+
+```php
+user_can( $user, $capability );
+```
+
+There is an undocumented, third argument, `$args`, that may include the object against which the test should be performed.
+
+E.g. Pass a post ID to test for the capability of that specific post.
+
+### Current User Can
+
+`current_user_can()` is a wrapper function for `user_can()` using the current user object as the `$user` parameter.
+
+Use this in scenarios where back-end and front-end areas should require a certain level of privileges to access and/or modify.
+
+```php
+current_user_can( $capability );
+```
+
+### Example
+
+Here's a practical example of adding an Edit link on the in a template file if the user has the proper capability:
+
+```php
+if ( current_user_can( 'edit_posts' ) ) {
+	edit_post_link( esc_html__( 'Edit', 'wporg' ), '<p>', '</p>' );
+}
+```
 
 ## Multisite
 
-On WordPress multisite installations, use `current_user_can_for_blog()` to check capabilities on specific sites.
+The `current_user_can_for_blog()` function is used to test if the current user has a certain role or capability on a specific blog.
+
+```php
+current_user_can_for_blog( $blog_id, $capability );
+```
+
+## Reference
+
+Codex Reference for User Roles and Capabilities.

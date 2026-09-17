@@ -2,32 +2,57 @@
 
 Reference: <https://developer.wordpress.org/apis/security/sanitizing/>
 
-## Overview
+Untrusted data comes from many sources (users, third party sites, even your own database!) and all of it needs to be checked before it's used.
 
-Data requires verification regardless of its origin — users, external sources, or even internal databases. The process of securing input is called sanitization, which involves cleaning and filtering information before use.
+Remember: Even admins are users, and users will enter incorrect data, either on purpose or accidentally. It's your job to protect them from themselves.
 
-Validation is preferred over sanitization because validation is more specific. However, when specificity isn't feasible, sanitization serves as the appropriate alternative.
+Sanitizing input is the process of securing/cleaning/filtering input data. Validation is preferred over sanitization because validation is more specific. But when "more specific" isn't possible, sanitization is the next best thing.
 
-## Practical Example
+## Example
 
-Consider a basic text input field for a title. Since such fields accept varied content, validation alone won't suffice. Instead, the `sanitize_text_field()` function processes the data by:
+Let's say we have an input field named `title`:
 
-1. Checking for invalid UTF-8 encoding
-2. Converting unencoded less-than symbols to entities
-3. Removing all HTML tags
-4. Eliminating line breaks, tabs, and excess whitespace
-5. Stripping octets
+```html
+<input id="title" type="text" name="title">
+```
 
-## Available Sanitization Functions
+We can't use validation here because the text field is too general: it can be anything at all. So we sanitize the input data with the `sanitize_text_field()` function:
 
-WordPress provides specialized functions for different data types:
+```php
+$title = sanitize_text_field( $_POST['title'] );
+update_post_meta( $post->ID, 'title', $title );
+```
+
+Behind the scenes, `sanitize_text_field()` does the following:
+
+- Checks for invalid UTF-8
+- Converts single less-than characters (`<`) to entity
+- Strips all tags
+- Removes line breaks, tabs and extra white space
+- Strips octets
+
+## Sanitization functions
+
+There are many functions that will help you sanitize your data.
 
 - `sanitize_email()`
 - `sanitize_file_name()`
-- `sanitize_hex_color()` and `sanitize_hex_color_no_hash()`
+- `sanitize_hex_color()`
+- `sanitize_hex_color_no_hash()`
 - `sanitize_html_class()`
 - `sanitize_key()`
-- `sanitize_text_field()` and `sanitize_textarea_field()`
-- `sanitize_title()`, `sanitize_title_for_query()`, and `sanitize_title_with_dashes()`
-- `sanitize_url()` and `sanitize_user()`
-- `wp_kses()` and `wp_kses_post()`
+- `sanitize_meta()`
+- `sanitize_mime_type()`
+- `sanitize_option()`
+- `sanitize_sql_orderby()`
+- `sanitize_term()`
+- `sanitize_term_field()`
+- `sanitize_text_field()`
+- `sanitize_textarea_field()`
+- `sanitize_title()`
+- `sanitize_title_for_query()`
+- `sanitize_title_with_dashes()`
+- `sanitize_user()`
+- `sanitize_url()`
+- `wp_kses()`
+- `wp_kses_post()`

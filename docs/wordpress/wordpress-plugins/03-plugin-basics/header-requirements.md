@@ -2,13 +2,11 @@
 
 Reference: <https://developer.wordpress.org/plugins/plugin-basics/header-requirements/>
 
-## Overview
+As described in Getting Started, the main PHP file should include a header comment that tells WordPress that a file is a plugin and provides information about the plugin.
 
-WordPress plugins require a header comment in the main PHP file to identify the plugin and provide metadata. The minimum requirement is specifying a Plugin Name, though additional fields enhance functionality and user experience.
+## Minimum Fields
 
-## Minimum Required Field
-
-Every plugin must include at least:
+At a minimum, a header comment must contain the Plugin Name:
 
 ```php
 /*
@@ -16,38 +14,75 @@ Every plugin must include at least:
  */
 ```
 
-## Available Header Fields
+## Header Fields
 
-- **Plugin Name** (required): Displayed in the WordPress admin plugins list
-- **Plugin URI**: Unique homepage URL for the plugin
-- **Description**: Brief overview under 140 characters
-- **Version**: Current release number
-- **Requires at least**: Minimum WordPress version compatibility
-- **Requires PHP**: Minimum PHP version needed
-- **Author**: Creator name(s)
-- **Author URI**: Creator's website or profile
-- **License**: License type identifier (e.g., GPLv2)
-- **License URI**: Link to full license text
-- **Text Domain**: Gettext translation identifier
-- **Domain Path**: Translation file location
-- **Network**: Multi-site activation setting
-- **Update URI**: Prevents accidental overwrites from similarly-named plugins
-- **Requires Plugins**: Dependencies listed as comma-separated slugs
+Available header fields:
 
-## Practical Example
+- **Plugin Name:** (*required*) The name of your plugin, which will be displayed in the Plugins list in the WordPress Admin.
+- **Plugin URI:** The home page of the plugin, which should be a unique URL, preferably on your own website. This *must be unique* to your plugin. You cannot use a WordPress.org URL here.
+- **Description:** A short description of the plugin, as displayed in the Plugins section in the WordPress Admin. Keep this description to fewer than 140 characters.
+- **Version:** The current version number of the plugin, such as 1.0 or 1.0.3.
+- **Requires at least:** The lowest WordPress version that the plugin will work on.
+- **Requires PHP:** The minimum required PHP version.
+- **Author:** The name of the plugin author. Multiple authors may be listed using commas.
+- **Author URI:** The author's website or profile on another website, such as WordPress.org.
+- **License:** The short name (slug) of the plugin's license (e.g. GPLv2). More information about licensing can be found in the WordPress.org guidelines.
+- **License URI:** A link to the full text of the license (e.g. https://www.gnu.org/licenses/gpl-2.0.html).
+- **Text Domain:** The gettext text domain of the plugin. More information can be found in the Text Domain section of the How to Internationalize your Plugin page.
+- **Domain Path:** The domain path lets WordPress know where to find the translations. More information can be found in the Domain Path section of the How to Internationalize your Plugin page.
+- **Network:** Whether the plugin can only be activated network-wide. Can only be set to *true*, and should be left out when not needed.
+- **Update URI:** Allows third-party plugins to avoid accidentally being overwritten with an update of a plugin of a similar name from the WordPress.org Plugin Directory. For more info read related dev note.
+- **Requires Plugins:** A comma-separated list of WordPress.org-formatted slugs for its dependencies, such as `my-plugin` (`my-plugin/my-plugin.php` is not supported). It does not support commas in plugin slugs. For more info read the related dev note.
 
-A complete header demonstrates proper formatting with all fields:
+A valid PHP file with a header comment might look like this:
 
 ```php
 /*
- * Plugin Name: My Basics Plugin
- * Version: 1.10.3
+ * Plugin Name:       My Basics Plugin
+ * Plugin URI:        https://example.com/plugins/the-basics/
+ * Description:       Handle the basics with this plugin.
+ * Version:           1.10.3
  * Requires at least: 5.2
- * Requires PHP: 7.2
- * License: GPL v2 or later
+ * Requires PHP:      7.2
+ * Author:            John Smith
+ * Author URI:        https://author.example.com/
+ * License:           GPL v2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Update URI:        https://example.com/my-plugin/
+ * Text Domain:       my-basics-plugin
+ * Domain Path:       /languages
+ * Requires Plugins:  my-plugin, yet-another-plugin
  */
 ```
 
-## Version Numbering Note
+Here's another example which allows file-level PHPDoc DocBlock as well as WordPress plugin file headers:
 
-WordPress relies on PHP's `version_compare()` function for version comparison, so 1.02 is actually greater than 1.1 according to that function's logic.
+```php
+/**
+ * Plugin Name
+ *
+ * @package           PluginPackage
+ * @author            Your Name
+ * @copyright         2019 Your Name or Company Name
+ * @license           GPL-2.0-or-later
+ *
+ * @wordpress-plugin
+ * Plugin Name:       Plugin Name
+ * Plugin URI:        https://example.com/plugin-name
+ * Description:       Description of the plugin.
+ * Version:           1.0.0
+ * Requires at least: 5.2
+ * Requires PHP:      7.2
+ * Author:            Your Name
+ * Author URI:        https://example.com
+ * Text Domain:       plugin-slug
+ * License:           GPL v2 or later
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * Update URI:        https://example.com/my-plugin/
+ * Requires Plugins:  my-plugin, yet-another-plugin
+ */
+```
+
+## Notes
+
+When assigning a version number to your project, keep in mind that WordPress uses the PHP `version_compare()` function to compare plugin version numbers. Therefore, before you release a new version of your plugin, you should make sure that this PHP function considers the new version to be "greater" than the old one. For example, 1.02 is actually greater than 1.1.

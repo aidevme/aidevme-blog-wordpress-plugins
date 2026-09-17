@@ -2,23 +2,64 @@
 
 Reference: <https://developer.wordpress.org/plugins/plugin-basics/uninstall-methods/>
 
-## Overview
+Your plugin may need to do some clean-up when it is uninstalled from a site.
 
-WordPress plugins may require cleanup procedures during uninstallation. Deactivation (when a plugin is turned off) is distinct from uninstallation (when it's deleted from the site).
+A plugin is considered uninstalled if a user has deactivated the plugin, and then clicks the delete link within the WordPress Admin.
 
-## Key Difference: Deactivation vs. Uninstallation
+When your plugin is uninstalled, you'll want to clear out any plugin options and/or settings specific to the plugin, and/or other database entities such as tables.
 
-Deactivation hooks should handle temporary operations like cache clearing, while uninstall procedures should remove persistent data:
+Less experienced developers sometimes make the mistake of using the deactivation hook for this purpose.
 
-- **Deactivation tasks**: Flush cache/temp files and reset permalinks
-- **Uninstallation tasks**: Remove database options and drop custom tables
+This table illustrates the differences between deactivation and uninstall.
 
-## Two Implementation Approaches
+| Scenario | Deactivation Hook | Uninstall Hook |
+| --- | --- | --- |
+| Flush Cache/Temp | Yes | No |
+| Flush Permalinks | Yes | No |
+| Remove Options from `{$wpdb->prefix}_options` | No | Yes |
+| Remove Tables from `wpdb` | No | Yes |
 
-**Method 1 — `register_uninstall_hook()`**: Uses WordPress's built-in function to designate a callback function that executes during plugin deletion.
+## Method 1: register_uninstall_hook
 
-**Method 2 — `uninstall.php`**: Creates a dedicated file in the plugin's root directory. This approach requires checking for the `WP_UNINSTALL_PLUGIN` constant before executing cleanup operations, protecting against unauthorized direct access.
+To set up an uninstall hook, use the `register_uninstall_hook()` function:
 
-## Important Consideration
+```php
+register_uninstall_hook(
+	__FILE__,
+	'pluginprefix_function_to_run'
+);
+```
 
-When working with WordPress Multisite installations, developers should be cautious about resource usage when deleting options across multiple sites, as this can consume significant server resources.
+## Method 2: uninstall.php
+
+To use this method you need to create an `uninstall.php` file inside the root folder of your plugin. This magic file is run automatically when the users deletes the plugin.
+
+For example: `/plugin-name/uninstall.php`
+
+Always check for the constant `WP_UNINSTALL_PLUGIN` in `uninstall.php` before doing anything. This protects against direct access.
+
+The constant will be defined by WordPress during the `uninstall.php` invocation.
+
+The constant is *not* defined when uninstall is performed by `register_uninstall_hook()`.
+
+Here is an example deleting option entries and dropping a database table:
+
+```php
+// if uninstall.php is not called by WordPress, die
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+    die;
+}
+
+$option_name = 'wporg_option';
+
+delete_option( $option_name );
+
+// for site options in Multisite
+delete_site_option( $option_name );
+
+// drop a custom database table
+global $wpdb;
+$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}mytable" );
+```
+
+In Multisite, looping through all blogs to delete options can be very resource intensive.

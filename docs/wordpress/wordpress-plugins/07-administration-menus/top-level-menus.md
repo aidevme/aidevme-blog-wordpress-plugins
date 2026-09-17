@@ -2,20 +2,52 @@
 
 Reference: <https://developer.wordpress.org/plugins/administration-menus/top-level-menus/>
 
-## Overview
+## Add a Top-Level Menu
 
-This page explains how to create, manage, and handle form submissions for top-level WordPress administration menus through plugin development.
+To add a new Top-level menu to WordPress Administration, use the `add_menu_page()` function.
 
-## Adding Top-Level Menus
+```php
+add_menu_page(
+    string $page_title,
+    string $menu_title,
+    string $capability,
+    string $menu_slug,
+    callable $function = '',
+    string $icon_url = '',
+    int $position = null
+);
+```
 
-The `add_menu_page()` function creates new top-level menus in the WordPress administration area. Its parameters include the page title, menu title, required user capability, menu slug, callback function, icon URL, and position.
+## Example
 
-### Implementation Steps
+Let's say we want to add a new Top-level menu called "WPOrg".
 
-1. Create a callback function that outputs the menu page HTML, wrapped in a `<div class="wrap">` container.
-2. Register the menu during the `admin_menu` action hook using `add_menu_page()`.
+The first step will be creating a function which will output the HTML. In this function we will perform the necessary security checks and render the options we've registered using the Settings API.
 
-Example:
+We recommend wrapping your HTML using a `<div>` with a class of `wrap`.
+
+```php
+function wporg_options_page_html() {
+    ?>
+    <div class="wrap">
+      <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+      <form action="options.php" method="post">
+        <?php
+        // output security fields for the registered setting "wporg_options"
+        settings_fields( 'wporg_options' );
+        // output setting sections and their fields
+        // (sections are registered for "wporg", each field is registered to a specific section)
+        do_settings_sections( 'wporg' );
+        // output save settings button
+        submit_button( __( 'Save Settings', 'textdomain' ) );
+        ?>
+      </form>
+    </div>
+    <?php
+}
+```
+
+The second step will be registering our WPOrg menu. The registration needs to occur during the `admin_menu` action hook.
 
 ```php
 add_action( 'admin_menu', 'wporg_options_page' );
@@ -32,25 +64,101 @@ function wporg_options_page() {
 }
 ```
 
-An alternative approach involves passing a PHP file path as the menu slug with a null function parameter, for legacy code patterns.
+For a list of parameters and what each do please see the `add_menu_page()` in the reference.
 
-## Removing Top-Level Menus
+## Using a PHP File for HTML
 
-Use `remove_menu_page()` to remove a registered menu. This requires timing the removal after the menu has been registered, typically using a higher priority number (like 99) on the `admin_menu` hook.
+The best practice for portable code would be to create a Callback that requires/includes your PHP file.
 
-Menu removal does not prevent direct access to the page — never rely on it for capability restrictions.
+For the sake of completeness and helping you understand legacy code, we will show another way: passing a PHP file path as the `$menu_slug` parameter with a null `$function` parameter.
 
-## Form Submission Handling
+```php
+add_action( 'admin_menu', 'wporg_options_page' );
+function wporg_options_page() {
+    add_menu_page(
+        'WPOrg',
+        'WPOrg Options',
+        'manage_options',
+        plugin_dir_path(__FILE__) . 'admin/view.php',
+        null,
+        plugin_dir_url(__FILE__) . 'images/icon_wporg.png',
+        20
+    );
+}
+```
 
-Two key requirements exist for processing form submissions:
+## Remove a Top-Level Menu
 
-1. Set the form action to the menu page URL using `menu_page_url()`.
-2. Use the `load-$hookname` action hook for processing, since the page's callback function executes after HTML output has already begun.
+To remove a registered menu from WordPress Administration, use the `remove_menu_page()` function.
 
-The `add_menu_page()` function returns a hook name. WordPress triggers `load-$hookname` before displaying the page content, which allows for header operations like redirects.
+```php
+remove_menu_page(
+    string $menu_slug
+);
+```
 
-Required validation checks:
+Removing menus won't prevent users accessing them directly. This should never be used as a way to restrict user capabilities.
 
-- Verify the request method is POST.
-- Perform CSRF verification using nonces.
-- Validate and sanitize all input data.
+### Example
+
+Let's say we want to remove the "Tools" menu.
+
+```php
+add_action( 'admin_menu', 'wporg_remove_options_page', 99 );
+function wporg_remove_options_page() {
+    remove_menu_page( 'tools.php' );
+}
+```
+
+Make sure that the menu have been registered with the `admin_menu` hook before attempting to remove, specify a higher priority number for `add_action()`.
+
+## Submitting forms
+
+To process the submissions of forms on options pages, you will need two things:
+
+- Use the URL of the page as the action attribute of the form.
+- Add a hook with the slug, returned by `add_menu_page`.
+
+You only need to follow those steps if you are manually creating forms in the back-end. The Settings API is the recommended way to do this.
+
+### Form action attribute
+
+Use the `$menu_slug` parameter of the options page as the first parameter of `menu_page_url()`. The function will automatically escape the URL and echo it by default, so you can directly use it within the `<form>` tag:
+
+```php
+<form action="<?php menu_page_url( 'wporg' ) ?>" method="post">
+```
+
+### Processing the form
+
+The `$function` you specify while adding the page will only be called once it is time to display the page, which makes it inappropriate if you need to send headers (ex. redirects) back to the browser.
+
+`add_menu_page` returns a `$hookname`, and WordPress triggers the `"load-$hookname"` action before any HTML output. You can use this to assign a function, which could process the form.
+
+`"load-$hookname"` will be executed every time before an options page will be displayed, even when the form is not being submitted.
+
+With the return parameter and action in mind, the example from above would look like this:
+
+```php
+add_action( 'admin_menu', 'wporg_options_page' );
+function wporg_options_page() {
+	$hookname = add_menu_page(
+		'WPOrg',
+		'WPOrg Options',
+		'manage_options',
+		'wporg',
+		'wporg_options_page_html',
+		plugin_dir_url(__FILE__) . 'images/icon_wporg.png',
+		20
+	);
+
+	add_action( 'load-' . $hookname, 'wporg_options_page_submit' );
+}
+```
+
+You can program `wporg_options_page_submit` according to your needs, but keep in mind that you must manually perform all necessary checks, including:
+
+- Whether the form is being submitted (`'POST' === $_SERVER['REQUEST_METHOD']`).
+- CSRF verification
+- Validation
+- Sanitization

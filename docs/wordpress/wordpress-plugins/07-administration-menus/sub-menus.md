@@ -2,30 +2,119 @@
 
 Reference: <https://developer.wordpress.org/plugins/administration-menus/sub-menus/>
 
-## Overview
+## Add a Sub-Menu
 
-This page explains how to create, manage, and handle sub-menus in the WordPress administration panel.
+To add a new Sub-menu to WordPress Administration, use the `add_submenu_page()` function.
 
-## Adding Sub-Menus
+```php
+add_submenu_page(
+	string $parent_slug,
+	string $page_title,
+	string $menu_title,
+	string $capability,
+	string $menu_slug,
+	callable $function = ''
+);
+```
 
-The primary function for creating sub-menus is `add_submenu_page()`, which accepts parameters including the parent slug, page title, menu title, required user capability, menu slug, and an optional callback function.
+## Example
 
-### Implementation Example
+Let's say we want to add a Sub-menu "WPOrg Options" to the "Tools" Top-level menu.
 
-A common example adds a "WPOrg Options" submenu to the Tools menu. This involves:
+The first step will be creating a function which will output the HTML. In this function we will perform the necessary security checks and render the options we've registered using the Settings API.
 
-1. Creating an output function that handles security checks and renders options using the Settings API.
-2. Registering the submenu via the `admin_menu` action hook.
+We recommend wrapping your HTML using a `<div>` with a class of `wrap`.
 
-The output function typically wraps its content in a `<div class="wrap">` and implements proper security fields with `settings_fields()`.
+```php
+function wporg_options_page_html() {
+	// check user capabilities
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	?>
+	<div class="wrap">
+		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+		<form action="options.php" method="post">
+			<?php
+			// output security fields for the registered setting "wporg_options"
+			settings_fields( 'wporg_options' );
+			// output setting sections and their fields
+			// (sections are registered for "wporg", each field is registered to a specific section)
+			do_settings_sections( 'wporg' );
+			// output save settings button
+			submit_button( __( 'Save Settings', 'textdomain' ) );
+			?>
+		</form>
+	</div>
+	<?php
+}
+```
 
-## Predefined Sub-Menu Helper Functions
+The second step will be registering our WPOrg Options Sub-menu. The registration needs to occur during the `admin_menu` action hook.
 
-WordPress offers convenience functions for common areas, eliminating the need to manually look up the parent slug:
+```php
+function wporg_options_page()
+{
+	add_submenu_page(
+		'tools.php',
+		'WPOrg Options',
+		'WPOrg Options',
+		'manage_options',
+		'wporg',
+		'wporg_options_page_html'
+	);
+}
+add_action('admin_menu', 'wporg_options_page');
+```
 
-- Dashboard, Posts, Media, Pages, Comments, Themes, Plugins, Users, Tools, Settings, and Links menus each have dedicated helper functions.
-- Custom post types use the format `edit.php?post_type=custom_type`.
+For a list of parameters and what each do please see the `add_submenu_page()` in the reference.
 
-## Removal and Form Handling
+## Predefined Sub-Menus
 
-Removing sub-menus follows the same process as removing top-level menus. Form submission handling leverages the `$hookname` value returned by `add_submenu_page()`, combined with the `load-` hook prefix, while still requiring proper CSRF verification and data sanitization.
+Wouldn't it be nice if we had helper functions that define the `$parent_slug` for WordPress built-in Top-level menus and save us from manually searching it through the source code?
+
+Below is a list of parent slugs and their helper functions:
+
+- `add_dashboard_page()` - index.php
+- `add_posts_page()` - edit.php
+- `add_media_page()` - upload.php
+- `add_pages_page()` - edit.php?post_type=page
+- `add_comments_page()` - edit-comments.php
+- `add_theme_page()` - themes.php
+- `add_plugins_page()` - plugins.php
+- `add_users_page()` - users.php
+- `add_management_page()` - tools.php
+- `add_options_page()` - options-general.php
+- `add_options_page()` - settings.php
+- `add_links_page()` - link-manager.php - requires a plugin since WP 3.5+
+- Custom Post Type - edit.php?post_type=wporg_post_type
+- Network Admin - settings.php
+
+## Remove a Sub-Menu
+
+The process of removing Sub-menus is exactly the same as removing Top-level menus.
+
+## Submitting forms
+
+The process of handling form submissions within Sub-menus is exactly the same as Submitting forms within Top-Level Menus.
+
+`add_submenu_page()` along with all functions for pre-defined sub-menus (`add_dashboard_page`, `add_posts_page`, etc.) will return a `$hookname`, which you can use as the first parameter of `add_action` in order to handle the submission of forms within custom pages:
+
+```php
+function wporg_options_page() {
+	$hookname = add_submenu_page(
+		'tools.php',
+		'WPOrg Options',
+		'WPOrg Options',
+		'manage_options',
+		'wporg',
+		'wporg_options_page_html'
+	);
+
+	add_action( 'load-' . $hookname, 'wporg_options_page_html_submit' );
+}
+
+add_action('admin_menu', 'wporg_options_page');
+```
+
+As always, do not forget to check whether the form is being submitted, do CSRF verification, validation, and sanitization.

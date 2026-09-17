@@ -2,42 +2,94 @@
 
 Reference: <https://developer.wordpress.org/plugins/shortcodes/shortcodes-with-parameters/>
 
-## Overview
+Now that we know how to create a basic shortcode and how to use it as self-closing and enclosing, we will look at using parameters in shortcode `[$tag]` and handler function.
 
-This guide builds on previous shortcode knowledge to demonstrate how to implement parameters — called "attributes" — in WordPress shortcodes.
+Shortcode `[$tag]` can accept parameters, known as attributes:
 
-## Shortcode Structure with Attributes
-
-Shortcodes can accept attributes within square brackets:
-
-```
+```php
 [wporg title="WordPress.org"]
 Having fun with WordPress.org shortcodes.
 [/wporg]
 ```
 
-The handler function receives three parameters:
+Shortcode handler function can accept 3 parameters:
 
-- `$atts` — an array containing the shortcode's attributes
-- `$content` — a string with text between opening and closing tags
-- `$tag` — a string identifying the shortcode name
+- `$atts` - array - `[$tag]` attributes
+- `$content` - string - The content inside your shortcode. In the example above, it will be "Having fun with WordPress.org shortcodes."
+- `$tag` - string - the name of the `[$tag]` (i.e. the name of the shortcode)
 
-## Parsing Attributes Best Practices
+```php
+function wporg_shortcode( $atts = array(), $content = null, $tag = '' ) {}
+```
 
-Since users may include varying numbers of attributes, developers should:
+## Parsing Attributes
 
-- Establish default parameters in the handler function
-- Normalize attribute key cases using `array_change_key_case()`
-- Use `shortcode_atts()` to merge defaults with user-provided values
+For the user, shortcodes are just strings with square brackets inside the post content. The user have no idea which attributes are available and what happens behind the scenes.
+
+For plugin developers, there is no way to enforce a policy on the use of attributes. The user may include one attribute, two or none at all.
+
+To gain control of how the shortcodes are used:
+
+- Declare default parameters for the handler function
+- Performing normalization of the key case for the attributes array with `array_change_key_case()`
+- Parse attributes using `shortcode_atts()` providing default values array and user `$atts`
 - Secure the output before returning it
 
-## Practical Implementation
+## Complete Example
 
-The documentation provides a complete `[wporg]` shortcode example that:
+Complete example using a basic shortcode structure, taking care of self-closing and enclosing scenarios and securing output.
 
-- Accepts an optional title attribute (defaults to "WordPress.org")
-- Displays content within a styled box wrapper
-- Applies WordPress content filters for security
-- Handles both self-closing and enclosing tag scenarios
+A `[wporg]` shortcode that will accept a title and will display a box that we can style with CSS.
 
-The code demonstrates proper escaping with `esc_html()` and filter application to ensure safe output rendering.
+```php
+/**
+ * The [wporg] shortcode.
+ *
+ * Accepts a title and will display a box.
+ *
+ * @param array  $atts    Shortcode attributes. Default empty.
+ * @param string $content Shortcode content. Default null.
+ * @param string $tag     Shortcode tag (name). Default empty.
+ * @return string Shortcode output.
+ */
+function wporg_shortcode( $atts = [], $content = null, $tag = '' ) {
+	// normalize attribute keys, lowercase
+	$atts = array_change_key_case( (array) $atts, CASE_LOWER );
+
+	// override default attributes with user attributes
+	$wporg_atts = shortcode_atts(
+		array(
+			'title' => 'WordPress.org',
+		), $atts, $tag
+	);
+
+	// start box
+	$o = '<div class="wporg-box">';
+
+	// title
+	$o .= '<h2>' . esc_html( $wporg_atts['title'] ) . '</h2>';
+
+	// enclosing tags
+	if ( ! is_null( $content ) ) {
+		// $content here holds everything in between the opening and the closing tags of your shortcode. eg.g [my-shortcode]content[/my-shortcode].
+        // Depending on what your shortcode supports, you will parse and append the content to your output in different ways.
+		// In this example, we just secure output by executing the_content filter hook on $content.
+		$o .= apply_filters( 'the_content', $content );
+	}
+
+	// end box
+	$o .= '</div>';
+
+	// return output
+	return $o;
+}
+
+/**
+ * Central location to create all shortcodes.
+ */
+function wporg_shortcodes_init() {
+	add_shortcode( 'wporg', 'wporg_shortcode' );
+}
+
+add_action( 'init', 'wporg_shortcodes_init' );
+```

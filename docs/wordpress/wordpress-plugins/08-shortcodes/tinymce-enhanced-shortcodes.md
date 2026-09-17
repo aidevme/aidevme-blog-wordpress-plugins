@@ -10,7 +10,7 @@ The WordPress visual editor can parse shortcodes and display rendered content in
 
 ### Audio Shortcode
 
-Enables embedding of individual audio files within posts or pages.
+The `[audio]` shortcode allows you to embed a single audio file.
 
 ### Caption Shortcode
 
@@ -26,4 +26,4 @@ The `[playlist]` shortcode allows you to attach more than one media file and ren
 
 ### Video Shortcode
 
-Similar to the audio shortcode, but renders video content rather than audio files.
+The `[video]` shortcode is very similar to the `[audio]` shortcode; it simply renders a video instead of audio.

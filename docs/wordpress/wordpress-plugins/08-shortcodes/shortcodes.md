@@ -2,33 +2,45 @@
 
 Reference: <https://developer.wordpress.org/plugins/shortcodes/>
 
-## Overview
+As a security precaution, running PHP inside WordPress content is forbidden; to allow dynamic interactions with the content, Shortcodes were presented in WordPress version 2.5.
 
-WordPress prohibits running PHP within content for security reasons. To enable dynamic content interactions, shortcodes were introduced in version 2.5. These macros allow operations such as creating a gallery from images attached to the post or rendering a video.
+Shortcodes are macros that can be used to perform dynamic interactions with the content. i.e creating a gallery from images attached to the post or rendering a video.
 
 ## Why Shortcodes?
 
-Shortcodes maintain clean, semantic content while giving users programmatic control over presentation. Key benefits include:
+Shortcodes are a valuable way of keeping content clean and semantic while allowing end users some ability to programmatically alter the presentation of their content.
 
-- No markup clutters post content, enabling flexible styling adjustments
-- Parameters allow instance-by-instance customization
+When the end user adds a photo gallery to their post using a shortcode, they're using the least data possible to indicate how the gallery should be presented.
 
-## Built-in WordPress Shortcodes
+Advantages:
 
-WordPress includes six default shortcodes:
+- No markup is added to the post content, which means that markup and styling can easily be manipulated on the fly or at a later state.
+- Shortcodes can also accept parameters, allowing users to modify how the shortcode behaves on an instance by instance basis.
 
-- `[caption]` — wraps captions around content
-- `[gallery]` — displays image galleries
-- `[audio]` — embeds and plays audio files
-- `[video]` — embeds and plays video files
-- `[playlist]` — shows audio or video collections
-- `[embed]` — wraps embedded items
+## Built-in Shortcodes
 
-## Best Practices
+By default, WordPress includes the following shortcodes:
 
-Developers should follow plugin development standards plus these guidelines:
+- `[caption]` - allows you to wrap captions around content
+- `[gallery]` - allows you to show image galleries
+- `[audio]` - allows you to embed and play audio files
+- `[video]` - allows you to embed and play video files
+- `[playlist]` - allows you to display collection of audio or video files
+- `[embed]` - allows you to wrap embedded items
 
-- Always return values to avoid side effects and bugs
-- Prefix shortcode names to prevent collisions
-- Sanitize inputs and escape outputs
-- Document all shortcode attributes clearly
+## Shortcode Best Practices
+
+Best practices for developing shortcodes include the plugin development best practices and the list below:
+
+- Always return! Shortcodes are essentially filters, so creating "side effects" will lead to unexpected bugs.
+- Prefix your shortcode names to avoid collisions with other plugins.
+- Sanitize the input and escape the output.
+- Provide users with clear documentation on all shortcode attributes.
+
+## Quick Reference
+
+See the complete example of using a basic shortcode structure, taking care of self-closing and enclosing scenarios, shortcodes within shortcodes and securing output.
+
+## External Resources
+
+- WordPress Shortcodes Generator

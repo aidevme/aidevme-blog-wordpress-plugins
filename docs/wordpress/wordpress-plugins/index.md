@@ -6,8 +6,8 @@ Reference: <https://developer.wordpress.org/plugins/>
 
 | Index | Name | Document | Reference Url | Last Synced On | Notes |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Plugin Handbook | [plugin-handbook.md](01-plugin-handbook/plugin-handbook.md) | <https://developer.wordpress.org/plugins/> | 2026-09-17 | Synced |
-| 2 | Introduction to Plugin Development | [introduction-to-plugin-development.md](02-introduction-to-plugin-development/introduction-to-plugin-development.md) | <https://developer.wordpress.org/plugins/intro/> | 2026-09-17 | Synced |
+| 1 | Plugin Handbook | [plugin-handbook.md](01-plugin-handbook/plugin-handbook.md) | <https://developer.wordpress.org/plugins/> | 2026-09-17T08:54:58Z | Verified via browser — content unchanged |
+| 2 | Introduction to Plugin Development | [introduction-to-plugin-development.md](02-introduction-to-plugin-development/introduction-to-plugin-development.md) | <https://developer.wordpress.org/plugins/intro/> | 2026-09-17T08:55:07Z | Verified via browser — content unchanged |
 | 2.1 | What is a Plugin? | [what-is-a-plugin.md](02-introduction-to-plugin-development/what-is-a-plugin.md) | <https://developer.wordpress.org/plugins/intro/what-is-a-plugin/> | 2026-09-17 | Synced |
 | 3 | Plugin Basics | [plugin-basics.md](03-plugin-basics/plugin-basics.md) | <https://developer.wordpress.org/plugins/plugin-basics/> | 2026-09-17 | Synced |
 | 3.1 | Header Requirements | [header-requirements.md](03-plugin-basics/header-requirements.md) | <https://developer.wordpress.org/plugins/plugin-basics/header-requirements/> | 2026-09-17 | Synced |
@@ -23,7 +23,7 @@ Reference: <https://developer.wordpress.org/plugins/>
 | 4.4 | Securing (escaping) Output | [securing-escaping-output.md](04-plugin-security/securing-escaping-output.md) | <https://developer.wordpress.org/apis/security/escaping/> | 2026-09-17 | Synced |
 | 4.5 | Securing (sanitizing) Input | [securing-sanitizing-input.md](04-plugin-security/securing-sanitizing-input.md) | <https://developer.wordpress.org/apis/security/sanitizing/> | 2026-09-17 | Synced |
 | 5 | Hooks | [hooks.md](05-hooks/hooks.md) | <https://developer.wordpress.org/plugins/hooks/> | 2026-09-17 | Synced |
-| 5.1 | Actions | [actions.md](05-hooks/actions.md) | <https://developer.wordpress.org/plugins/hooks/actions/> | 2026-09-17 | Synced |
+| 5.1 | Actions | [actions.md](05-hooks/actions.md) | <https://developer.wordpress.org/plugins/hooks/actions/> | 2026-09-17T08:55:17Z | Verified via browser — content unchanged |
 | 5.2 | Filters | [filters.md](05-hooks/filters.md) | <https://developer.wordpress.org/plugins/hooks/filters/> | 2026-09-17 | Synced |
 | 5.3 | Custom Hooks | [custom-hooks.md](05-hooks/custom-hooks.md) | <https://developer.wordpress.org/plugins/hooks/custom-hooks/> | 2026-09-17 | Synced |
 | 5.4 | Advanced Topics | [advanced-topics.md](05-hooks/advanced-topics.md) | <https://developer.wordpress.org/plugins/hooks/advanced-topics/> | 2026-09-17 | Synced |
@@ -53,7 +53,7 @@ Reference: <https://developer.wordpress.org/plugins/>
 | 11.1 | Registering Custom Post Types | [registering-custom-post-types.md](11-custom-post-types/registering-custom-post-types.md) | <https://developer.wordpress.org/plugins/post-types/registering-custom-post-types/> | 2026-09-17 | Synced |
 | 11.2 | Working with Custom Post Types | [working-with-custom-post-types.md](11-custom-post-types/working-with-custom-post-types.md) | <https://developer.wordpress.org/plugins/post-types/working-with-custom-post-types/> | 2026-09-17 | Synced |
 | 12 | Taxonomies | [taxonomies.md](12-taxonomies/taxonomies.md) | <https://developer.wordpress.org/plugins/taxonomies/> | 2026-09-17 | Synced |
-| 12.1 | Term Splitting (WordPress 4.2) | [term-splitting-wordpress-4-2.md](12-taxonomies/term-splitting-wordpress-4-2.md) | <https://developer.wordpress.org/plugins/taxonomies/split-terms-wp-4-2/> | 2026-09-17 | Synced — real slug is `split-terms-wp-4-2` |
+| 12.1 | Term Splitting (WordPress 4.2) | [term-splitting-wordpress-4-2.md](12-taxonomies/term-splitting-wordpress-4-2.md) | <https://developer.wordpress.org/plugins/taxonomies/split-terms-wp-4-2/> | 2026-09-17T08:55:26Z | Verified via browser — content unchanged |
 | 12.2 | Working with Custom Taxonomies | [working-with-custom-taxonomies.md](12-taxonomies/working-with-custom-taxonomies.md) | <https://developer.wordpress.org/plugins/taxonomies/working-with-custom-taxonomies/> | 2026-09-17 | Synced |
 | 13 | Users | [users.md](13-users/users.md) | <https://developer.wordpress.org/plugins/users/> | 2026-09-17 | Synced |
 | 13.1 | Roles and Capabilities | [roles-and-capabilities.md](13-users/roles-and-capabilities.md) | <https://developer.wordpress.org/plugins/users/roles-and-capabilities/> | 2026-09-17 | Synced |
@@ -106,7 +106,7 @@ Reference: <https://developer.wordpress.org/plugins/>
 | 20 | Developer Tools | [developer-tools.md](20-developer-tools/developer-tools.md) | <https://developer.wordpress.org/plugins/developer-tools/> | 2026-09-17 | Synced |
 | 20.1 | Debug Bar and Add-Ons | [debug-bar-and-add-ons.md](20-developer-tools/debug-bar-and-add-ons.md) | <https://developer.wordpress.org/plugins/developer-tools/debug-bar-and-add-ons/> | 2026-09-17 | Synced |
 | 20.2 | Helper Plugins | [helper-plugins.md](20-developer-tools/helper-plugins.md) | <https://developer.wordpress.org/plugins/developer-tools/helper-plugins/> | 2026-09-17 | Synced |
-| 21 | Creating Tables with Plugins | [creating-tables-with-plugins.md](21-creating-tables-with-plugins/creating-tables-with-plugins.md) | <https://developer.wordpress.org/plugins/creating-tables-with-plugins/> | 2026-09-17 | Synced |
+| 21 | Creating Tables with Plugins | [creating-tables-with-plugins.md](21-creating-tables-with-plugins/creating-tables-with-plugins.md) | <https://developer.wordpress.org/plugins/creating-tables-with-plugins/> | 2026-09-17T08:55:34Z | Verified via browser — content unchanged |
 | 22 | Credits | [credits.md](22-credits/credits.md) | <https://developer.wordpress.org/plugins/credits/> | 2026-09-17 | Synced |
 
 ## Plugin Handbook

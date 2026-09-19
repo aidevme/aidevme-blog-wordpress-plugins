@@ -1,2 +1,5 @@
 # Playwright MCP session artifacts (snapshots, console logs)
 .playwright-mcp/
+
+# Node dependencies (installed via npm; not shipped — only build/ output is)
+node_modules/

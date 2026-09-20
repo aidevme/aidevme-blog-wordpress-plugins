@@ -127,6 +127,16 @@ Things to know:
 - **It uses the built-in `GITHUB_TOKEN`** with `contents: write` on this job only, and the `gh` CLI that GitHub-hosted runners already have — no third-party release action and no extra secret.
 - **To redo a release**, delete the release *and* its tag (Releases page, then Tags) — the workflow refuses to run while the tag exists — then bump the version and run it again.
 
+**How sites find out about a release.** From version 0.0.84 the plugin checks these GitHub Releases itself (`includes/class-credpl-updater.php`, `SPECIFICATION.md` §6.9): the header's `Update URI:` makes WordPress ask `Credpl_Updater`, which reads the repo's releases and offers the newest that is published (not a draft), tagged `credentials-manager-plugin-v<X.Y.Z>`, and has the `credentials-manager-plugin-<X.Y.Z>.zip` asset. Consequences for how you release:
+
+- **Don't rename the tag or the asset.** The tag prefix and the asset name are what the updater matches on; a release that doesn't follow them is invisible to sites. The workflow produces them correctly — don't hand-create releases.
+- **The package must come from the workflow.** GitHub's automatic "Source code" zips have a different top-level folder and would install as a second plugin.
+- **Pre-releases are offered while the plugin is below 1.0.0** and stop being offered from 1.0.0 (filter `credpl_updater_include_prereleases` overrides this). So when you reach 1.0.0, untick **prerelease** in the workflow's dialog or nobody will be offered it.
+- **Sites see it within about 12 hours**, plus up to 6 hours of the plugin's own cache; **Dashboard → Updates → Check Again** skips both waits.
+- **The first version with the updater is 0.0.84.** Sites on 0.0.83 or earlier can't self-update and need the zip installed by hand once.
+
+**Verifying the updater on a real site** (this has been tested against stubbed WordPress functions and the live GitHub API, not inside a running WordPress — do this once): install the 0.0.84 zip on a test site, then publish a later release (or, quicker, temporarily edit the *installed* copy's `Version:` header down to `0.0.83` while release 0.0.84 exists). Open **Dashboard → Updates → Check Again**: the plugin should be listed as updatable, and **View version 0.0.84 details** should open a popup with the release notes. Run the update and confirm it replaces `wp-content/plugins/credentials-manager-plugin/` in place (no second copy). With WP-CLI: `wp transient delete update_plugins --network` (or `wp transient delete --all`) then `wp plugin list --update=available`.
+
 ### Lint one file
 
 ```bash

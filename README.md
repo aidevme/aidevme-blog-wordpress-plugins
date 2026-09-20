@@ -1,3 +1,5 @@
+![Aidevme Blog WordPress Plugins — custom plugins built for the Aidevme Blog, shown as interlocking puzzle pieces beside WordPress admin cards](assets/repo-social-preview-image.png)
+
 # Aidevme Blog WordPress Plugins
 
 WordPress plugins developed for the Aidevme Blog project.

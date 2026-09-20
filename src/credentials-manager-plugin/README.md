@@ -61,6 +61,20 @@ kind of record, and a shortcode you copy after saving.
 Activation creates the plugin's four database tables. Later updates upgrade the
 schema automatically when the plugin loads.
 
+### Updates
+
+From version 0.0.84, WordPress tells you when a new version is available, like
+any other plugin: a notice on **Plugins** and **Dashboard → Updates**, with a
+one-click update (and the per-plugin auto-update toggle). It works by checking
+this repository's GitHub Releases — see [Data, privacy, and security](#data-privacy-and-security)
+for what that request involves. A version is offered only once a release has been
+published for it; merging code alone offers nothing. To see a new release right
+away instead of waiting for WordPress's next check, use **Dashboard → Updates →
+Check Again**.
+
+Sites still running 0.0.83 or earlier don't have this and need the newer zip
+installed by hand once.
+
 ## Using it
 
 After activating, a **Credentials Manager** item appears in the admin sidebar. Its
@@ -118,11 +132,18 @@ it:
   its tables; drop `{prefix}credentials`, `{prefix}credential_blocks`,
   `{prefix}microsoft_certifications`, and `{prefix}microsoft_exams` yourself if
   you want them gone.
-- **One outbound request.** The **Sync** buttons on the Microsoft Certifications
-  and Microsoft Exams screens fetch `https://learn.microsoft.com/api/catalog/`.
-  It only happens when an administrator clicks Sync and confirms — nothing runs
-  in the background. It is a plain `GET` request; none of your stored records are
-  sent.
+- **Two kinds of outbound request.**
+  - The **Sync** buttons on the Microsoft Certifications and Microsoft Exams
+    screens fetch `https://learn.microsoft.com/api/catalog/`. This only happens
+    when an administrator clicks Sync and confirms. It is a plain `GET` request;
+    none of your stored records are sent.
+  - **Update checks** ask `https://api.github.com/repos/aidevme/aidevme-blog-wordpress-plugins/releases`
+    whether a newer release exists. WordPress does this on its normal update
+    schedule, and the plugin remembers the answer for 6 hours (1 hour after a
+    failure). The request carries only a `User-Agent` naming this plugin and its
+    version — no site URL, no content, no stored records — but, like any web
+    request, GitHub sees your server's IP address. If GitHub can't be reached, the
+    check fails silently.
 - **Security model.** Every admin screen and action requires `manage_options`,
   every save/delete/sync is nonce-protected, database writes use `$wpdb`'s
   insert/update/delete helpers, and output is escaped when rendered. The details

@@ -2,10 +2,11 @@
 /**
  * Plugin Name:       Credentials Manager
  * Description:       Manage Credentials, Credential Blocks, Microsoft Certifications, and Microsoft Exams (Contact Form 7 style) in dedicated admin screens, and embed a block's selected credentials anywhere with a [credential-block id="…"] shortcode.
- * Version:           0.0.85
+ * Version:           0.0.86
  * Requires at least: 6.6
  * Requires PHP:      7.4
  * Author:            AIDevMe
+ * Author URI:        https://aidevme.com
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       credentials-manager-plugin
@@ -16,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'CREDPL_VERSION', '0.0.85' );
+define( 'CREDPL_VERSION', '0.0.86' );
 // Bumped from 1.0 to 1.1: triggers Credpl_Installer's one-time migration
 // that renames the old `credential_forms` table (and its `form_key`
 // column) to `credential_blocks`/`block_key` on sites that already
@@ -79,22 +80,3 @@ add_action( 'plugins_loaded', 'credpl_bootstrap' );
  * and `microsoft_exams` tables on activation.
  */
 register_activation_hook( __FILE__, array( 'Credpl_Installer', 'install' ) );
-
-/**
- * Add a "View details" link to this plugin's row on the Plugins screen
- * (Plugins > Installed Plugins), next to "Version … | By AIDevMe". This
- * link only appears automatically for plugins WordPress can match to a
- * WordPress.org listing; since this plugin isn't published there, the
- * link is added manually here as a placeholder (href="#") until a real
- * details destination exists.
- */
-function credpl_plugin_row_meta( $plugin_meta, $plugin_file ) {
-	if ( plugin_basename( CREDPL_PLUGIN_FILE ) !== $plugin_file ) {
-		return $plugin_meta;
-	}
-
-	$plugin_meta[] = '<a href="#" aria-label="' . esc_attr__( 'View details', 'credentials-manager-plugin' ) . '">' . esc_html__( 'View details', 'credentials-manager-plugin' ) . '</a>';
-
-	return $plugin_meta;
-}
-add_filter( 'plugin_row_meta', 'credpl_plugin_row_meta', 10, 2 );

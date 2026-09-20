@@ -117,7 +117,7 @@ class Credpl_Updater {
 			'name'          => 'Credentials Manager',
 			'slug'          => self::PLUGIN_SLUG,
 			'version'       => $release['version'],
-			'author'        => '<a href="https://github.com/aidevme">AIDevMe</a>',
+			'author'        => '<a href="https://aidevme.com">AIDevMe</a>', // Same site as the plugin header's `Author URI`.
 			'homepage'      => 'https://github.com/' . self::REPOSITORY,
 			'requires'      => $headers['requires'],
 			'requires_php'  => $headers['requires_php'],

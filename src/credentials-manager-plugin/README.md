@@ -7,6 +7,7 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
 ![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css&logoColor=white)
 
+[![Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Faidevme%2Faidevme-blog-wordpress-plugins%2Fmain%2Fsrc%2Fcredentials-manager-plugin%2Fpackage.json&query=%24.version&label=version&prefix=v&color=0F6CBD)](CHANGE_LOG.md)
 ![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)
 ![Fluent UI 9](https://img.shields.io/badge/Fluent%20UI-9-0F6CBD)
 ![WordPress 6.6+](https://img.shields.io/badge/WordPress-6.6%2B-21759B?logo=wordpress&logoColor=white)

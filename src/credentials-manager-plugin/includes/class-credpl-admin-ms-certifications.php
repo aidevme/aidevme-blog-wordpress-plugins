@@ -172,6 +172,7 @@ class Credpl_Admin_Ms_Certifications {
 				'listUrl'       => add_query_arg( array( 'page' => Credpl_Admin_Menu::PAGE_MS_CERTIFICATIONS ), admin_url( 'admin.php' ) ),
 				'orderby'       => $orderby,
 				'order'         => $order,
+				'backUrl'       => add_query_arg( array( 'page' => Credpl_Admin_Menu::PAGE_MANAGER ), admin_url( 'admin.php' ) ),
 				'addNewUrl'     => add_query_arg( array( 'page' => Credpl_Admin_Menu::PAGE_MS_CERTIFICATION_NEW ), admin_url( 'admin.php' ) ),
 				'bulkDeleteUrl' => wp_nonce_url(
 					add_query_arg(

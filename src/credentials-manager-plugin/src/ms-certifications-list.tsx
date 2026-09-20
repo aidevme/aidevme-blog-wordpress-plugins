@@ -45,7 +45,7 @@ import {
 	Tooltip,
 	tokens,
 } from '@fluentui/react-components';
-import { AddRegular, EditRegular, DeleteRegular, ArrowSyncRegular } from '@fluentui/react-icons';
+import { ArrowLeftRegular, AddRegular, EditRegular, DeleteRegular, ArrowSyncRegular } from '@fluentui/react-icons';
 import { useMsCertificationsListStyles, useToolbarCardStyles } from './styles';
 import { ConfirmationDialog, TableFooter } from './components';
 import { EM_DASH, getCurrentSortDirection, buildNextSortUrl, buildBulkDeleteUrl } from './tools';
@@ -71,6 +71,7 @@ interface MsCertificationsListConfig {
 	listUrl: string;
 	orderby: string;
 	order: string;
+	backUrl: string;
 	addNewUrl: string;
 	bulkDeleteUrl: string;
 	syncUrl: string;
@@ -88,6 +89,7 @@ const config: MsCertificationsListConfig = window.credplMsCertificationsList || 
 	listUrl: '',
 	orderby: 'title',
 	order: 'asc',
+	backUrl: '',
 	addNewUrl: '',
 	bulkDeleteUrl: '',
 	syncUrl: '',
@@ -311,6 +313,19 @@ function MsCertificationsList() {
 	const toolbar = (
 		<Card className={ toolbarCardStyles.toolbarCard }>
 			<Toolbar aria-label={ __( 'Microsoft Certifications actions', 'credentials-manager-plugin' ) }>
+				<Tooltip
+					content={ __( 'Go back to the Credentials Manager page.', 'credentials-manager-plugin' ) }
+					relationship="label"
+					withArrow
+				>
+					<ToolbarButton
+						icon={ <ArrowLeftRegular /> }
+						onClick={ () => {
+							window.location.href = config.backUrl;
+						} }
+					/>
+				</Tooltip>
+				<ToolbarDivider />
 				<Tooltip
 					content={ __( 'Create a new Microsoft Certification. Deselect all certifications to enable this button.', 'credentials-manager-plugin' ) }
 					relationship="label"

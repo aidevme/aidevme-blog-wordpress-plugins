@@ -1,6 +1,6 @@
 <?php
 /**
- * Registers the top-level "Credentials Manager" admin menu and its five
+ * Registers the top-level "Credentials Manager" admin menu and its six
  * visible submenus (plus four registered-but-CSS-hidden "Add …" ones —
  * see the note on hide_add_screens_from_menu() below). See
  * SPECIFICATION.md §6.1.
@@ -14,6 +14,7 @@ class Credpl_Admin_Menu {
 
 	const CAPABILITY = 'manage_options';
 
+	const PAGE_MANAGER              = 'credpl-credentials-manager';
 	const PAGE_CREDENTIALS          = 'credpl-credentials';
 	const PAGE_CREDENTIAL_NEW       = 'credpl-credential-new';
 	const PAGE_BLOCKS               = 'credpl-credential-blocks';
@@ -30,13 +31,14 @@ class Credpl_Admin_Menu {
 	}
 
 	/**
-	 * Submenu order mirrors Contact Form 7's "Contact" menu: the primary
-	 * list (here, Credential Blocks) first, so the top-level menu item's
-	 * own click target is the Blocks list (PAGE_BLOCKS) — clicking
-	 * "Credentials Manager" and clicking "All Credential Blocks" land on
-	 * the same page, which is why both use the PAGE_BLOCKS slug below.
+	 * The top-level menu item's own click target is the Credentials Manager
+	 * landing page (PAGE_MANAGER) — clicking "Credentials Manager" and
+	 * clicking its first submenu item, also "Credentials Manager", land on
+	 * the same page, which is why both use the PAGE_MANAGER slug below. The
+	 * Credential Blocks list (PAGE_BLOCKS) used to be that target (§10 v72
+	 * moved it) and is now an ordinary submenu item like the others.
 	 *
-	 * All nine submenus, including the four "Add …" ones, are registered
+	 * All ten submenus, including the four "Add …" ones, are registered
 	 * normally here — see hide_add_screens_from_menu() for why those four
 	 * are hidden via CSS afterward rather than unregistered.
 	 */
@@ -45,14 +47,23 @@ class Credpl_Admin_Menu {
 			__( 'Credentials Manager', 'credentials-manager-plugin' ),
 			__( 'Credentials Manager', 'credentials-manager-plugin' ),
 			self::CAPABILITY,
-			self::PAGE_BLOCKS,
-			array( 'Credpl_Admin_Blocks', 'render_list_page' ),
+			self::PAGE_MANAGER,
+			array( 'Credpl_Admin_Manager', 'render_page' ),
 			'dashicons-awards',
 			25
 		);
 
 		add_submenu_page(
-			self::PAGE_BLOCKS,
+			self::PAGE_MANAGER,
+			__( 'Credentials Manager', 'credentials-manager-plugin' ),
+			__( 'Credentials Manager', 'credentials-manager-plugin' ),
+			self::CAPABILITY,
+			self::PAGE_MANAGER,
+			array( 'Credpl_Admin_Manager', 'render_page' )
+		);
+
+		add_submenu_page(
+			self::PAGE_MANAGER,
 			__( 'All Credential Blocks', 'credentials-manager-plugin' ),
 			__( 'All Credential Blocks', 'credentials-manager-plugin' ),
 			self::CAPABILITY,
@@ -61,7 +72,7 @@ class Credpl_Admin_Menu {
 		);
 
 		add_submenu_page(
-			self::PAGE_BLOCKS,
+			self::PAGE_MANAGER,
 			__( 'Add Credential Block', 'credentials-manager-plugin' ),
 			__( 'Add Credential Block', 'credentials-manager-plugin' ),
 			self::CAPABILITY,
@@ -70,7 +81,7 @@ class Credpl_Admin_Menu {
 		);
 
 		add_submenu_page(
-			self::PAGE_BLOCKS,
+			self::PAGE_MANAGER,
 			__( 'All Credentials', 'credentials-manager-plugin' ),
 			__( 'All Credentials', 'credentials-manager-plugin' ),
 			self::CAPABILITY,
@@ -79,7 +90,7 @@ class Credpl_Admin_Menu {
 		);
 
 		add_submenu_page(
-			self::PAGE_BLOCKS,
+			self::PAGE_MANAGER,
 			__( 'Add Credential', 'credentials-manager-plugin' ),
 			__( 'Add Credential', 'credentials-manager-plugin' ),
 			self::CAPABILITY,
@@ -88,7 +99,7 @@ class Credpl_Admin_Menu {
 		);
 
 		add_submenu_page(
-			self::PAGE_BLOCKS,
+			self::PAGE_MANAGER,
 			__( 'All Microsoft Certifications', 'credentials-manager-plugin' ),
 			__( 'All Microsoft Certifications', 'credentials-manager-plugin' ),
 			self::CAPABILITY,
@@ -97,7 +108,7 @@ class Credpl_Admin_Menu {
 		);
 
 		add_submenu_page(
-			self::PAGE_BLOCKS,
+			self::PAGE_MANAGER,
 			__( 'Add Microsoft Certification', 'credentials-manager-plugin' ),
 			__( 'Add Microsoft Certification', 'credentials-manager-plugin' ),
 			self::CAPABILITY,
@@ -106,7 +117,7 @@ class Credpl_Admin_Menu {
 		);
 
 		add_submenu_page(
-			self::PAGE_BLOCKS,
+			self::PAGE_MANAGER,
 			__( 'All Microsoft Exams', 'credentials-manager-plugin' ),
 			__( 'All Microsoft Exams', 'credentials-manager-plugin' ),
 			self::CAPABILITY,
@@ -115,7 +126,7 @@ class Credpl_Admin_Menu {
 		);
 
 		add_submenu_page(
-			self::PAGE_BLOCKS,
+			self::PAGE_MANAGER,
 			__( 'Add Microsoft Exam', 'credentials-manager-plugin' ),
 			__( 'Add Microsoft Exam', 'credentials-manager-plugin' ),
 			self::CAPABILITY,
@@ -124,7 +135,7 @@ class Credpl_Admin_Menu {
 		);
 
 		add_submenu_page(
-			self::PAGE_BLOCKS,
+			self::PAGE_MANAGER,
 			__( 'Integration', 'credentials-manager-plugin' ),
 			__( 'Integration', 'credentials-manager-plugin' ),
 			self::CAPABILITY,

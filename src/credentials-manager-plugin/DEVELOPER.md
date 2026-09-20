@@ -109,6 +109,24 @@ It deliberately uses `npx wp-scripts build` rather than `npm run build`, so the 
 
 Uploading results needs repository **code scanning** to be usable, which is free for a public repository. If you later turn on GitHub's own CodeQL "default setup" for this repo, it will conflict with this workflow (GitHub rejects advanced-workflow uploads while default setup is enabled) — use one or the other, not both.
 
+### Publishing a release: the "Release Credentials Manager Plugin" workflow
+
+`.github/workflows/release-credentials-manager-plugin.yml` builds the plugin and publishes a **GitHub Release** with the installable zip attached. **Manual trigger only, and only from `main`** (Actions tab → **Release Credentials Manager Plugin** → **Run workflow**, with **Use workflow from** set to `main`). Started from any other branch, its first step fails immediately with an explanatory error — before anything is checked out, built, or published. It has two checkboxes: **prerelease** (default on — keep it on while the plugin is `0.x`) and **draft** (default off; turn it on to review the release before it goes public).
+
+**The version comes from the repo, not the workflow.** Like the build workflow it uses `npx wp-scripts build`, so the `prebuild` version bump does *not* run; the release is built from exactly what's committed. Bump the version first (a local `npm run build` does it), merge that to `main`, then run the workflow. Before building anything it checks that `package.json`, the plugin header `Version:`, and `CREDPL_VERSION` all agree and are in `X.Y.Z` form, and that the tag doesn't already exist — otherwise it stops with an error rather than publishing something inconsistent. After building it type-checks, lints PHP with 7.4, and verifies the zip contains the required plugin files and compiled scripts and none of the dev-only files (`src/`, `bin/`, `package.json`, …).
+
+**What it creates:**
+
+- A tag named `credentials-manager-plugin-v<version>` (for example `credentials-manager-plugin-v0.0.83`), on the exact commit that was built. The name is plugin-scoped because this repository will hold more than one plugin, so a bare `v0.0.83` would be ambiguous.
+- A release titled **Credentials Manager \<version\>** with `credentials-manager-plugin-<version>.zip` attached, and notes made of a short install blurb (with the WordPress/PHP requirements read from the plugin header and a link to `CHANGE_LOG.md` at that tag) followed by GitHub's auto-generated "What's Changed" list.
+
+Things to know:
+
+- **`main` only.** The first step compares the run's ref with `refs/heads/main` exactly, so `dev`, a feature branch, a tag, or a look-alike such as `main-2` all fail it. It's a step that fails rather than a job-level `if:`, because a skipped job looks like a passing run and is easy to mistake for a release that happened. The job summary records the branch and commit that were released. Note this guards against *mistakes*, not against someone with write access: a workflow can be edited on another branch and run from there. For a hard guarantee, put the release job in a GitHub **Environment** restricted to the `main` branch (repo Settings → Environments → Deployment branches).
+- **The auto-generated notes cover the whole repository**, not only this plugin, so once other plugins exist they can include those plugins' pull requests. The install blurb and the `CHANGE_LOG.md` link are plugin-specific.
+- **It uses the built-in `GITHUB_TOKEN`** with `contents: write` on this job only, and the `gh` CLI that GitHub-hosted runners already have — no third-party release action and no extra secret.
+- **To redo a release**, delete the release *and* its tag (Releases page, then Tags) — the workflow refuses to run while the tag exists — then bump the version and run it again.
+
 ### Lint one file
 
 ```bash

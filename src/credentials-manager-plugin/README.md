@@ -2,6 +2,15 @@
 
 # Credentials Manager
 
+![PHP](https://img.shields.io/badge/PHP-7.4%2B-777BB4?logo=php&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
+![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css&logoColor=white)
+
+![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)
+![Fluent UI 9](https://img.shields.io/badge/Fluent%20UI-9-0F6CBD)
+![WordPress 6.6+](https://img.shields.io/badge/WordPress-6.6%2B-21759B?logo=wordpress&logoColor=white)
+
 A WordPress plugin for keeping a structured record of your credentials —
 certifications, applied skills, awards — and showing a chosen selection of them,
 as badges, anywhere on your site with a shortcode.

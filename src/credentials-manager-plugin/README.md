@@ -151,11 +151,14 @@ header first. To build without bumping it, run `npx wp-scripts build` and then
 `npm run package-zip`. See [DEVELOPER.md](DEVELOPER.md) for why, and for
 installing PHP on Windows.
 
-Two GitHub Actions workflows are provided, both run manually from the Actions tab:
+Two GitHub Actions workflows are provided:
 
-- **Build Credentials Manager Plugin** — type-check, PHP lint, build, and upload the zip.
+- **Build Credentials Manager Plugin** — type-check, PHP lint, build, and upload
+  the zip. Run manually from the Actions tab.
 - **CodeQL - Credentials Manager Plugin** — static analysis of the TypeScript and
-  the workflows. CodeQL does not support PHP, so the PHP is not covered by it.
+  the workflows. Run manually from the Actions tab, and automatically on every push
+  to `dev` (not on pull requests). CodeQL does not support PHP, so the PHP is not
+  covered by it.
 
 ## Documentation
 

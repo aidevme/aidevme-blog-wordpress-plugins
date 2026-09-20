@@ -1,4 +1,4 @@
-![Aidevme Blog WordPress Plugins — Credentials Manager: a puzzle piece and an award badge beside credential cards](assets/img/credentials-manager-social-preview-image.png)
+![Aidevme Blog WordPress Plugins — Credentials Manager: a puzzle piece and an award badge beside credential cards](../../assets/credentials-manager-social-preview-image.png)
 
 # Credentials Manager
 

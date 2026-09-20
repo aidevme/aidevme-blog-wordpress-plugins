@@ -1,6 +1,6 @@
 /**
  * React-based "Credentials Manager" landing page, built on Fluent UI 9 —
- * the top-level screen of the plugin's admin menu (§6.1, §6.8, §10 v72–v75).
+ * the top-level screen of the plugin's admin menu (§6.1, §6.8, §10 v72–v77).
  * Renders into #credpl-credentials-manager-page-root (see
  * Credpl_Admin_Manager::render_page()).
  *
@@ -19,6 +19,13 @@
  * itself, which already navigates natively. `focusMode="off"` keeps the
  * Card from also becoming its own tab stop next to that anchor. The section
  * cards themselves are plain containers — not clickable, no hover effect.
+ *
+ * A navigation card with no `urlKey` (currently Skills, §10 v77) has no
+ * destination yet, so it is rendered as a plain, non-interactive card: no
+ * link, no click handler, and none of the pointer cursor / hover lift that
+ * signal "clickable" — a card that reacted like a button but did nothing
+ * would mislead. Giving it a destination later means adding its URL to the
+ * localized config and setting `urlKey`; the card then becomes interactive.
  */
 
 import { createRoot } from '@wordpress/element';
@@ -31,6 +38,7 @@ import {
 	CertificateRegular,
 	ClipboardTaskListLtrRegular,
 	PlugConnectedRegular,
+	BrainCircuitRegular,
 } from '@fluentui/react-icons';
 import { useCredentialsManagerPageStyles } from './styles';
 
@@ -60,7 +68,9 @@ const config: CredentialsManagerPageConfig = window.credplCredentialsManagerPage
 } as CredentialsManagerPageConfig );
 
 interface NavCardDef {
-	key: keyof CredentialsManagerPageConfig['urls'];
+	key: string;
+	/** Which `config.urls` entry this card navigates to. Omit for a card with no destination yet. */
+	urlKey?: keyof CredentialsManagerPageConfig['urls'];
 	label: string;
 	Icon: typeof BoxMultipleRegular;
 }
@@ -76,16 +86,18 @@ const sections: SectionDef[] = [
 		key: 'main',
 		title: __( 'Main', 'credentials-manager-plugin' ),
 		cards: [
-			{ key: 'blocks', label: __( 'Credential Blocks', 'credentials-manager-plugin' ), Icon: BoxMultipleRegular },
-			{ key: 'credentials', label: __( 'Credentials', 'credentials-manager-plugin' ), Icon: RibbonRegular },
+			{ key: 'blocks', urlKey: 'blocks', label: __( 'Credential Blocks', 'credentials-manager-plugin' ), Icon: BoxMultipleRegular },
+			{ key: 'credentials', urlKey: 'credentials', label: __( 'Credentials', 'credentials-manager-plugin' ), Icon: RibbonRegular },
 		],
 	},
 	{
 		key: 'miscellaneous',
 		title: __( 'Miscellaneous', 'credentials-manager-plugin' ),
 		cards: [
-			{ key: 'certifications', label: __( 'Microsoft Certifications', 'credentials-manager-plugin' ), Icon: CertificateRegular },
-			{ key: 'exams', label: __( 'Microsoft Exams', 'credentials-manager-plugin' ), Icon: ClipboardTaskListLtrRegular },
+			{ key: 'certifications', urlKey: 'certifications', label: __( 'Microsoft Certifications', 'credentials-manager-plugin' ), Icon: CertificateRegular },
+			{ key: 'exams', urlKey: 'exams', label: __( 'Microsoft Exams', 'credentials-manager-plugin' ), Icon: ClipboardTaskListLtrRegular },
+			// No destination yet, so no `urlKey`: rendered non-interactive.
+			{ key: 'skills', label: __( 'Skills', 'credentials-manager-plugin' ), Icon: BrainCircuitRegular },
 		],
 	},
 	{
@@ -97,7 +109,7 @@ const sections: SectionDef[] = [
 		key: 'integrations',
 		title: __( 'Integrations', 'credentials-manager-plugin' ),
 		cards: [
-			{ key: 'integrations', label: __( 'Integrations', 'credentials-manager-plugin' ), Icon: PlugConnectedRegular },
+			{ key: 'integrations', urlKey: 'integrations', label: __( 'Integrations', 'credentials-manager-plugin' ), Icon: PlugConnectedRegular },
 		],
 	},
 ];
@@ -132,8 +144,19 @@ function CredentialsManagerPage() {
 						/>
 						{ section.cards.length > 0 ? (
 							<div className={ styles.grid }>
-								{ section.cards.map( ( { key, label, Icon } ) => {
-									const url = config.urls[ key ];
+								{ section.cards.map( ( { key, urlKey, label, Icon } ) => {
+									if ( ! urlKey ) {
+										return (
+											<Card key={ key } appearance="outline" focusMode="off">
+												<CardHeader
+													image={ <Icon className={ styles.icon } aria-hidden="true" /> }
+													header={ <Text size={ 500 } weight="semibold">{ label }</Text> }
+												/>
+											</Card>
+										);
+									}
+
+									const url = config.urls[ urlKey ];
 
 									return (
 										<Card

@@ -68,9 +68,10 @@ any other plugin: a notice on **Plugins** and **Dashboard → Updates**, with a
 one-click update (and the per-plugin auto-update toggle). It works by checking
 this repository's GitHub Releases — see [Data, privacy, and security](#data-privacy-and-security)
 for what that request involves. A version is offered only once a release has been
-published for it; merging code alone offers nothing. To see a new release right
-away instead of waiting for WordPress's next check, use **Dashboard → Updates →
-Check Again**.
+published for it; merging code alone offers nothing. WordPress checks on its own
+schedule, and the plugin remembers GitHub's answer for up to 6 hours, so a release
+published in the last few hours may take a while to appear. (**Dashboard →
+Updates → Check Again** does not clear that memory yet — a known limitation.)
 
 Sites still running 0.0.83 or earlier don't have this and need the newer zip
 installed by hand once.

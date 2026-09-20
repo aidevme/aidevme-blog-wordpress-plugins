@@ -99,6 +99,14 @@ This is the exact same script `postbuild` runs — just callable without trigger
 
 It deliberately uses `npx wp-scripts build` rather than `npm run build`, so the `prebuild` version bump (above) does **not** run: the artifact carries exactly the version committed on the chosen branch, and nothing is committed or pushed back. It builds from the committed sources, so it doesn't include uncommitted local changes, and its `build/` output is discarded with the runner — the `build/` folder and `dist/` zip committed in the repo are still the ones you produce locally.
 
+### Static analysis on GitHub: the "CodeQL - Credentials Manager Plugin" workflow
+
+`.github/workflows/codeql-credentials-manager-plugin.yml` runs GitHub's CodeQL analysis, also **manual trigger only** (Actions tab → **CodeQL - Credentials Manager Plugin** → **Run workflow**). It runs two analyses in parallel — `javascript-typescript` (the `.ts`/`.tsx` sources and the `bin/`/`webpack.config.js` scripts) and `actions` (the workflow files themselves) — with the `security-and-quality` query suite, i.e. the security queries *plus* maintainability/reliability ones. Neither language needs a build step (`build-mode: none`). Results appear under the repo's **Security → Code scanning** tab, one category per language.
+
+**It does not analyze the PHP.** CodeQL has no PHP support at all, so everything under `includes/` is outside what this workflow checks — `npm run lint-php` (syntax only) is still the only automated PHP check. `.github/codeql/codeql-config.yml` excludes `build/`, `dist/`, and `node_modules` from analysis: the compiled, minified bundles committed there would only add noise, and the TypeScript under `src/` is what's worth scanning.
+
+Uploading results needs repository **code scanning** to be usable, which is free for a public repository. If you later turn on GitHub's own CodeQL "default setup" for this repo, it will conflict with this workflow (GitHub rejects advanced-workflow uploads while default setup is enabled) — use one or the other, not both.
+
 ### Lint one file
 
 ```bash

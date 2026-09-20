@@ -1,0 +1,12 @@
+name: CodeQL config - Credentials Manager Plugin
+
+# Used by .github/workflows/codeql-credentials-manager-plugin.yml.
+#
+# build/ and dist/ hold the *compiled* output (minified webpack bundles and
+# the packaged zip) that is committed to the repo. Scanning generated,
+# minified code only produces noise; the TypeScript sources under src/ are
+# what should be analyzed.
+paths-ignore:
+  - '**/node_modules'
+  - src/credentials-manager-plugin/build
+  - src/credentials-manager-plugin/dist

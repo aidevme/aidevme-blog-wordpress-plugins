@@ -1,6 +1,6 @@
 /**
  * React-based "Credentials Manager" landing page, built on Fluent UI 9 —
- * the top-level screen of the plugin's admin menu (§6.1, §6.8, §10 v72–v77).
+ * the top-level screen of the plugin's admin menu (§6.1, §6.8, §10 v72–v75, v77).
  * Renders into #credpl-credentials-manager-page-root (see
  * Credpl_Admin_Manager::render_page()).
  *

@@ -41,6 +41,7 @@ interface CredentialsListConfig {
 	listUrl: string;      // base admin.php?page=… URL, no orderby/order of its own
 	orderby: string;
 	order: string;        // 'asc' | 'desc', lowercase, matching what PHP's allowlist accepts
+	backUrl: string;      // the Credentials Manager landing page — the toolbar's Back button (§7)
 	addNewUrl: string;
 	bulkDeleteUrl: string; // a nonce URL with no ids[] of its own — appended client-side
 	noItemsText: string;
@@ -57,6 +58,7 @@ const config: CredentialsListConfig = window.credplCredentialsList || ( {
 	listUrl: '',
 	orderby: 'title',
 	order: 'asc',
+	backUrl: '',
 	addNewUrl: '',
 	bulkDeleteUrl: '',
 	noItemsText: '',
@@ -204,6 +206,14 @@ A selected row gets `<TableRow appearance="brand" aria-selected={ selected }>` �
 <Card className={ toolbarCardStyles.toolbarCard }>
 	<Toolbar aria-label={ __( 'Credentials actions', 'credentials-manager-plugin' ) }>
 		<Tooltip
+			content={ __( 'Go back to the Credentials Manager page.', 'credentials-manager-plugin' ) }
+			relationship="label"
+			withArrow
+		>
+			<ToolbarButton icon={ <ArrowLeftRegular /> } onClick={ () => { window.location.href = config.backUrl; } } />
+		</Tooltip>
+		<ToolbarDivider />
+		<Tooltip
 			content={ __( 'Create a new credential. Deselect all credentials to enable this button.', 'credentials-manager-plugin' ) }
 			relationship="label"
 			withArrow
@@ -214,7 +224,7 @@ A selected row gets `<TableRow appearance="brand" aria-selected={ selected }>` �
 				onClick={ () => { window.location.href = config.addNewUrl; } }
 			/>
 		</Tooltip>
-		{ /* … Edit, a <ToolbarDivider />, Delete, same pattern */ }
+		{ /* … Edit, a <ToolbarDivider />, Delete, same pattern — Back is always first, always enabled, and followed by its own divider (§10 v74) */ }
 	</Toolbar>
 </Card>
 ```

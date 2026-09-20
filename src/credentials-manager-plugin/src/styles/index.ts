@@ -1,5 +1,6 @@
 export { useCredentialStyles } from './credential.styles';
 export { useCredentialsListStyles } from './credentialsList.styles';
+export { useCredentialsManagerPageStyles } from './credentialsManagerPage.styles';
 export { useCredentialsBlocksListStyles } from './credentialsBlocksList.styles';
 export { useCredentialsBlockStyles } from './credentialsBlock.styles';
 export { useMsCertificationStyles } from './msCertification.styles';

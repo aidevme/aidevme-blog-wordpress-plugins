@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Credentials Manager
  * Description:       Manage Credentials, Credential Blocks, Microsoft Certifications, and Microsoft Exams (Contact Form 7 style) in dedicated admin screens, and embed a block's selected credentials anywhere with a [credential-block id="…"] shortcode.
- * Version:           0.0.78
+ * Version:           0.0.83
  * Requires at least: 6.6
  * Requires PHP:      7.4
  * Author:            AIDevMe
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'CREDPL_VERSION', '0.0.78' );
+define( 'CREDPL_VERSION', '0.0.83' );
 // Bumped from 1.0 to 1.1: triggers Credpl_Installer's one-time migration
 // that renames the old `credential_forms` table (and its `form_key`
 // column) to `credential_blocks`/`block_key` on sites that already
@@ -48,6 +48,7 @@ define( 'CREDPL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 require_once CREDPL_PLUGIN_DIR . 'includes/class-credpl-installer.php';
 require_once CREDPL_PLUGIN_DIR . 'includes/class-credpl-data.php';
 require_once CREDPL_PLUGIN_DIR . 'includes/class-credpl-admin-menu.php';
+require_once CREDPL_PLUGIN_DIR . 'includes/class-credpl-admin-manager.php';
 require_once CREDPL_PLUGIN_DIR . 'includes/class-credpl-admin-credentials.php';
 require_once CREDPL_PLUGIN_DIR . 'includes/class-credpl-admin-blocks.php';
 require_once CREDPL_PLUGIN_DIR . 'includes/class-credpl-admin-ms-certifications.php';
@@ -61,6 +62,7 @@ require_once CREDPL_PLUGIN_DIR . 'includes/class-credpl-shortcode.php';
 function credpl_bootstrap() {
 	Credpl_Installer::init();
 	Credpl_Admin_Menu::init();
+	Credpl_Admin_Manager::init();
 	Credpl_Admin_Credentials::init();
 	Credpl_Admin_Blocks::init();
 	Credpl_Admin_Ms_Certifications::init();

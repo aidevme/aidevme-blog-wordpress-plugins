@@ -93,6 +93,12 @@ npm run package-zip
 
 This is the exact same script `postbuild` runs — just callable without triggering a version bump or a webpack rebuild first. There's no longer any reason to hand-build a staging folder and run `Compress-Archive` yourself; `npm run build:release` (or, for a docs-only refresh, `npm run package-zip`) replaces that entirely.
 
+### Building on GitHub: the "Build Credentials Manager Plugin" workflow
+
+`.github/workflows/build-credentials-manager-plugin.yml` builds the plugin on a GitHub-hosted runner, **manual trigger only** (`workflow_dispatch`): Actions tab → **Build Credentials Manager Plugin** → **Run workflow**, choosing a branch. It runs, in order: `npm ci`, `npm run check-types`, `npm run lint-php` (with PHP 7.4, the plugin's declared minimum), `npx wp-scripts build`, `npm run package-zip`, then uploads `dist/credentials-manager-plugin.zip` as a workflow artifact named `credentials-manager-plugin-<version>` (downloadable from the run's summary page).
+
+It deliberately uses `npx wp-scripts build` rather than `npm run build`, so the `prebuild` version bump (above) does **not** run: the artifact carries exactly the version committed on the chosen branch, and nothing is committed or pushed back. It builds from the committed sources, so it doesn't include uncommitted local changes, and its `build/` output is discarded with the runner — the `build/` folder and `dist/` zip committed in the repo are still the ones you produce locally.
+
 ### Lint one file
 
 ```bash

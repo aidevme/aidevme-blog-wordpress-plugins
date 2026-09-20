@@ -218,15 +218,9 @@ class Credpl_Admin_Credentials {
 		if ( ! current_user_can( Credpl_Admin_Menu::CAPABILITY ) ) {
 			wp_die( esc_html__( 'You are not allowed to access this page.', 'credentials-manager-plugin' ) );
 		}
-
-		$add_new_url = add_query_arg(
-			array( 'page' => Credpl_Admin_Menu::PAGE_CREDENTIAL_NEW ),
-			admin_url( 'admin.php' )
-		);
 		?>
 		<div class="wrap">
 			<h1 class="wp-heading-inline"><?php esc_html_e( 'Credentials', 'credentials-manager-plugin' ); ?></h1>
-			<a href="<?php echo esc_url( $add_new_url ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'credentials-manager-plugin' ); ?></a>
 			<hr class="wp-header-end" />
 			<?php self::maybe_render_notice(); ?>
 			<div id="credpl-credentials-list-root"></div>

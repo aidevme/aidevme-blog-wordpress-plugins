@@ -55,7 +55,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { Ref } from 'react';
-import { useCredentialsBlockStyles } from './styles/credentialsBlock.styles';
+import { useCredentialsBlockStyles } from './styles';
 
 /** One row from `Credpl_Admin_Blocks::prepare_credential_for_js()`. */
 interface Credential {

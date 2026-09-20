@@ -1,9 +1,6 @@
 import { makeStyles, tokens } from '@fluentui/react-components';
 
 export const useCredentialsListStyles = makeStyles( {
-	toolbar: {
-		marginBottom: tokens.spacingVerticalM,
-	},
 	tableWrap: {
 		overflowX: 'auto',
 	},

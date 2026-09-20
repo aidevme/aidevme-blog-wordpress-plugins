@@ -34,7 +34,7 @@ import {
 	type OptionOnSelectData,
 } from '@fluentui/react-components';
 import { DatePicker } from '@fluentui/react-datepicker-compat';
-import { useCredentialStyles } from './styles/credential.styles';
+import { useCredentialStyles } from './styles';
 
 /**
  * The shape PHP's `wp_localize_script( 'credpl-credential-form',

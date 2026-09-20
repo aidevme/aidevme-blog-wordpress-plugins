@@ -35,7 +35,7 @@ import {
 	type InputOnChangeData,
 	type TextareaOnChangeData,
 } from '@fluentui/react-components';
-import { useMsExamStyles } from './styles/msExam.styles';
+import { useMsExamStyles } from './styles';
 
 /**
  * The shape PHP's `wp_localize_script( 'credpl-ms-exam-form',

@@ -18,9 +18,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Credpl_Admin_Ms_Exams {
 
-	const SAVE_ACTION   = 'credpl_save_ms_exam';
-	const DELETE_ACTION = 'credpl_delete_ms_exam';
-	const SYNC_ACTION   = 'credpl_sync_ms_exams';
+	const SAVE_ACTION        = 'credpl_save_ms_exam';
+	const DELETE_ACTION      = 'credpl_delete_ms_exam';
+	const BULK_DELETE_ACTION = 'credpl_bulk_delete_ms_exams';
+	const SYNC_ACTION        = 'credpl_sync_ms_exams';
 
 	/**
 	 * Same catalog endpoint Credpl_Admin_Ms_Certifications::sync() already
@@ -33,20 +34,33 @@ class Credpl_Admin_Ms_Exams {
 	public static function init() {
 		add_action( 'admin_post_' . self::SAVE_ACTION, array( __CLASS__, 'save' ) );
 		add_action( 'admin_post_' . self::DELETE_ACTION, array( __CLASS__, 'delete' ) );
+		add_action( 'admin_post_' . self::BULK_DELETE_ACTION, array( __CLASS__, 'bulk_delete' ) );
 		add_action( 'admin_post_' . self::SYNC_ACTION, array( __CLASS__, 'sync' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ) );
 	}
 
 	/**
-	 * Load the React-built Add/Edit Microsoft Exam form only on that
-	 * screen. Checked via $_GET['page'] for the same reason as
-	 * Credpl_Admin_Credentials::enqueue_assets().
+	 * Load the React-built Add/Edit Microsoft Exam form and/or the
+	 * React-built Microsoft Exams list (§10 v61, mirroring
+	 * Credpl_Admin_Credentials::enqueue_assets(), §10 v34) depending on
+	 * which of this screen's two pages is being requested.
 	 */
 	public static function enqueue_assets() {
-		if ( ! isset( $_GET['page'] ) || Credpl_Admin_Menu::PAGE_MS_EXAM_NEW !== $_GET['page'] ) {
+		if ( ! isset( $_GET['page'] ) ) {
 			return;
 		}
 
+		if ( Credpl_Admin_Menu::PAGE_MS_EXAM_NEW === $_GET['page'] ) {
+			self::enqueue_edit_form_assets();
+		} elseif ( Credpl_Admin_Menu::PAGE_MS_EXAMS === $_GET['page'] ) {
+			self::enqueue_list_assets();
+		}
+	}
+
+	/**
+	 * Load the React-built Add/Edit Microsoft Exam form.
+	 */
+	private static function enqueue_edit_form_assets() {
 		$asset_file = CREDPL_PLUGIN_DIR . 'build/ms-exam.asset.php';
 
 		if ( ! file_exists( $asset_file ) ) {
@@ -97,40 +111,104 @@ class Credpl_Admin_Ms_Exams {
 	}
 
 	/**
-	 * The "Microsoft Exams" list screen.
+	 * Load the React-built "All Microsoft Exams" list (§10 v61, mirroring
+	 * Credpl_Admin_Credentials::enqueue_list_assets(), §10 v34).
+	 * `orderby`/`order` are read and validated exactly as
+	 * `Credpl_Ms_Exams_List_Table::prepare_items()` used to.
+	 */
+	private static function enqueue_list_assets() {
+		$asset_file = CREDPL_PLUGIN_DIR . 'build/ms-exams-list.asset.php';
+
+		if ( ! file_exists( $asset_file ) ) {
+			return;
+		}
+
+		$asset = include $asset_file;
+
+		wp_enqueue_script(
+			'credpl-ms-exams-list',
+			plugins_url( 'build/ms-exams-list.js', CREDPL_PLUGIN_FILE ),
+			$asset['dependencies'],
+			$asset['version'],
+			true
+		);
+
+		$orderby = isset( $_GET['orderby'] ) ? sanitize_key( $_GET['orderby'] ) : 'title';
+		$order   = isset( $_GET['order'] ) ? sanitize_key( $_GET['order'] ) : 'asc';
+
+		$exams = Credpl_Data::get_ms_exams(
+			array(
+				'orderby' => $orderby,
+				'order'   => $order,
+			)
+		);
+
+		$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+		$rows        = array();
+
+		foreach ( $exams as $exam ) {
+			$rows[] = array(
+				'id'                  => (int) $exam['id'],
+				'title'               => $exam['title'],
+				'editUrl'             => add_query_arg(
+					array(
+						'page' => Credpl_Admin_Menu::PAGE_MS_EXAM_NEW,
+						'id'   => (int) $exam['id'],
+					),
+					admin_url( 'admin.php' )
+				),
+				'iconUrl'             => $exam['icon_url'],
+				'displayName'         => $exam['display_name'],
+				'type'                => $exam['type'],
+				'lastModifiedDisplay' => $exam['last_modified'] ? date_i18n( $date_format, strtotime( $exam['last_modified'] ) ) : '',
+				'lastModifiedRaw'     => $exam['last_modified'] ? $exam['last_modified'] : '',
+			);
+		}
+
+		wp_localize_script(
+			'credpl-ms-exams-list',
+			'credplMsExamsList',
+			array(
+				'rows'          => $rows,
+				'listUrl'       => add_query_arg( array( 'page' => Credpl_Admin_Menu::PAGE_MS_EXAMS ), admin_url( 'admin.php' ) ),
+				'orderby'       => $orderby,
+				'order'         => $order,
+				'addNewUrl'     => add_query_arg( array( 'page' => Credpl_Admin_Menu::PAGE_MS_EXAM_NEW ), admin_url( 'admin.php' ) ),
+				'bulkDeleteUrl' => wp_nonce_url(
+					add_query_arg(
+						array( 'action' => self::BULK_DELETE_ACTION ),
+						admin_url( 'admin-post.php' )
+					),
+					self::BULK_DELETE_ACTION
+				),
+				'syncUrl'       => wp_nonce_url(
+					add_query_arg( array( 'action' => self::SYNC_ACTION ), admin_url( 'admin-post.php' ) ),
+					self::SYNC_ACTION
+				),
+				'noItemsText'   => __( 'No Microsoft Exams yet.', 'credentials-manager-plugin' ),
+			)
+		);
+	}
+
+	/**
+	 * The "Microsoft Exams" list screen: a mount point for the React-built
+	 * list from src/ms-exams-list.tsx (see enqueue_list_assets() for the
+	 * localized row data it hydrates from), replacing the earlier
+	 * `Credpl_Ms_Exams_List_Table`-rendered HTML table (§10 v61, mirroring
+	 * Credentials' own conversion, §10 v34). No `page-title-action`
+	 * **Add New** / **Sync Exams** links here any more — the toolbar's
+	 * New/Sync buttons cover them.
 	 */
 	public static function render_list_page() {
 		if ( ! current_user_can( Credpl_Admin_Menu::CAPABILITY ) ) {
 			wp_die( esc_html__( 'You are not allowed to access this page.', 'credentials-manager-plugin' ) );
 		}
-
-		$list_table = new Credpl_Ms_Exams_List_Table();
-		$list_table->prepare_items();
-
-		$add_new_url = add_query_arg(
-			array( 'page' => Credpl_Admin_Menu::PAGE_MS_EXAM_NEW ),
-			admin_url( 'admin.php' )
-		);
-
-		$sync_url = wp_nonce_url(
-			add_query_arg( array( 'action' => self::SYNC_ACTION ), admin_url( 'admin-post.php' ) ),
-			self::SYNC_ACTION
-		);
 		?>
 		<div class="wrap">
 			<h1 class="wp-heading-inline"><?php esc_html_e( 'Microsoft Exams', 'credentials-manager-plugin' ); ?></h1>
-			<a href="<?php echo esc_url( $add_new_url ); ?>" class="page-title-action"><?php esc_html_e( 'Add New', 'credentials-manager-plugin' ); ?></a>
-			<a
-				href="<?php echo esc_url( $sync_url ); ?>"
-				class="page-title-action"
-				onclick="return confirm('<?php echo esc_js( __( 'Sync exams from Microsoft Learn now? This fetches the full catalog and may take a minute.', 'credentials-manager-plugin' ) ); ?>');"
-			><?php esc_html_e( 'Sync Exams', 'credentials-manager-plugin' ); ?></a>
 			<hr class="wp-header-end" />
 			<?php self::maybe_render_notice(); ?>
-			<form method="get">
-				<input type="hidden" name="page" value="<?php echo esc_attr( Credpl_Admin_Menu::PAGE_MS_EXAMS ); ?>" />
-				<?php $list_table->display(); ?>
-			</form>
+			<div id="credpl-ms-exams-list-root"></div>
 		</div>
 		<?php
 	}
@@ -290,6 +368,43 @@ class Credpl_Admin_Ms_Exams {
 			array(
 				'page'    => Credpl_Admin_Menu::PAGE_MS_EXAMS,
 				'deleted' => 1,
+			),
+			admin_url( 'admin.php' )
+		);
+
+		wp_safe_redirect( $redirect_url );
+		exit;
+	}
+
+	/**
+	 * Bulk delete handler (admin-post.php?action=credpl_bulk_delete_ms_exams&ids[]=…&ids[]=…),
+	 * driven by the list screen's toolbar Delete button (§6.5.2) — one
+	 * fixed nonce action string, not per-ID, since the selected ID set is
+	 * only known client-side at click time (mirrors
+	 * Credpl_Admin_Credentials::bulk_delete(), §10 v41).
+	 */
+	public static function bulk_delete() {
+		if ( ! current_user_can( Credpl_Admin_Menu::CAPABILITY ) ) {
+			wp_die( esc_html__( 'You are not allowed to do that.', 'credentials-manager-plugin' ) );
+		}
+
+		check_admin_referer( self::BULK_DELETE_ACTION );
+
+		$ids = isset( $_GET['ids'] ) && is_array( $_GET['ids'] ) ? array_map( 'absint', $_GET['ids'] ) : array();
+		$ids = array_filter( $ids );
+
+		$deleted_count = 0;
+
+		foreach ( $ids as $id ) {
+			if ( Credpl_Data::delete_ms_exam( $id ) ) {
+				++$deleted_count;
+			}
+		}
+
+		$redirect_url = add_query_arg(
+			array(
+				'page'         => Credpl_Admin_Menu::PAGE_MS_EXAMS,
+				'bulk_deleted' => $deleted_count,
 			),
 			admin_url( 'admin.php' )
 		);
@@ -647,6 +762,17 @@ class Credpl_Admin_Ms_Exams {
 
 		if ( isset( $_GET['deleted'] ) ) {
 			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Microsoft Exam deleted.', 'credentials-manager-plugin' ) . '</p></div>';
+		}
+
+		if ( isset( $_GET['bulk_deleted'] ) ) {
+			$count = absint( $_GET['bulk_deleted'] );
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html(
+				sprintf(
+					/* translators: %d: number of Microsoft Exams deleted. */
+					_n( '%d Microsoft Exam deleted.', '%d Microsoft Exams deleted.', $count, 'credentials-manager-plugin' ),
+					$count
+				)
+			) . '</p></div>';
 		}
 
 		if ( isset( $_GET['synced'] ) ) {

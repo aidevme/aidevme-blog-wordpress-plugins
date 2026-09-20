@@ -34,14 +34,16 @@ import {
 	Toolbar,
 	ToolbarButton,
 	ToolbarDivider,
+	Card,
 	Badge,
 	Link,
 	Tooltip,
 	tokens,
 } from '@fluentui/react-components';
 import { AddRegular, EditRegular, DeleteRegular } from '@fluentui/react-icons';
-import { useCredentialsListStyles } from './styles/credentialsList.styles';
-import { ConfirmationDialog } from './components/dialogs/confirmation-dialog';
+import { useCredentialsListStyles, useToolbarCardStyles } from './styles';
+import { ConfirmationDialog, TableFooter } from './components';
+import { EM_DASH, getCurrentSortDirection, buildNextSortUrl, buildBulkDeleteUrl } from './tools';
 
 interface CredentialRow {
 	id: number;
@@ -90,55 +92,14 @@ const config: CredentialsListConfig = window.credplCredentialsList || ( {
 	noItemsText: '',
 } as CredentialsListConfig );
 
-const EM_DASH = '—';
-
 /**
  * The direction the currently-sorted column (`config.orderby`) is sorted
  * in — only meaningful for whichever column ID matches `config.orderby`;
  * every other column's header renders with no arrow at all (§6.2.3).
+ * `EM_DASH`/`buildNextSortUrl()`/`buildBulkDeleteUrl()` are shared across
+ * all four list screens — see `src/tools/listUrls.ts`.
  */
-const currentSortDirection: 'ascending' | 'descending' = 'desc' === config.order.toLowerCase() ? 'descending' : 'ascending';
-
-/**
- * `config.listUrl` never carries `orderby`/`order` of its own (PHP builds it
- * from just `?page=…`, see enqueue_list_assets()), so this only ever needs
- * to append them, never replace an existing pair.
- */
-function buildSortUrl( columnId: string, direction: 'ascending' | 'descending' ): string {
-	const separator = config.listUrl.includes( '?' ) ? '&' : '?';
-	const order = 'descending' === direction ? 'desc' : 'asc';
-
-	return `${ config.listUrl }${ separator }orderby=${ encodeURIComponent( columnId ) }&order=${ order }`;
-}
-
-/**
- * Clicking the already-sorted column's header toggles its direction (same
- * as the old `WP_List_Table` sort links / DataGrid's own built-in
- * behavior); clicking any other sortable column's header always starts
- * that column at ascending.
- */
-function buildNextSortUrl( columnId: string ): string {
-	const isCurrentColumn = columnId === config.orderby;
-	const direction: 'ascending' | 'descending' = isCurrentColumn && 'ascending' === currentSortDirection
-		? 'descending'
-		: 'ascending';
-
-	return buildSortUrl( columnId, direction );
-}
-
-/**
- * `config.bulkDeleteUrl` is a nonce URL with no `ids[]` of its own (the
- * nonce action, `Credpl_Admin_Credentials::BULK_DELETE_ACTION`, is a fixed
- * string rather than per-ID the way the single-row `deleteUrl`s are, so it
- * doesn't need one baked in server-side) — the IDs being deleted are
- * appended here, client-side, at confirm time.
- */
-function buildBulkDeleteUrl( ids: number[] ): string {
-	const separator = config.bulkDeleteUrl.includes( '?' ) ? '&' : '?';
-	const idsQuery = ids.map( ( id ) => `ids[]=${ encodeURIComponent( String( id ) ) }` ).join( '&' );
-
-	return `${ config.bulkDeleteUrl }${ separator }${ idsQuery }`;
-}
+const currentSortDirection: 'ascending' | 'descending' = getCurrentSortDirection( config.order );
 
 /**
  * The Title cell is a Fluent UI `Link` to the credential's Edit screen
@@ -289,6 +250,7 @@ const columns: ColumnDef[] = [
 
 function CredentialsList() {
 	const styles = useCredentialsListStyles();
+	const toolbarCardStyles = useToolbarCardStyles();
 	const [ selectedIds, setSelectedIds ] = useState<Set<number>>( () => new Set() );
 	const [ pendingDeleteIds, setPendingDeleteIds ] = useState<number[] | null>( null );
 
@@ -338,7 +300,7 @@ function CredentialsList() {
 			return;
 		}
 
-		window.location.href = buildBulkDeleteUrl( pendingDeleteIds );
+		window.location.href = buildBulkDeleteUrl( config, pendingDeleteIds );
 	}
 
 	function handleCancelDelete() {
@@ -391,48 +353,50 @@ function CredentialsList() {
 	);
 
 	const toolbar = (
-		<Toolbar aria-label={ __( 'Credentials actions', 'credentials-manager-plugin' ) } className={ styles.toolbar }>
-			<Tooltip
-				content={ __( 'Create a new credential. Deselect all credentials to enable this button.', 'credentials-manager-plugin' ) }
-				relationship="label"
-				withArrow
-			>
-				<ToolbarButton
-					icon={ <AddRegular /> }
-					disabledFocusable={ selectedIds.size > 0 }
-					onClick={ () => {
-						window.location.href = config.addNewUrl;
-					} }
-				/>
-			</Tooltip>
-			<Tooltip
-				content={ __( "Edit the selected credential's details. Select exactly one credential to enable this button.", 'credentials-manager-plugin' ) }
-				relationship="label"
-				withArrow
-			>
-				<ToolbarButton
-					icon={ <EditRegular /> }
-					disabledFocusable={ ! singleSelectedRow }
-					onClick={ () => {
-						if ( singleSelectedRow ) {
-							window.location.href = singleSelectedRow.editUrl;
-						}
-					} }
-				/>
-			</Tooltip>
-			<ToolbarDivider />
-			<Tooltip
-				content={ __( 'Permanently delete the selected credential(s). Select one or more credentials to enable this button.', 'credentials-manager-plugin' ) }
-				relationship="label"
-				withArrow
-			>
-				<ToolbarButton
-					icon={ <DeleteRegular /> }
-					disabledFocusable={ 0 === selectedIds.size }
-					onClick={ () => setPendingDeleteIds( Array.from( selectedIds ) ) }
-				/>
-			</Tooltip>
-		</Toolbar>
+		<Card className={ toolbarCardStyles.toolbarCard }>
+			<Toolbar aria-label={ __( 'Credentials actions', 'credentials-manager-plugin' ) }>
+				<Tooltip
+					content={ __( 'Create a new credential. Deselect all credentials to enable this button.', 'credentials-manager-plugin' ) }
+					relationship="label"
+					withArrow
+				>
+					<ToolbarButton
+						icon={ <AddRegular /> }
+						disabledFocusable={ selectedIds.size > 0 }
+						onClick={ () => {
+							window.location.href = config.addNewUrl;
+						} }
+					/>
+				</Tooltip>
+				<Tooltip
+					content={ __( "Edit the selected credential's details. Select exactly one credential to enable this button.", 'credentials-manager-plugin' ) }
+					relationship="label"
+					withArrow
+				>
+					<ToolbarButton
+						icon={ <EditRegular /> }
+						disabledFocusable={ ! singleSelectedRow }
+						onClick={ () => {
+							if ( singleSelectedRow ) {
+								window.location.href = singleSelectedRow.editUrl;
+							}
+						} }
+					/>
+				</Tooltip>
+				<ToolbarDivider />
+				<Tooltip
+					content={ __( 'Permanently delete the selected credential(s). Select one or more credentials to enable this button.', 'credentials-manager-plugin' ) }
+					relationship="label"
+					withArrow
+				>
+					<ToolbarButton
+						icon={ <DeleteRegular /> }
+						disabledFocusable={ 0 === selectedIds.size }
+						onClick={ () => setPendingDeleteIds( Array.from( selectedIds ) ) }
+					/>
+				</Tooltip>
+			</Toolbar>
+		</Card>
 	);
 
 	if ( 0 === config.rows.length ) {
@@ -470,7 +434,7 @@ function CredentialsList() {
 										sortable={ column.sortable }
 										sortDirection={ column.id === config.orderby ? currentSortDirection : undefined }
 										button={ column.sortable ? { onClick: () => {
-											window.location.href = buildNextSortUrl( column.id );
+											window.location.href = buildNextSortUrl( config, column.id );
 										} } : undefined }
 									>
 										{ column.label }
@@ -499,6 +463,7 @@ function CredentialsList() {
 					</TableBody>
 				</Table>
 			</div>
+			<TableFooter recordCount={ config.rows.length } selectedCount={ selectedIds.size } />
 			{ deleteDialog }
 		</>
 	);

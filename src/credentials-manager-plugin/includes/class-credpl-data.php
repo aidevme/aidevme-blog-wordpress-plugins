@@ -667,4 +667,154 @@ class Credpl_Data {
 
 		return false !== $deleted;
 	}
+
+	/* ---------------------------------------------------------------
+	 * Skills
+	 * ------------------------------------------------------------- */
+
+	public static function skills_table() {
+		global $wpdb;
+		return $wpdb->prefix . 'skills';
+	}
+
+	/**
+	 * All Skill rows, skill name A–Z by default.
+	 */
+	public static function get_skills( array $args = array() ) {
+		global $wpdb;
+
+		$defaults = array(
+			'orderby' => 'skill_name',
+			'order'   => 'ASC',
+		);
+		$args = wp_parse_args( $args, $defaults );
+
+		$orderby = in_array( $args['orderby'], array( 'id', 'guid', 'skill_name', 'description' ), true )
+			? $args['orderby']
+			: 'skill_name';
+		$order = 'DESC' === strtoupper( $args['order'] ) ? 'DESC' : 'ASC';
+
+		$table = self::skills_table();
+
+		// $orderby/$order are validated against fixed allowlists above, so
+		// this interpolation is safe even though it can't go through
+		// $wpdb->prepare() (identifiers can't be parameterized).
+		$sql = "SELECT * FROM {$table} ORDER BY {$orderby} {$order}";
+
+		$results = $wpdb->get_results( $sql, ARRAY_A );
+
+		return is_array( $results ) ? $results : array();
+	}
+
+	public static function get_skill( $id ) {
+		global $wpdb;
+		$table = self::skills_table();
+
+		$row = $wpdb->get_row(
+			$wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", $id ),
+			ARRAY_A
+		);
+
+		return $row ? $row : null;
+	}
+
+	/**
+	 * Look up a row by its `guid` rather than the internal `id` — the guid is
+	 * the stable identifier, safe to hand to other systems.
+	 */
+	public static function get_skill_by_guid( $guid ) {
+		global $wpdb;
+		$table = self::skills_table();
+
+		$row = $wpdb->get_row(
+			$wpdb->prepare( "SELECT * FROM {$table} WHERE guid = %s", $guid ),
+			ARRAY_A
+		);
+
+		return $row ? $row : null;
+	}
+
+	/**
+	 * The `guid` is generated here (wp_generate_uuid4()), not typed by the
+	 * admin, unless the caller passes one in explicitly — e.g. when
+	 * importing a skill that already has an identifier elsewhere.
+	 */
+	public static function insert_skill( array $data ) {
+		global $wpdb;
+		$table = self::skills_table();
+
+		$row = array(
+			'guid'        => ! empty( $data['guid'] ) ? $data['guid'] : wp_generate_uuid4(),
+			'skill_name'  => isset( $data['skill_name'] ) ? $data['skill_name'] : '',
+			'description' => isset( $data['description'] ) ? $data['description'] : '',
+		);
+
+		$inserted = $wpdb->insert( $table, $row );
+
+		if ( false === $inserted ) {
+			return new WP_Error(
+				'credpl_insert_failed',
+				sprintf(
+					/* translators: %s: the database error message. */
+					__( 'Could not save the skill. Database said: %s', 'credentials-manager-plugin' ),
+					$wpdb->last_error
+				)
+			);
+		}
+
+		$insert_id = (int) $wpdb->insert_id;
+
+		if ( ! $insert_id ) {
+			// Same fallback as the other insert_*() methods — some hosts
+			// don't reliably surface LAST_INSERT_ID() via $wpdb->insert_id.
+			// Reliable here: guid is a UNIQUE KEY, so this lookup can't
+			// match the wrong row.
+			$insert_id = (int) $wpdb->get_var(
+				$wpdb->prepare( "SELECT id FROM {$table} WHERE guid = %s", $row['guid'] )
+			);
+		}
+
+		return $insert_id;
+	}
+
+	/**
+	 * The `guid` is assigned once, at insert, and never changed by an
+	 * update — any `guid` in `$data` is ignored.
+	 *
+	 * @return true|WP_Error `true` on success (including a successful query
+	 *                       that changed zero rows), or a WP_Error with the
+	 *                       database's own error message if the query
+	 *                       itself failed.
+	 */
+	public static function update_skill( $id, array $data ) {
+		global $wpdb;
+		$table = self::skills_table();
+
+		$row = $data;
+		unset( $row['id'], $row['guid'] );
+
+		$updated = $wpdb->update( $table, $row, array( 'id' => absint( $id ) ) );
+
+		if ( false === $updated ) {
+			return new WP_Error(
+				'credpl_update_failed',
+				sprintf(
+					/* translators: %s: the database error message. */
+					__( 'Could not update the skill. Database said: %s', 'credentials-manager-plugin' ),
+					$wpdb->last_error
+				)
+			);
+		}
+
+		return true;
+	}
+
+	public static function delete_skill( $id ) {
+		global $wpdb;
+		$table = self::skills_table();
+
+		$deleted = $wpdb->delete( $table, array( 'id' => absint( $id ) ) );
+
+		return false !== $deleted;
+	}
 }

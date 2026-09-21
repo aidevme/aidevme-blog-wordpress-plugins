@@ -58,7 +58,7 @@ kind of record, and a shortcode you copy after saving.
 2. In WordPress: **Plugins → Add New → Upload Plugin**, choose the zip, then
    **Install Now** and **Activate**.
 
-Activation creates the plugin's four database tables. Later updates upgrade the
+Activation creates the plugin's five database tables. Later updates upgrade the
 schema automatically when the plugin loads.
 
 ### Updates
@@ -101,16 +101,20 @@ landing page has cards that lead to each screen:
 
 4. Paste it into any page or post.
 
-The block's own title is shown as the heading, followed by one entry per
-credential: badge, title, and an "Expires on … · Earned on …" line. For **Awards**
-the dates line is replaced by the award category and technology area. If a block
-is missing or empty, nothing is rendered — visitors never see an error.
+The block's own title is shown as the heading, followed by one card per
+credential: a round badge, the title, a pill naming the issuer and type (for
+example "Microsoft Applied Skills"), and an "Earned on" / "Expires on" column
+showing whichever dates are set. For **Awards** the dates column is replaced by
+the award category and technology area. If a block is missing or empty, nothing
+is rendered — visitors never see an error.
 
 ### Styling
 
 The plugin loads a small stylesheet, only on pages that actually contain the
-shortcode. The markup uses `credpl-` prefixed classes, so your theme can restyle
-it:
+shortcode. The markup uses `credpl-` prefixed classes, and every colour is a CSS
+custom property on `.credpl-credential-block` (`--credpl-accent`,
+`--credpl-panel-bg`, `--credpl-card-bg`, …), so your theme can restyle it — for
+example `.credpl-credential-block { --credpl-accent: #c00; }`:
 
 ```html
 <div class="credpl-credential-block" data-credpl-block="a2949a2">
@@ -120,8 +124,10 @@ it:
       <span class="credpl-credential-badge"><img src="…" alt="" /></span>
       <div class="credpl-credential-info">
         <h3 class="credpl-credential-title">…</h3>
-        <p class="credpl-credential-meta">…</p>
+        <span class="credpl-credential-tag">…</span>
+        <p class="credpl-credential-meta">…</p> <!-- Awards only -->
       </div>
+      <div class="credpl-credential-dates">…</div> <!-- not for Awards -->
     </li>
   </ul>
 </div>

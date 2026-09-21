@@ -122,20 +122,24 @@ class Credpl_Shortcode {
 
 		$badge_media = absint( $credential['badge_media'] );
 		$image_url   = $badge_media ? wp_get_attachment_image_url( $badge_media, 'medium' ) : '';
+		$badge_inner = self::badge_inner( $image_url, $credential['title'] );
 
-		$meta = self::format_earned_expires( $credential );
+		$is_award = 'Awards' === $credential['credentials_type']; // Must match the literal in Credpl_Admin_Credentials::CREDENTIALS_TYPES (§6.2) — same convention as credential.tsx's own conditional Award Category/Technology Area rendering (§10 v30).
+		$tag      = self::format_tag( $credential );
+
+		// Awards show Award Category/Technology Area lines instead of dates
+		// (§10 v32): earned/expires dates aren't meaningful for awards.
+		$show_dates = ! $is_award && ( ! empty( $credential['earned_on'] ) || ! empty( $credential['expires_on'] ) );
 		?>
 		<li class="credpl-credential-item">
-			<?php if ( $image_url ) : ?>
-				<?php if ( $link ) : ?>
-					<a class="credpl-credential-badge" href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener noreferrer">
-						<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $credential['title'] ); ?>" />
-					</a>
-				<?php else : ?>
-					<span class="credpl-credential-badge">
-						<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $credential['title'] ); ?>" />
-					</span>
-				<?php endif; ?>
+			<?php if ( $link ) : ?>
+				<a class="credpl-credential-badge" href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo esc_attr( $credential['title'] ); ?>">
+					<?php echo $badge_inner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built by badge_inner() from escaped values and static markup. ?>
+				</a>
+			<?php else : ?>
+				<span class="credpl-credential-badge">
+					<?php echo $badge_inner; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- see above. ?>
+				</span>
 			<?php endif; ?>
 
 			<div class="credpl-credential-info">
@@ -146,11 +150,10 @@ class Credpl_Shortcode {
 						<?php echo esc_html( $credential['title'] ); ?>
 					<?php endif; ?>
 				</h3>
-				<?php // 'Awards' must match the literal in Credpl_Admin_Credentials::CREDENTIALS_TYPES (§6.2) — same convention already followed by credential.tsx's own conditional Award Category/Technology Area rendering (§10 v30). The Earned on/Expires on line is suppressed for Awards credentials (§10 v32): those dates aren't meaningful for awards and the screenshot driving §7's example doesn't show them. ?>
-				<?php if ( '' !== $meta && 'Awards' !== $credential['credentials_type'] ) : ?>
-					<p class="credpl-credential-meta"><?php echo esc_html( $meta ); ?></p>
+				<?php if ( '' !== $tag ) : ?>
+					<span class="credpl-credential-tag"><?php echo esc_html( $tag ); ?></span>
 				<?php endif; ?>
-				<?php if ( 'Awards' === $credential['credentials_type'] ) : ?>
+				<?php if ( $is_award ) : ?>
 					<?php if ( ! empty( $credential['award_category'] ) ) : ?>
 						<p class="credpl-credential-meta">
 							<?php
@@ -175,36 +178,68 @@ class Credpl_Shortcode {
 					<?php endif; ?>
 				<?php endif; ?>
 			</div>
+
+			<?php if ( $show_dates ) : ?>
+				<div class="credpl-credential-dates">
+					<?php self::render_date( __( 'Earned on', 'credentials-manager-plugin' ), $credential['earned_on'] ); ?>
+					<?php self::render_date( __( 'Expires on', 'credentials-manager-plugin' ), $credential['expires_on'] ); ?>
+				</div>
+			<?php endif; ?>
 		</li>
 		<?php
 	}
 
 	/**
-	 * "Expires on {date} · Earned on {date}" (site's configured date
-	 * format, localized), with either clause dropped if that date isn't
-	 * set — and the separator only appearing when both are. Returns ''
-	 * if neither date is set, so callers can skip the line entirely.
+	 * The pill under a credential's title: "{issuer} {type}", e.g.
+	 * "Microsoft Applied Skills" (uppercased by the stylesheet, not here, so
+	 * the stored text stays as typed). Either half is dropped if empty;
+	 * returns '' if both are, so the caller can skip the pill entirely.
 	 */
-	private static function format_earned_expires( array $credential ) {
-		$date_format = get_option( 'date_format' );
-		$parts       = array();
+	private static function format_tag( array $credential ) {
+		return trim( $credential['issuer'] . ' ' . $credential['credentials_type'] );
+	}
 
-		if ( ! empty( $credential['expires_on'] ) ) {
-			$parts[] = sprintf(
-				/* translators: %s: formatted expiration date. */
-				__( 'Expires on %s', 'credentials-manager-plugin' ),
-				date_i18n( $date_format, strtotime( $credential['expires_on'] ) )
+	/**
+	 * One "Earned on"/"Expires on" entry — calendar icon, small label, and
+	 * the date formatted per the site's `date_format` option (localized via
+	 * date_i18n()). Renders nothing if the date isn't set (or unparseable),
+	 * so a credential with only one of the two dates shows only that one.
+	 */
+	private static function render_date( $label, $date ) {
+		$timestamp = empty( $date ) ? false : strtotime( $date );
+
+		if ( ! $timestamp ) {
+			return;
+		}
+		?>
+		<div class="credpl-credential-date">
+			<?php echo self::calendar_icon(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static markup. ?>
+			<span class="credpl-credential-date-text">
+				<span class="credpl-credential-date-label"><?php echo esc_html( $label ); ?></span>
+				<time class="credpl-credential-date-value" datetime="<?php echo esc_attr( gmdate( 'Y-m-d', $timestamp ) ); ?>"><?php echo esc_html( date_i18n( get_option( 'date_format' ), $timestamp ) ); ?></time>
+			</span>
+		</div>
+		<?php
+	}
+
+	/**
+	 * The contents of a credential's round badge slot: its uploaded badge
+	 * image, or — so a credential with no image still lines up with the
+	 * others — a generic star badge. Returns ready-to-echo markup.
+	 */
+	private static function badge_inner( $image_url, $title ) {
+		if ( $image_url ) {
+			return sprintf(
+				'<img src="%s" alt="%s" />',
+				esc_url( $image_url ),
+				esc_attr( $title )
 			);
 		}
 
-		if ( ! empty( $credential['earned_on'] ) ) {
-			$parts[] = sprintf(
-				/* translators: %s: formatted earned date. */
-				__( 'Earned on %s', 'credentials-manager-plugin' ),
-				date_i18n( $date_format, strtotime( $credential['earned_on'] ) )
-			);
-		}
+		return '<svg class="credpl-credential-badge-fallback" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="24" cy="24" r="20" fill="currentColor"/><path fill="#fff" d="M24 13l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6-6.8-3.6-6.8 3.6 1.3-7.6L13 21l7.6-1.1z"/></svg>';
+	}
 
-		return implode( ' · ', $parts );
+	private static function calendar_icon() {
+		return '<svg class="credpl-credential-date-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01" stroke-width="2.2"/></svg>';
 	}
 }

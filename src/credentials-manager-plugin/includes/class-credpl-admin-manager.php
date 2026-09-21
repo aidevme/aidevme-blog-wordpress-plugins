@@ -56,6 +56,7 @@ class Credpl_Admin_Manager {
 					'credentials'    => self::list_url( Credpl_Admin_Menu::PAGE_CREDENTIALS ),
 					'certifications' => self::list_url( Credpl_Admin_Menu::PAGE_MS_CERTIFICATIONS ),
 					'exams'          => self::list_url( Credpl_Admin_Menu::PAGE_MS_EXAMS ),
+					'skills'         => self::list_url( Credpl_Admin_Menu::PAGE_SKILLS ),
 					'integrations'   => self::list_url( Credpl_Admin_Menu::PAGE_INTEGRATION ),
 				),
 			)

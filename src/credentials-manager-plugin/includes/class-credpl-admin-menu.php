@@ -1,7 +1,7 @@
 <?php
 /**
  * Registers the top-level "Credentials Manager" admin menu and its six
- * visible submenus (plus four registered-but-CSS-hidden "Add …" ones —
+ * visible submenus (plus five registered-but-CSS-hidden "Add …" ones —
  * see the note on hide_add_screens_from_menu() below). See
  * SPECIFICATION.md §6.1.
  */
@@ -23,6 +23,8 @@ class Credpl_Admin_Menu {
 	const PAGE_MS_CERTIFICATION_NEW = 'credpl-ms-certification-new';
 	const PAGE_MS_EXAMS             = 'credpl-ms-exams';
 	const PAGE_MS_EXAM_NEW          = 'credpl-ms-exam-new';
+	const PAGE_SKILLS               = 'credpl-skills';
+	const PAGE_SKILL_NEW            = 'credpl-skill-new';
 	const PAGE_INTEGRATION          = 'credpl-integration';
 
 	public static function init() {
@@ -38,7 +40,7 @@ class Credpl_Admin_Menu {
 	 * Credential Blocks list (PAGE_BLOCKS) used to be that target (§10 v72
 	 * moved it) and is now an ordinary submenu item like the others.
 	 *
-	 * All ten submenus, including the four "Add …" ones, are registered
+	 * All twelve submenus, including the five "Add …" ones, are registered
 	 * normally here — see hide_add_screens_from_menu() for why those four
 	 * are hidden via CSS afterward rather than unregistered.
 	 */
@@ -136,6 +138,24 @@ class Credpl_Admin_Menu {
 
 		add_submenu_page(
 			self::PAGE_MANAGER,
+			__( 'All Skills', 'credentials-manager-plugin' ),
+			__( 'All Skills', 'credentials-manager-plugin' ),
+			self::CAPABILITY,
+			self::PAGE_SKILLS,
+			array( 'Credpl_Admin_Skills', 'render_list_page' )
+		);
+
+		add_submenu_page(
+			self::PAGE_MANAGER,
+			__( 'Add Skill', 'credentials-manager-plugin' ),
+			__( 'Add Skill', 'credentials-manager-plugin' ),
+			self::CAPABILITY,
+			self::PAGE_SKILL_NEW,
+			array( 'Credpl_Admin_Skills', 'render_edit_page' )
+		);
+
+		add_submenu_page(
+			self::PAGE_MANAGER,
 			__( 'Integration', 'credentials-manager-plugin' ),
 			__( 'Integration', 'credentials-manager-plugin' ),
 			self::CAPABILITY,
@@ -145,7 +165,7 @@ class Credpl_Admin_Menu {
 	}
 
 	/**
-	 * Hides the four "Add …" items from the visible admin menu via CSS
+	 * Hides the five "Add …" items from the visible admin menu via CSS
 	 * (`admin_head`, so it applies site-wide, not just on this plugin's own
 	 * screens — the WP admin sidebar is global) — deliberately **not**
 	 * `remove_submenu_page()`, which was tried first and reverted (§10
@@ -169,6 +189,7 @@ class Credpl_Admin_Menu {
 			self::PAGE_CREDENTIAL_NEW,
 			self::PAGE_MS_CERTIFICATION_NEW,
 			self::PAGE_MS_EXAM_NEW,
+			self::PAGE_SKILL_NEW,
 		);
 
 		echo '<style>';

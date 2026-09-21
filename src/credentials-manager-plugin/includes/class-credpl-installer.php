@@ -1,9 +1,9 @@
 <?php
 /**
- * Creates and versions the plugin's four custom tables:
+ * Creates and versions the plugin's five custom tables:
  * `{$wpdb->prefix}credentials`, `{$wpdb->prefix}credential_blocks`,
- * `{$wpdb->prefix}microsoft_certifications`, and
- * `{$wpdb->prefix}microsoft_exams`.
+ * `{$wpdb->prefix}microsoft_certifications`,
+ * `{$wpdb->prefix}microsoft_exams`, and `{$wpdb->prefix}skills`.
  *
  * See SPECIFICATION.md §4 (schema) and §5 (activation/versioning).
  */
@@ -28,7 +28,7 @@ class Credpl_Installer {
 	}
 
 	/**
-	 * Create (or update, via dbDelta()'s diffing) all four tables and
+	 * Create (or update, via dbDelta()'s diffing) all five tables and
 	 * record the current schema version.
 	 */
 	public static function install() {
@@ -129,10 +129,22 @@ class Credpl_Installer {
 			KEY display_name (display_name)
 		) $charset_collate;";
 
+		$skills_table = $wpdb->prefix . 'skills';
+		$sql_skills   = "CREATE TABLE $skills_table (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			guid varchar(36) NOT NULL,
+			skill_name varchar(255) NOT NULL DEFAULT '',
+			description text,
+			PRIMARY KEY  (id),
+			UNIQUE KEY guid (guid),
+			KEY skill_name (skill_name)
+		) $charset_collate;";
+
 		dbDelta( $sql_credentials );
 		dbDelta( $sql_blocks );
 		dbDelta( $sql_ms_certifications );
 		dbDelta( $sql_ms_exams );
+		dbDelta( $sql_skills );
 
 		// dbDelta() doesn't report failure — if the DB user lacks ALTER
 		// privileges (seen on some restrictive hosting setups), the

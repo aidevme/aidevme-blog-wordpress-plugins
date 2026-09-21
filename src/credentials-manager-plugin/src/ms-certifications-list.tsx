@@ -26,28 +26,19 @@
 
 import { createRoot, useState } from '@wordpress/element';
 import { __, _n, sprintf } from '@wordpress/i18n';
-import type { ReactNode } from 'react';
 import {
 	FluentProvider,
 	webLightTheme,
-	Table,
-	TableHeader,
-	TableHeaderCell,
-	TableRow,
-	TableBody,
-	TableCell,
-	TableSelectionCell,
 	Toolbar,
 	ToolbarButton,
 	ToolbarDivider,
 	Card,
 	Link,
 	Tooltip,
-	tokens,
 } from '@fluentui/react-components';
 import { ArrowLeftRegular, AddRegular, EditRegular, DeleteRegular, ArrowSyncRegular } from '@fluentui/react-icons';
 import { useMsCertificationsListStyles, useToolbarCardStyles } from './styles';
-import { ConfirmationDialog, TableFooter } from './components';
+import { ConfirmationDialog, DataTable, useRowSelection, type ColumnDef } from './components';
 import { EM_DASH, getCurrentSortDirection, buildNextSortUrl, buildBulkDeleteUrl } from './tools';
 
 interface MsCertificationRow {
@@ -141,14 +132,6 @@ function MsCertificationLastModifiedCell( { display, raw }: { display: string; r
 	return <time dateTime={ raw }>{ display }</time>;
 }
 
-interface ColumnDef {
-	id: string;
-	label: string;
-	sortable: boolean;
-	headerTooltip: string;
-	renderCell: ( row: MsCertificationRow ) => ReactNode;
-}
-
 /**
  * Column IDs that are sortable (`title`, `certification_type`, `type`,
  * `last_modified`) are the exact strings
@@ -158,7 +141,7 @@ interface ColumnDef {
  * (an image, not descriptive data) — column order otherwise matches that
  * table exactly: title, icon, certification_type, type, last_modified.
  */
-const columns: ColumnDef[] = [
+const columns: ColumnDef<MsCertificationRow>[] = [
 	{
 		id: 'title',
 		label: __( 'Title', 'credentials-manager-plugin' ),
@@ -197,41 +180,10 @@ const columns: ColumnDef[] = [
 ];
 
 function MsCertificationsList() {
-	const styles = useMsCertificationsListStyles();
 	const toolbarCardStyles = useToolbarCardStyles();
-	const [ selectedIds, setSelectedIds ] = useState<Set<number>>( () => new Set() );
+	const { selectedIds, setSelectedIds, singleSelectedRow } = useRowSelection( config.rows );
 	const [ pendingDeleteIds, setPendingDeleteIds ] = useState<number[] | null>( null );
 	const [ pendingSync, setPendingSync ] = useState( false );
-
-	const allSelected = config.rows.length > 0 && config.rows.every( ( row ) => selectedIds.has( row.id ) );
-	const someSelected = ! allSelected && config.rows.some( ( row ) => selectedIds.has( row.id ) );
-
-	function toggleRow( id: number ) {
-		setSelectedIds( ( current ) => {
-			const next = new Set( current );
-
-			if ( next.has( id ) ) {
-				next.delete( id );
-			} else {
-				next.add( id );
-			}
-
-			return next;
-		} );
-	}
-
-	function toggleAllRows() {
-		setSelectedIds( allSelected ? new Set() : new Set( config.rows.map( ( row ) => row.id ) ) );
-	}
-
-	/**
-	 * Enablement rules: New only when nothing is selected, Edit only when
-	 * exactly one row is, Delete whenever one or more are, Sync always.
-	 */
-	const singleSelectedId = 1 === selectedIds.size ? Array.from( selectedIds )[ 0 ] : undefined;
-	const singleSelectedRow = undefined !== singleSelectedId
-		? config.rows.find( ( row ) => row.id === singleSelectedId )
-		: undefined;
 
 	function handleConfirmDelete() {
 		if ( ! pendingDeleteIds || 0 === pendingDeleteIds.length ) {
@@ -383,72 +335,25 @@ function MsCertificationsList() {
 		</Card>
 	);
 
-	if ( 0 === config.rows.length ) {
-		return (
-			<>
-				{ toolbar }
-				<p className={ styles.noItems }>{ config.noItemsText }</p>
-				{ deleteDialog }
-				{ syncDialog }
-			</>
-		);
-	}
-
 	return (
 		<>
 			{ toolbar }
-			<div className={ styles.tableWrap }>
-				<Table aria-label={ __( 'Microsoft Certifications', 'credentials-manager-plugin' ) }>
-					<TableHeader>
-						<TableRow>
-							<Tooltip
-								content={ __( 'Select or deselect every Microsoft Certification currently shown in the list.', 'credentials-manager-plugin' ) }
-								relationship="label"
-								withArrow
-							>
-								<TableSelectionCell
-									checked={ allSelected ? true : ( someSelected ? 'mixed' : false ) }
-									onClick={ toggleAllRows }
-									checkboxIndicator={ { 'aria-label': __( 'Select all Microsoft Certifications', 'credentials-manager-plugin' ) } }
-								/>
-							</Tooltip>
-							{ columns.map( ( column ) => (
-								<Tooltip key={ column.id } content={ column.headerTooltip } relationship="label" withArrow>
-									<TableHeaderCell
-										style={ { fontWeight: tokens.fontWeightSemibold } }
-										sortable={ column.sortable }
-										sortDirection={ column.id === config.orderby ? currentSortDirection : undefined }
-										button={ column.sortable ? { onClick: () => {
-											window.location.href = buildNextSortUrl( config, column.id );
-										} } : undefined }
-									>
-										{ column.label }
-									</TableHeaderCell>
-								</Tooltip>
-							) ) }
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{ config.rows.map( ( row ) => {
-							const selected = selectedIds.has( row.id );
-
-							return (
-								<TableRow key={ row.id } appearance={ selected ? 'brand' : 'none' } aria-selected={ selected }>
-									<TableSelectionCell
-										checked={ selected }
-										onClick={ () => toggleRow( row.id ) }
-										checkboxIndicator={ { 'aria-label': __( 'Select Microsoft Certification', 'credentials-manager-plugin' ) } }
-									/>
-									{ columns.map( ( column ) => (
-										<TableCell key={ column.id }>{ column.renderCell( row ) }</TableCell>
-									) ) }
-								</TableRow>
-							);
-						} ) }
-					</TableBody>
-				</Table>
-			</div>
-			<TableFooter recordCount={ config.rows.length } selectedCount={ selectedIds.size } />
+			<DataTable
+				rows={ config.rows }
+				columns={ columns }
+				sortColumnId={ config.orderby }
+				sortDirection={ currentSortDirection }
+				onSortColumn={ ( columnId ) => {
+					window.location.href = buildNextSortUrl( config, columnId );
+				} }
+				selectedIds={ selectedIds }
+				onSelectionChange={ setSelectedIds }
+				ariaLabel={ __( 'Microsoft Certifications', 'credentials-manager-plugin' ) }
+				selectAllTooltip={ __( 'Select or deselect every Microsoft Certification currently shown in the list.', 'credentials-manager-plugin' ) }
+				selectAllLabel={ __( 'Select all Microsoft Certifications', 'credentials-manager-plugin' ) }
+				selectRowLabel={ __( 'Select Microsoft Certification', 'credentials-manager-plugin' ) }
+				noItemsText={ config.noItemsText }
+			/>
 			{ deleteDialog }
 			{ syncDialog }
 		</>

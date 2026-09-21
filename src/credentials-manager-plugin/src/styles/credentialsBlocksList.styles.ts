@@ -1,9 +1,6 @@
 import { makeStyles, tokens } from '@fluentui/react-components';
 
 export const useCredentialsBlocksListStyles = makeStyles( {
-	tableWrap: {
-		overflowX: 'auto',
-	},
 	descriptionCell: {
 		display: 'block',
 		maxWidth: '280px',
@@ -18,8 +15,5 @@ export const useCredentialsBlocksListStyles = makeStyles( {
 		fontSize: tokens.fontSizeBase200,
 		padding: `${ tokens.spacingVerticalXS } ${ tokens.spacingHorizontalSNudge }`,
 		boxSizing: 'border-box',
-	},
-	noItems: {
-		padding: tokens.spacingVerticalM,
 	},
 } );

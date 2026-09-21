@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name:       Credentials Manager
- * Description:       Manage Credentials, Credential Blocks, Microsoft Certifications, and Microsoft Exams (Contact Form 7 style) in dedicated admin screens, and embed a block's selected credentials anywhere with a [credential-block id="…"] shortcode.
- * Version:           0.0.86
+ * Description:       Manage Credentials, Credential Blocks, Microsoft Certifications, Microsoft Exams, and Skills (Contact Form 7 style) in dedicated admin screens, and embed a block's selected credentials anywhere with a [credential-block id="…"] shortcode.
+ * Version:           0.0.93
  * Requires at least: 6.6
  * Requires PHP:      7.4
  * Author:            AIDevMe
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'CREDPL_VERSION', '0.0.86' );
+define( 'CREDPL_VERSION', '0.0.93' );
 // Bumped from 1.0 to 1.1: triggers Credpl_Installer's one-time migration
 // that renames the old `credential_forms` table (and its `form_key`
 // column) to `credential_blocks`/`block_key` on sites that already
@@ -43,7 +43,9 @@ define( 'CREDPL_VERSION', '0.0.86' );
 // Bumped again to 1.9: adds award_category and technology_area to
 // `credentials` — same category of change as 1.4/1.6, dbDelta() adds
 // them as new columns automatically.
-define( 'CREDPL_DB_VERSION', '1.9' );
+// Bumped again to 1.10: creates the new `skills` table — same as the
+// 1.7/1.8 bumps, dbDelta() creates it automatically.
+define( 'CREDPL_DB_VERSION', '1.10' );
 define( 'CREDPL_PLUGIN_FILE', __FILE__ );
 define( 'CREDPL_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
@@ -55,6 +57,7 @@ require_once CREDPL_PLUGIN_DIR . 'includes/class-credpl-admin-credentials.php';
 require_once CREDPL_PLUGIN_DIR . 'includes/class-credpl-admin-blocks.php';
 require_once CREDPL_PLUGIN_DIR . 'includes/class-credpl-admin-ms-certifications.php';
 require_once CREDPL_PLUGIN_DIR . 'includes/class-credpl-admin-ms-exams.php';
+require_once CREDPL_PLUGIN_DIR . 'includes/class-credpl-admin-skills.php';
 require_once CREDPL_PLUGIN_DIR . 'includes/class-credpl-shortcode.php';
 require_once CREDPL_PLUGIN_DIR . 'includes/class-credpl-updater.php';
 
@@ -70,6 +73,7 @@ function credpl_bootstrap() {
 	Credpl_Admin_Blocks::init();
 	Credpl_Admin_Ms_Certifications::init();
 	Credpl_Admin_Ms_Exams::init();
+	Credpl_Admin_Skills::init();
 	Credpl_Shortcode::init();
 	Credpl_Updater::init();
 }
@@ -77,6 +81,6 @@ add_action( 'plugins_loaded', 'credpl_bootstrap' );
 
 /**
  * Create the `credentials`, `credential_blocks`, `microsoft_certifications`,
- * and `microsoft_exams` tables on activation.
+ * `microsoft_exams`, and `skills` tables on activation.
  */
 register_activation_hook( __FILE__, array( 'Credpl_Installer', 'install' ) );

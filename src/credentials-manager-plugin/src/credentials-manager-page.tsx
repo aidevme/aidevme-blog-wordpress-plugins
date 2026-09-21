@@ -20,8 +20,8 @@
  * Card from also becoming its own tab stop next to that anchor. The section
  * cards themselves are plain containers — not clickable, no hover effect.
  *
- * A navigation card with no `urlKey` (currently Skills, §10 v77) has no
- * destination yet, so it is rendered as a plain, non-interactive card: no
+ * A navigation card with no `urlKey` (none currently — Skills was the one
+ * until §10 v81) has no destination yet, so it is rendered as a plain, non-interactive card: no
  * link, no click handler, and none of the pointer cursor / hover lift that
  * signal "clickable" — a card that reacted like a button but did nothing
  * would mislead. Giving it a destination later means adding its URL to the
@@ -53,6 +53,7 @@ interface CredentialsManagerPageConfig {
 		credentials: string;
 		certifications: string;
 		exams: string;
+		skills: string;
 		integrations: string;
 	};
 }
@@ -64,7 +65,7 @@ declare global {
 }
 
 const config: CredentialsManagerPageConfig = window.credplCredentialsManagerPage || ( {
-	urls: { blocks: '', credentials: '', certifications: '', exams: '', integrations: '' },
+	urls: { blocks: '', credentials: '', certifications: '', exams: '', skills: '', integrations: '' },
 } as CredentialsManagerPageConfig );
 
 interface NavCardDef {
@@ -96,8 +97,7 @@ const sections: SectionDef[] = [
 		cards: [
 			{ key: 'certifications', urlKey: 'certifications', label: __( 'Microsoft Certifications', 'credentials-manager-plugin' ), Icon: CertificateRegular },
 			{ key: 'exams', urlKey: 'exams', label: __( 'Microsoft Exams', 'credentials-manager-plugin' ), Icon: ClipboardTaskListLtrRegular },
-			// No destination yet, so no `urlKey`: rendered non-interactive.
-			{ key: 'skills', label: __( 'Skills', 'credentials-manager-plugin' ), Icon: BrainCircuitRegular },
+			{ key: 'skills', urlKey: 'skills', label: __( 'Skills', 'credentials-manager-plugin' ), Icon: BrainCircuitRegular },
 		],
 	},
 	{

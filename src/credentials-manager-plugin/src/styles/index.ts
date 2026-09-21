@@ -9,3 +9,6 @@ export { useMsExamStyles } from './msExam.styles';
 export { useMsExamsListStyles } from './msExamsList.styles';
 export { useTableFooterStyles } from './tableFooter.style';
 export { useToolbarCardStyles } from './toolbarCard.styles';
+export { useSkillStyles } from './skill.styles';
+export { useSkillsListStyles } from './skillsList.styles';
+export { useTableStyles } from './table.styles';

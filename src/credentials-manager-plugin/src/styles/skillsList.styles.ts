@@ -1,15 +1,9 @@
 import { makeStyles } from '@fluentui/react-components';
 
-export const useCredentialsListStyles = makeStyles( {
-	badgeImg: {
-		display: 'block',
-		width: '40px',
-		height: '40px',
-		objectFit: 'contain',
-	},
+export const useSkillsListStyles = makeStyles( {
 	descriptionCell: {
 		display: 'block',
-		maxWidth: '280px',
+		maxWidth: '420px',
 		overflow: 'hidden',
 		whiteSpace: 'nowrap',
 		textOverflow: 'ellipsis',

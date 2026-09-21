@@ -95,18 +95,12 @@ Each sortable `TableHeaderCell` gets `sortable`, `sortDirection` (only set on th
 
 ## 5. Column definitions: a hand-rolled array, not `createTableColumn()`
 
-There's no `DataGrid`, so there's no `createTableColumn()` either. Define your own:
+There's no `DataGrid`, so there's no `createTableColumn()` either. Define your own array, typed with the shared generic `ColumnDef<TRow>` (exported from `./components`, defined in `src/components/tables/table.tsx` — don't redeclare it per screen):
 
 ```ts
-interface ColumnDef {
-	id: string;
-	label: string;
-	sortable: boolean;
-	headerTooltip: string;
-	renderCell: ( row: CredentialRow ) => ReactNode;
-}
+import { DataTable, type ColumnDef } from './components';
 
-const columns: ColumnDef[] = [
+const columns: ColumnDef<CredentialRow>[] = [
 	{
 		id: 'title',
 		label: __( 'Title', 'credentials-manager-plugin' ),
@@ -122,32 +116,30 @@ const columns: ColumnDef[] = [
 
 **Keep this array at module scope**, not inside the component function, *unless* a cell needs to close over component state (a callback into a `useState` setter, for instance). Credentials list's own `columns` array moved *into* the component temporarily (`CHANGE_LOG.md` v42) when its Actions column needed to hand a delete-confirmation callback down to a row-action button, then moved back *out* to module scope (v45) once that column was deleted and nothing remaining needed the closure. Default to module scope; only pull it into the component if you have a concrete reason.
 
-Render the header row and every body row off the same array:
+You don't render the header row or the body rows yourself — hand the array to `DataTable` (§10), which renders both off it, so the header and every row can't drift apart:
 
 ```tsx
-<TableHeader>
-	<TableRow>
-		{ /* selection cell first, see §6 */ }
-		{ columns.map( ( column ) => (
-			<Tooltip key={ column.id } content={ column.headerTooltip } relationship="label" withArrow>
-				<TableHeaderCell /* … */ >{ column.label }</TableHeaderCell>
-			</Tooltip>
-		) ) }
-	</TableRow>
-</TableHeader>
-<TableBody>
-	{ config.rows.map( ( row ) => (
-		<TableRow key={ row.id }>
-			{ /* selection cell first, see §6 */ }
-			{ columns.map( ( column ) => (
-				<TableCell key={ column.id }>{ column.renderCell( row ) }</TableCell>
-			) ) }
-		</TableRow>
-	) ) }
-</TableBody>
+<DataTable
+	rows={ config.rows }
+	columns={ columns }
+	sortColumnId={ config.orderby }
+	sortDirection={ currentSortDirection }
+	onSortColumn={ ( columnId ) => {
+		window.location.href = buildNextSortUrl( config, columnId );
+	} }
+	selectedIds={ selectedIds }
+	onSelectionChange={ setSelectedIds }
+	ariaLabel={ __( 'Credentials', 'credentials-manager-plugin' ) }
+	selectAllTooltip={ __( 'Select or deselect every credential currently shown in the list.', 'credentials-manager-plugin' ) }
+	selectAllLabel={ __( 'Select all credentials', 'credentials-manager-plugin' ) }
+	selectRowLabel={ __( 'Select credential', 'credentials-manager-plugin' ) }
+	noItemsText={ config.noItemsText }
+/>
 ```
 
 ## 6. Multi-row selection: the `TableSelectionCell` gotcha
+
+**Where this lives now** (`CHANGE_LOG.md` v83): everything below is implemented **once**, inside `DataTable` (`src/components/tables/table.tsx`, §10) — a screen no longer writes any `TableSelectionCell` markup or toggle handlers itself. It only owns the selection *state*, through the `useRowSelection()` hook (below), so its toolbar can read it. This section is kept because it explains *why* `DataTable` is written the way it is — read it before changing `DataTable`'s selection cells.
 
 **Attach the toggle handler's `onClick` directly to `TableSelectionCell` itself — never to its `checkboxIndicator` slot.** This took three attempts to get right in `credentials-list.tsx` (`CHANGE_LOG.md` v38–v40) and is the single most important gotcha in this whole guide:
 
@@ -171,30 +163,13 @@ Render the header row and every body row off the same array:
 />
 ```
 
-Selection state is a plain `useState<Set<number>>` — **not** `@fluentui/react-table`'s `useTableFeatures`/`useTableSelection` hook pair. That pair expects a `DataGrid`-shaped `columns: TableColumnDefinition<TItem>[]` array to drive its bookkeeping, which this pattern doesn't maintain (§1 above). A `Set` is the direct, sufficient fit:
+Selection state is a plain `useState<Set<number>>` — **not** `@fluentui/react-table`'s `useTableFeatures`/`useTableSelection` hook pair. That pair expects a `DataGrid`-shaped `columns: TableColumnDefinition<TItem>[]` array to drive its bookkeeping, which this pattern doesn't maintain (§1 above). A `Set` is the direct, sufficient fit. Screens get it from `useRowSelection()` (`src/components/tables/use-row-selection.ts`), which also derives the one row the toolbar's Edit button needs:
 
 ```ts
-const [ selectedIds, setSelectedIds ] = useState<Set<number>>( () => new Set() );
-
-const allSelected = config.rows.length > 0 && config.rows.every( ( row ) => selectedIds.has( row.id ) );
-const someSelected = ! allSelected && config.rows.some( ( row ) => selectedIds.has( row.id ) );
-
-function toggleRow( id: number ) {
-	setSelectedIds( ( current ) => {
-		const next = new Set( current );
-		if ( next.has( id ) ) {
-			next.delete( id );
-		} else {
-			next.add( id );
-		}
-		return next;
-	} );
-}
-
-function toggleAllRows() {
-	setSelectedIds( allSelected ? new Set() : new Set( config.rows.map( ( row ) => row.id ) ) );
-}
+const { selectedIds, setSelectedIds, singleSelectedRow } = useRowSelection( config.rows );
 ```
+
+`DataTable` reports every change through `onSelectionChange( nextSet )` — pass it `setSelectedIds` directly. The parent keeps ownership of the state (rather than `DataTable` holding it) because the toolbar reads it too: New is enabled only when `selectedIds.size === 0`, Edit only when `singleSelectedRow` is set, Delete when `selectedIds.size > 0`.
 
 A selected row gets `<TableRow appearance="brand" aria-selected={ selected }>` — this is a visual cue only; nothing about row rendering otherwise changes.
 
@@ -295,17 +270,20 @@ A handful of small, reusable shapes cover most columns:
 
 - **Empty-value convention**: `EM_DASH` (imported from `./tools`, §4 — not a local `const`), `value || EM_DASH` in every `renderCell`. Consistent across every column in this pattern — don't invent a second "not set" convention.
 
-## 10. Reusable components: `ConfirmationDialog` and `TableFooter`
+## 10. Reusable components: `DataTable`, `useRowSelection`, `ConfirmationDialog` and `TableFooter`
 
-Two small, **not entity-specific** components already exist under `src/components/` — reuse them rather than rebuilding either:
+These **not entity-specific** pieces already exist under `src/components/` — reuse them rather than rebuilding any of them:
+
+- **`DataTable`** (`src/components/tables/table.tsx`, `CHANGE_LOG.md` v83) — the whole list table: multi-select checkbox column, sortable header cells with tooltips, selected-row highlight, the empty state, and a `TableFooter` below. Generic over the row type (`DataTable<TRow extends { id: number }>`). It deliberately owns **no** selection state, **no** URLs and **no** strings: selection comes in through `selectedIds`/`onSelectionChange` (§6), a sortable header click just calls `onSortColumn( columnId )` (the screen turns that into a reload, §4), and every label — `ariaLabel`, `selectAllTooltip`, `selectAllLabel`, `selectRowLabel`, `noItemsText`, each column's `label`/`headerTooltip` — is passed in already translated, so a screen's `__()` calls stay in its own file. With no rows it renders just the `noItemsText` paragraph (no table, no footer). The toolbar and the confirmation dialogs stay in the screen, since they vary between screens (Sync on Microsoft Certifications/Exams). Its own two style rules (`tableWrap`, `noItems`) are in `src/styles/table.styles.ts` (`useTableStyles`), so a screen's `*List.styles.ts` only holds its cell-specific rules.
+- **`useRowSelection( rows )`** (`src/components/tables/use-row-selection.ts`) — returns `{ selectedIds, setSelectedIds, singleSelectedRow }` (§6).
 
 - **`ConfirmationDialog`** (`src/components/dialogs/confirmation-dialog.tsx`) — wraps Fluent's `Dialog`/`DialogSurface`/`DialogBody`/`DialogTitle`/`DialogContent`/`DialogActions` behind `open`/`title`/`message`/`confirmLabel`/`cancelLabel`/`onConfirm`/`onCancel` props, with `modalType="alert"` so it can only be dismissed by an explicit Cancel/Confirm click (not by clicking the dimmed backdrop) — appropriate for any destructive confirmation, not just delete. The owning component tracks *what's* pending in its own state (Credentials list uses `useState<number[] | null>`) and builds the dialog's title/message from that state; the dialog itself has no idea what a "credential" is.
-- **`TableFooter`** (`src/components/tables/table-footer.tsx`) — renders "Number of Records: N" / "Number of Selected Records: N" on one line. Its only props are `recordCount`/`selectedCount`, both plain numbers the caller supplies (`config.rows.length`, `selectedIds.size`). Render it directly below the `Table`, not in the empty-list state (nothing meaningful to count there).
+- **`TableFooter`** (`src/components/tables/table-footer.tsx`) — renders "Number of Records: N" / "Number of Selected Records: N" on one line. Its only props are `recordCount`/`selectedCount`, both plain numbers the caller supplies (`config.rows.length`, `selectedIds.size`). `DataTable` already renders it below the table (and not in the empty state, where there's nothing meaningful to count), so a screen using `DataTable` never renders it itself.
 
 Both are re-exported from the `src/components/index.ts` barrel — import from `'./components'`, not each file's own path:
 
 ```ts
-import { ConfirmationDialog, TableFooter } from './components';
+import { ConfirmationDialog, DataTable, useRowSelection, type ColumnDef } from './components';
 ```
 
 **If you add a new reusable component**, add its `export`/`export type` pair to that barrel too, and import it from `'./components'` in whatever uses it. A barrel nothing imports from is dead code.
@@ -357,7 +335,7 @@ Never build user-facing copy by string concatenation or template literals with n
 1. PHP: add `enqueue_<entity>_list_assets()` (or extend the existing `enqueue_assets()` dispatcher) to query, shape rows, and `wp_localize_script()` the config — make sure it includes `listUrl`/`orderby`/`order`/`bulkDeleteUrl` (the shape `src/tools/listUrls.ts`'s `ListUrlConfig` needs, §4) alongside whatever else this screen's config carries.
 2. PHP: replace the `WP_List_Table`-rendering `render_list_page()` body with the chrome + one empty mount `<div>`.
 3. `webpack.config.js`: add the new entry.
-4. New `src/<entity>-list.tsx`: config interfaces + global declaration (§3), `columns` array (§5), sortable-header wiring **imported from the `src/tools` barrel, not hand-written** (§4 — `EM_DASH`/`getCurrentSortDirection()`/`buildNextSortUrl()`/`buildBulkDeleteUrl()`, each called with this screen's own `config` as the first argument), selection wiring (§6) if wanted, toolbar (§7) if wanted, cell renderers (§9), footer (§10) if wanted.
+4. New `src/<entity>-list.tsx`: config interfaces + global declaration (§3), `columns` array (§5), sortable-header wiring **imported from the `src/tools` barrel, not hand-written** (§4 — `EM_DASH`/`getCurrentSortDirection()`/`buildNextSortUrl()`/`buildBulkDeleteUrl()`, each called with this screen's own `config` as the first argument), `useRowSelection()` (§6), toolbar (§7), cell renderers (§9), and one `<DataTable>` for the table itself with its footer (§10) — no hand-written `Table`/`TableSelectionCell`/`TableFooter` markup.
 5. New `src/styles/<entity>List.styles.ts`, added to the barrel (§11) — never `makeStyles()` inline in the `.tsx` file, even for a single rule.
 6. Update `SPECIFICATION.md` for the converted screen and add a `CHANGE_LOG.md` entry, per this repo's usual discipline (`.claude/agents/developer.md`).
 7. `npm run check-types` clean first (webpack's build only strips types, it doesn't check them — see `DEVELOPER.md`/§6.2.1). Then `npm run build:release` — lints every `.php` file, bumps `CREDPL_VERSION`/`package.json` together, runs the webpack build, and repackages `dist/credentials-manager-plugin.zip`, all in one command (see `DEVELOPER.md`).

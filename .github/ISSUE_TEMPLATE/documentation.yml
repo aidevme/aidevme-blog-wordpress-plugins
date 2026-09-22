@@ -1,0 +1,49 @@
+name: Documentation
+description: Report an issue with the WordPress Plugin Handbook mirror or other repo docs
+title: "docs: "
+labels:
+  - documentation
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for problems with `docs/wordpress/wordpress-plugins/` (the Handbook mirror), `docs/styles/`, `docs/claude/`, plugin READMEs, or `SPECIFICATION.md`/`CHANGE_LOG.md` files.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Documentation area
+      options:
+        - docs/wordpress/wordpress-plugins (Handbook mirror)
+        - docs/styles (style guides)
+        - docs/claude (agent docs)
+        - Plugin README
+        - SPECIFICATION.md / CHANGE_LOG.md
+        - CLAUDE.md
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: File or page
+      description: Path to the file (e.g. `docs/wordpress/wordpress-plugins/...`) or the live `developer.wordpress.org` URL it should match.
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue
+    attributes:
+      label: What's wrong?
+      description: Out of date content, broken link, formatting issue, missing section, drift from the live source, etc.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected content
+      description: What it should say instead, or where to find the correct source.
+    validations:
+      required: false

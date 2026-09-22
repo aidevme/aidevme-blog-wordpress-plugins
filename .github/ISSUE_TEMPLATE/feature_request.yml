@@ -1,0 +1,60 @@
+name: Feature request
+description: Propose a new feature or enhancement for one of the plugins
+title: "feat: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion. For anything touching `credentials-manager-plugin`'s architecture or data model, this will likely need a `SPECIFICATION.md` update (via the `architect` agent) before implementation — feel free to note that here.
+
+  - type: dropdown
+    id: plugin
+    attributes:
+      label: Target plugin
+      description: Which plugin under `src/` is this feature for?
+      options:
+        - credentials-manager-plugin
+        - aidevme-category-visualization-plugin
+        - aidevme-configuration-manager-plugin
+        - wordpress-react-plugin-template
+        - wordpress-standard-plugin-template
+        - docs/wordpress-plugins mirror
+        - Repo-wide / tooling (workflows, agents, docs styles)
+        - New plugin
+        - Other / not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the use case or pain point this feature addresses.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: What you'd like to see happen. If you have thoughts on the data model, admin UI, or hooks involved, include them here.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any other approaches you thought about and why you didn't go with them.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Screenshots, mockups, links to related issues, or references to relevant handbook docs.
+    validations:
+      required: false

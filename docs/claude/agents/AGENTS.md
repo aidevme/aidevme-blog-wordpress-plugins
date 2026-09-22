@@ -1,6 +1,6 @@
 # Claude Code agents
 
-Documentation for the project-level Claude Code subagents defined in [`.claude/agents/`](../../.claude/agents/). Each agent has its own file here; this page is the overview.
+Documentation for the project-level Claude Code subagents defined in [`.claude/agents/`](../../../.claude/agents/). Each agent has its own file here; this page is the overview.
 
 These docs describe the agent definitions as they exist in the repo (snapshot: 2026-09-19). The `.claude/agents/*.md` files are the source of truth - when one changes, update its page here.
 
@@ -59,7 +59,7 @@ These boundaries are enforced by each agent's instructions, not by tool permissi
 
 - **Automatically:** Claude delegates to an agent when the request matches its `description` (the trigger phrases are listed on each agent's page).
 - **Explicitly:** name it in the request, for example "Use the tester agent to verify credentials-manager-plugin against its spec."
-- **Slash command:** `/sync-wordpress-plugin-docs [scope]` launches `wordpress-docs-research-agent` (see [`.claude/commands/sync-wordpress-plugin-docs.md`](../../.claude/commands/sync-wordpress-plugin-docs.md)).
+- **Slash command:** `/sync-wordpress-plugin-docs [scope]` launches `wordpress-docs-research-agent` (see [`.claude/commands/sync-wordpress-plugin-docs.md`](../../../.claude/commands/sync-wordpress-plugin-docs.md)).
 
 A subagent starts with no memory of the conversation, so include the plugin slug and the specific task in the request.
 
@@ -67,8 +67,8 @@ A subagent starts with no memory of the conversation, so include the plugin slug
 
 | File | What it provides |
 | --- | --- |
-| [`.claude/agents/*.md`](../../.claude/agents/) | The agent definitions: YAML frontmatter (`name`, `description`, `tools`, `model`) followed by the agent's instructions |
-| [`.claude/commands/sync-wordpress-plugin-docs.md`](../../.claude/commands/sync-wordpress-plugin-docs.md) | The `/sync-wordpress-plugin-docs` command |
+| [`.claude/agents/*.md`](../../../.claude/agents/) | The agent definitions: YAML frontmatter (`name`, `description`, `tools`, `model`) followed by the agent's instructions |
+| [`.claude/commands/sync-wordpress-plugin-docs.md`](../../../.claude/commands/sync-wordpress-plugin-docs.md) | The `/sync-wordpress-plugin-docs` command |
 | `.claude/settings.json` | Enables the `microsoft-docs@claude-plugins-official` plugin (source of the `microsoft_docs_*` tools) |
 | `.claude/settings.local.json` | Enables the project's `playwright` MCP server (`enabledMcpjsonServers`) |
 | `.mcp.json` | Defines the headless `playwright` MCP server the research agent uses |
@@ -79,5 +79,5 @@ Only the five agents defined in this repository. Built-in agents (such as `Explo
 
 ## Related
 
-- Root [`CLAUDE.md`](../../CLAUDE.md) - repository conventions every agent is expected to follow
-- [`docs/styles/`](../styles/) - documentation style guides (`WORDPRESS-PLUGIN-DOCS-STYLE.md` governs the handbook mirror)
+- Root [`CLAUDE.md`](../../../CLAUDE.md) - repository conventions every agent is expected to follow
+- [`docs/styles/`](../../styles/) - documentation style guides (`WORDPRESS-PLUGIN-DOCS-STYLE.md` governs the handbook mirror)

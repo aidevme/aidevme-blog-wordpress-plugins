@@ -2,7 +2,7 @@
 
 Verifies a WordPress plugin's code against its `SPECIFICATION.md` Acceptance Criteria and this repo's security conventions, through structured code review. Read-mostly: it reports findings rather than fixing them.
 
-Source definition: [`.claude/agents/tester.md`](../../.claude/agents/tester.md)
+Source definition: [`.claude/agents/tester.md`](../../../.claude/agents/tester.md)
 
 ## At a glance
 

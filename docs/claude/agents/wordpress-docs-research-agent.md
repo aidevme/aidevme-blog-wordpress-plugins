@@ -2,7 +2,7 @@
 
 Syncs the local WordPress Plugin Handbook mirror in `docs/wordpress/wordpress-plugins/` against its live source on `developer.wordpress.org`, using a real headless browser (Playwright MCP) instead of guessing content.
 
-Source definition: [`.claude/agents/wordpress-docs-research-agent.md`](../../.claude/agents/wordpress-docs-research-agent.md)
+Source definition: [`.claude/agents/wordpress-docs-research-agent.md`](../../../.claude/agents/wordpress-docs-research-agent.md)
 
 ## At a glance
 
@@ -25,7 +25,7 @@ Trigger phrases from the agent's description: "sync the WordPress docs", "refres
 
 ### The slash command
 
-`/sync-wordpress-plugin-docs [scope]` ([`.claude/commands/sync-wordpress-plugin-docs.md`](../../.claude/commands/sync-wordpress-plugin-docs.md)) launches this agent:
+`/sync-wordpress-plugin-docs [scope]` ([`.claude/commands/sync-wordpress-plugin-docs.md`](../../../.claude/commands/sync-wordpress-plugin-docs.md)) launches this agent:
 
 - With an argument (an `Index` number or `Name` from the Index table, for example `19` or `Hooks`), only those rows are synced.
 - With no argument, every row is synced.
@@ -65,7 +65,7 @@ Trigger phrases from the agent's description: "sync the WordPress docs", "refres
 - PHP/JS/JSON code kept in fenced code blocks
 - Straight quotes (not curly), no scraped author/date byline, no added commentary
 
-The full conventions (folder layout, Index format, document skeleton, content-fidelity rules) live in [`docs/styles/WORDPRESS-PLUGIN-DOCS-STYLE.md`](../styles/WORDPRESS-PLUGIN-DOCS-STYLE.md). Per root `CLAUDE.md`, that style guide and this agent's definition are meant to stay identical; change one, update the other.
+The full conventions (folder layout, Index format, document skeleton, content-fidelity rules) live in [`docs/styles/WORDPRESS-PLUGIN-DOCS-STYLE.md`](../../styles/WORDPRESS-PLUGIN-DOCS-STYLE.md). Per root `CLAUDE.md`, that style guide and this agent's definition are meant to stay identical; change one, update the other.
 
 ## Rules
 

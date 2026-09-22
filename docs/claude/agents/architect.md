@@ -2,7 +2,7 @@
 
 Designs and maintains a WordPress plugin's `SPECIFICATION.md`. Its output is a design document, never code.
 
-Source definition: [`.claude/agents/architect.md`](../../.claude/agents/architect.md)
+Source definition: [`.claude/agents/architect.md`](../../../.claude/agents/architect.md)
 
 ## At a glance
 

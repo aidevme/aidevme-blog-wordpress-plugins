@@ -2,7 +2,7 @@
 
 Implements and modifies a WordPress plugin's PHP/JS code against its approved `SPECIFICATION.md`, following WordPress core security and coding conventions, and records every change in the plugin's `CHANGE_LOG.md`.
 
-Source definition: [`.claude/agents/developer.md`](../../.claude/agents/developer.md)
+Source definition: [`.claude/agents/developer.md`](../../../.claude/agents/developer.md)
 
 ## At a glance
 

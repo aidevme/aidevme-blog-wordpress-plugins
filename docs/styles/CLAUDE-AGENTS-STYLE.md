@@ -1,6 +1,6 @@
 # Claude Agent Definitions Style Guide
 
-This guide governs every file under `.claude/agents/` — the project-level Claude Code subagent definitions (`architect`, `developer`, `tester`, `documenter`, `wordpress-docs-research-agent` as of this writing). It does not govern `docs/claude/`, which documents these agents for human readers; see "Keeping this in sync" below for how the two relate.
+This guide governs every file under `.claude/agents/` — the project-level Claude Code subagent definitions (`architect`, `developer`, `tester`, `documenter`, `wordpress-docs-research-agent` as of this writing). It does not govern `docs/claude/agents/`, which documents these agents for human readers; see "Keeping this in sync" below for how the two relate.
 
 ## File and naming conventions
 
@@ -66,4 +66,4 @@ These conventions currently hold across every agent in `.claude/agents/` — kee
 
 ## Keeping this in sync
 
-`CLAUDE.md` requires that `docs/claude/<agent-name>.md` (and `docs/claude/README.md`'s overview table/diagram) be updated whenever an agent definition under `.claude/agents/` changes — treat an edit to an agent file as incomplete until its matching doc page reflects it. If you introduce a new convention here that isn't yet reflected in the five current agent files, update them to match in the same change rather than leaving this guide ahead of reality.
+`CLAUDE.md` requires that `docs/claude/agents/<agent-name>.md` (and `docs/claude/agents/AGENTS.md`'s overview table/diagram) be updated whenever an agent definition under `.claude/agents/` changes — treat an edit to an agent file as incomplete until its matching doc page reflects it. If you introduce a new convention here that isn't yet reflected in the five current agent files, update them to match in the same change rather than leaving this guide ahead of reality.

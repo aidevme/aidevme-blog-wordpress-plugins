@@ -2,7 +2,7 @@
 
 Keeps the repo's non-handbook documentation honest and current: plugin READMEs, `SPECIFICATION.md` accuracy after implementation, PHP docblocks, root `CLAUDE.md` and root `README.md`. It documents what exists; it does not write documentation speculatively ahead of the code.
 
-Source definition: [`.claude/agents/documenter.md`](../../.claude/agents/documenter.md)
+Source definition: [`.claude/agents/documenter.md`](../../../.claude/agents/documenter.md)
 
 ## At a glance
 

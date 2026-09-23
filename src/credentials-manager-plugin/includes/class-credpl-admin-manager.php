@@ -3,7 +3,8 @@
  * Page callback and asset loading for the top-level "Credentials Manager"
  * landing screen. See SPECIFICATION.md §6.1.
  *
- * A React/Fluent UI 9 page built from src/credentials-manager-page.tsx: one
+ * A React/Fluent UI 9 page built from
+ * src/components/pages/credentials-manager/credentials-manager-page.tsx: one
  * four full-width section cards (Main, Miscellaneous, Style, Integrations)
  * holding clickable navigation cards. The only PHP→React data is the
  * destination URLs; there are no save/delete handlers here.

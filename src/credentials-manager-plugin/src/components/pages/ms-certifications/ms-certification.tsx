@@ -35,7 +35,7 @@ import {
 	type InputOnChangeData,
 	type TextareaOnChangeData,
 } from '@fluentui/react-components';
-import { useMsCertificationStyles } from './styles';
+import { useMsCertificationStyles } from '../../../styles';
 
 /**
  * The shape PHP's `wp_localize_script( 'credpl-ms-certification-form',

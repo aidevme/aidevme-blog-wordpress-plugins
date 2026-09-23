@@ -40,7 +40,7 @@ import {
 	PlugConnectedRegular,
 	BrainCircuitRegular,
 } from '@fluentui/react-icons';
-import { useCredentialsManagerPageStyles } from './styles';
+import { useCredentialsManagerPageStyles } from '../../../styles';
 
 /**
  * The shape PHP's `wp_localize_script( 'credpl-credentials-manager-page',

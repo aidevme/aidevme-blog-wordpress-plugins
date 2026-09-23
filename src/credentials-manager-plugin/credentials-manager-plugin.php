@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Credentials Manager
  * Description:       Manage Credentials, Credential Blocks, Microsoft Certifications, Microsoft Exams, and Skills (Contact Form 7 style) in dedicated admin screens, and embed a block's selected credentials anywhere with a [credential-block id="…"] shortcode.
- * Version:           0.0.93
+ * Version:           0.0.94
  * Requires at least: 6.6
  * Requires PHP:      7.4
  * Author:            AIDevMe
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'CREDPL_VERSION', '0.0.93' );
+define( 'CREDPL_VERSION', '0.0.94' );
 // Bumped from 1.0 to 1.1: triggers Credpl_Installer's one-time migration
 // that renames the old `credential_forms` table (and its `form_key`
 // column) to `credential_blocks`/`block_key` on sites that already

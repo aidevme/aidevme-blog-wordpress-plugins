@@ -209,7 +209,8 @@ class Credpl_Admin_Credentials {
 
 	/**
 	 * The "Credentials" list screen: a mount point for the React-built
-	 * DataGrid from src/credentials-list.tsx (see enqueue_list_assets()
+	 * DataGrid from src/components/pages/credentials/credentials-list.tsx
+	 * (see enqueue_list_assets()
 	 * for the localized row data it hydrates from), replacing the earlier
 	 * `Credpl_Credentials_List_Table`-rendered HTML table (§10 v34). The
 	 * surrounding chrome (heading, Add New button, notices) stays
@@ -231,7 +232,8 @@ class Credpl_Admin_Credentials {
 
 	/**
 	 * The "Add New Credential" / "Edit Credential" screen: a mount point
-	 * for the React form built from src/credential.tsx (see enqueue_assets()
+	 * for the React form built from
+	 * src/components/pages/credentials/credential.tsx (see enqueue_assets()
 	 * for the localized data it hydrates from) — no PHP-rendered form
 	 * markup here anymore. The React form still submits as a plain HTML
 	 * form POST to admin-post.php, so save() below is unchanged. When

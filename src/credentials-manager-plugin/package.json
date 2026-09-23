@@ -1,6 +1,6 @@
 {
   "name": "credentials-manager-plugin",
-  "version": "0.0.93",
+  "version": "0.0.94",
   "private": true,
   "description": "Build tooling for the Credentials Manager plugin's React-based admin screens.",
   "scripts": {

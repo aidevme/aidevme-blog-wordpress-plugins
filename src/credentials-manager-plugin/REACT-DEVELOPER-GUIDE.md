@@ -175,41 +175,41 @@ A selected row gets `<TableRow appearance="brand" aria-selected={ selected }>` �
 
 **Scope selection to the checkbox, not the whole row.** If any cell in the row is itself clickable (a `Link`, a `Button`), a whole-row `onClick` would make every click on those *also* toggle selection as an unwanted side effect. Keep the `onClick` on `TableSelectionCell` alone.
 
-## 7. The toolbar: icon-only buttons, tooltips, and a `Card` wrapper
+## 7. The toolbar: `ListPagesToolbar`, a shared component
+
+The `Card`-wrapped `Toolbar` — icon-only Back/New/Edit/Delete buttons, plus an optional Sync button on the two Microsoft screens — used to be hand-copied into each list screen. As of `CHANGE_LOG.md` v88 it's one shared component, `ListPagesToolbar` (`src/components/toolbars/list-pages-toolbar.tsx`, re-exported from the `src/components/index.ts` barrel), used by all five list screens instead:
 
 ```tsx
-<Card className={ toolbarCardStyles.toolbarCard }>
-	<Toolbar aria-label={ __( 'Credentials actions', 'credentials-manager-plugin' ) }>
-		<Tooltip
-			content={ __( 'Go back to the Credentials Manager page.', 'credentials-manager-plugin' ) }
-			relationship="label"
-			withArrow
-		>
-			<ToolbarButton icon={ <ArrowLeftRegular /> } onClick={ () => { window.location.href = config.backUrl; } } />
-		</Tooltip>
-		<ToolbarDivider />
-		<Tooltip
-			content={ __( 'Create a new credential. Deselect all credentials to enable this button.', 'credentials-manager-plugin' ) }
-			relationship="label"
-			withArrow
-		>
-			<ToolbarButton
-				icon={ <AddRegular /> }
-				disabledFocusable={ selectedIds.size > 0 }
-				onClick={ () => { window.location.href = config.addNewUrl; } }
-			/>
-		</Tooltip>
-		{ /* … Edit, a <ToolbarDivider />, Delete, same pattern — Back is always first, always enabled, and followed by its own divider (§10 v74) */ }
-	</Toolbar>
-</Card>
+<ListPagesToolbar
+	ariaLabel={ __( 'Credentials actions', 'credentials-manager-plugin' ) }
+	backUrl={ config.backUrl }
+	addNewUrl={ config.addNewUrl }
+	addNewTooltip={ __( 'Create a new credential. Deselect all credentials to enable this button.', 'credentials-manager-plugin' ) }
+	addNewDisabled={ selectedIds.size > 0 }
+	editTooltip={ __( "Edit the selected credential's details. Select exactly one credential to enable this button.", 'credentials-manager-plugin' ) }
+	editUrl={ singleSelectedRow?.editUrl }
+	deleteTooltip={ __( 'Permanently delete the selected credential(s). Select one or more credentials to enable this button.', 'credentials-manager-plugin' ) }
+	deleteDisabled={ 0 === selectedIds.size }
+	onDelete={ () => setPendingDeleteIds( Array.from( selectedIds ) ) }
+	// sync={ { tooltip, label, onClick } } — Microsoft Certifications/Exams only; omit elsewhere
+/>
 ```
 
-A few rules baked into this pattern:
+What the component owns vs. what a screen still supplies:
 
-- **Icon-only, no visible text label** (`icon` prop from `@fluentui/react-icons` — pick the `*Regular` variant, e.g. `AddRegular`/`EditRegular`/`DeleteRegular`). Because there's no visible text, wrap every `ToolbarButton` in a `Tooltip` with `relationship="label"` — this is the mechanism Fluent's own accessibility guidance calls for to give an icon-only control its accessible name. Give the tooltip a **full sentence**, not just a restatement of the icon: what the button does *and*, since the enablement rule isn't obvious from the icon alone, what makes it available (e.g. "Select exactly one credential to enable this button.").
+- **Back is fully hardcoded** — icon, tooltip copy ("Go back to the Credentials Manager page."), always enabled — since it's identical on every screen; a screen only supplies `backUrl`.
+- **New/Edit/Delete tooltip wording still varies per entity** ("Create a new credential…" vs "…skill…"), so `addNewTooltip`/`editTooltip`/`deleteTooltip` stay screen-supplied strings.
+- **New's and Delete's disabled state are booleans the screen computes from its own selection** (`addNewDisabled={ selectedIds.size > 0 }`, `deleteDisabled={ 0 === selectedIds.size }`) — the component has no selection state of its own.
+- **Edit's disabled state is *not* a separate boolean.** Pass `editUrl={ singleSelectedRow?.editUrl }`; the button is disabled whenever that's `undefined` and navigates to it otherwise. This avoids a second value (`editDisabled`) that could drift out of sync with whether there's actually a URL to go to.
+- **Delete never navigates directly** — `onDelete` is a callback, because every screen opens its own `ConfirmationDialog` first (§10). Same for the optional `sync` prop's `onClick`.
+- **`sync?: { tooltip, label, onClick }`** adds the trailing Sync button (visible label, not icon-only — `ArrowSyncRegular`) only when passed; omit it and no Sync button, divider, or icon renders at all. Only Microsoft Certifications and Microsoft Exams pass it.
+
+A few rules baked into the component itself, worth knowing if you're changing it:
+
+- **Icon-only, no visible text label** on Back/New/Edit/Delete (`icon` prop from `@fluentui/react-icons` — the `*Regular` variant, e.g. `AddRegular`/`EditRegular`/`DeleteRegular`). Because there's no visible text, every `ToolbarButton` is wrapped in a `Tooltip` with `relationship="label"` — this is the mechanism Fluent's own accessibility guidance calls for to give an icon-only control its accessible name. Tooltip copy is a **full sentence**, not just a restatement of the icon: what the button does *and*, since the enablement rule isn't obvious from the icon alone, what makes it available (e.g. "Select exactly one credential to enable this button.").
 - **`withArrow` on every `Tooltip`** in this plugin — including the header-cell tooltips (§8) and the Description cell's truncation tooltip. Keep it consistent across every `Tooltip` usage, not just the toolbar's.
-- **`disabledFocusable`, never plain `disabled`, on a button with a tooltip.** A plain `disabled` native `<button>` doesn't reliably receive hover/focus events in most browsers, so its tooltip would never show — including when the user most needs the explanation (to understand *why* it's disabled). `disabledFocusable` keeps it hoverable/focusable while still fully non-interactive: `useARIAButtonProps()` (`@fluentui/react-aria`) strips the `onClick` handler from the rendered button either way, so no separate click-guard is needed in your own handlers.
-- **Wrap the whole `Toolbar` in a `Card`** (`appearance="filled"`, the default — no need to pass it explicitly) if you want the "rounded corners + shadow" panel look. `Card`'s default appearance already provides `border-radius`, `box-shadow: var(--shadow4)`, and a `colorNeutralBackground1` background with zero custom CSS. Give the `Card` a `marginBottom` via its own style rule (see §11) — don't constrain its `width`; a block-level `Card` stretches to its container's width on its own, matching the table below it edge-to-edge, which is what actually reads as "a toolbar for this table" rather than a floating unrelated panel.
+- **`disabledFocusable`, never plain `disabled`, on a button with a tooltip.** A plain `disabled` native `<button>` doesn't reliably receive hover/focus events in most browsers, so its tooltip would never show — including when the user most needs the explanation (to understand *why* it's disabled). `disabledFocusable` keeps it hoverable/focusable while still fully non-interactive: `useARIAButtonProps()` (`@fluentui/react-aria`) strips the `onClick` handler from the rendered button either way, so no separate click-guard is needed.
+- **Wrapped in a `Card`** (`appearance="filled"`, the default — no need to pass it explicitly) for the "rounded corners + shadow" panel look, via `useToolbarCardStyles()` — now called only inside `ListPagesToolbar` itself, not in each screen. `Card`'s default appearance already provides `border-radius`, `box-shadow: var(--shadow4)`, and a `colorNeutralBackground1` background with zero custom CSS. The `Card` gets a `marginBottom` via its own style rule (see §11) and no constrained `width`; a block-level `Card` stretches to its container's width on its own, matching the table below it edge-to-edge, which is what actually reads as "a toolbar for this table" rather than a floating unrelated panel.
 
 ## 8. Header tooltips
 
@@ -270,20 +270,21 @@ A handful of small, reusable shapes cover most columns:
 
 - **Empty-value convention**: `EM_DASH` (imported from `./tools`, §4 — not a local `const`), `value || EM_DASH` in every `renderCell`. Consistent across every column in this pattern — don't invent a second "not set" convention.
 
-## 10. Reusable components: `DataTable`, `useRowSelection`, `ConfirmationDialog` and `TableFooter`
+## 10. Reusable components: `DataTable`, `useRowSelection`, `ListPagesToolbar`, `ConfirmationDialog` and `TableFooter`
 
 These **not entity-specific** pieces already exist under `src/components/` — reuse them rather than rebuilding any of them:
 
-- **`DataTable`** (`src/components/tables/table.tsx`, `CHANGE_LOG.md` v83) — the whole list table: multi-select checkbox column, sortable header cells with tooltips, selected-row highlight, the empty state, and a `TableFooter` below. Generic over the row type (`DataTable<TRow extends { id: number }>`). It deliberately owns **no** selection state, **no** URLs and **no** strings: selection comes in through `selectedIds`/`onSelectionChange` (§6), a sortable header click just calls `onSortColumn( columnId )` (the screen turns that into a reload, §4), and every label — `ariaLabel`, `selectAllTooltip`, `selectAllLabel`, `selectRowLabel`, `noItemsText`, each column's `label`/`headerTooltip` — is passed in already translated, so a screen's `__()` calls stay in its own file. With no rows it renders just the `noItemsText` paragraph (no table, no footer). The toolbar and the confirmation dialogs stay in the screen, since they vary between screens (Sync on Microsoft Certifications/Exams). Its own two style rules (`tableWrap`, `noItems`) are in `src/styles/table.styles.ts` (`useTableStyles`), so a screen's `*List.styles.ts` only holds its cell-specific rules.
+- **`DataTable`** (`src/components/tables/table.tsx`, `CHANGE_LOG.md` v83) — the whole list table: multi-select checkbox column, sortable header cells with tooltips, selected-row highlight, the empty state, and a `TableFooter` below. Generic over the row type (`DataTable<TRow extends { id: number }>`). It deliberately owns **no** selection state, **no** URLs and **no** strings: selection comes in through `selectedIds`/`onSelectionChange` (§6), a sortable header click just calls `onSortColumn( columnId )` (the screen turns that into a reload, §4), and every label — `ariaLabel`, `selectAllTooltip`, `selectAllLabel`, `selectRowLabel`, `noItemsText`, each column's `label`/`headerTooltip` — is passed in already translated, so a screen's `__()` calls stay in its own file. With no rows it renders just the `noItemsText` paragraph (no table, no footer). The confirmation dialogs stay in the screen, since their title/message vary between screens. Its own two style rules (`tableWrap`, `noItems`) are in `src/styles/table.styles.ts` (`useTableStyles`), so a screen's `*List.styles.ts` only holds its cell-specific rules.
 - **`useRowSelection( rows )`** (`src/components/tables/use-row-selection.ts`) — returns `{ selectedIds, setSelectedIds, singleSelectedRow }` (§6).
+- **`ListPagesToolbar`** (`src/components/toolbars/list-pages-toolbar.tsx`, `CHANGE_LOG.md` v88) — the `Card`-wrapped `Toolbar` above the table: Back (hardcoded), New/Edit/Delete, and an optional trailing Sync button. See §7 for its full prop shape and the reasoning behind which parts it owns vs. which stay screen-supplied.
 
 - **`ConfirmationDialog`** (`src/components/dialogs/confirmation-dialog.tsx`) — wraps Fluent's `Dialog`/`DialogSurface`/`DialogBody`/`DialogTitle`/`DialogContent`/`DialogActions` behind `open`/`title`/`message`/`confirmLabel`/`cancelLabel`/`onConfirm`/`onCancel` props, with `modalType="alert"` so it can only be dismissed by an explicit Cancel/Confirm click (not by clicking the dimmed backdrop) — appropriate for any destructive confirmation, not just delete. The owning component tracks *what's* pending in its own state (Credentials list uses `useState<number[] | null>`) and builds the dialog's title/message from that state; the dialog itself has no idea what a "credential" is.
 - **`TableFooter`** (`src/components/tables/table-footer.tsx`) — renders "Number of Records: N" / "Number of Selected Records: N" on one line. Its only props are `recordCount`/`selectedCount`, both plain numbers the caller supplies (`config.rows.length`, `selectedIds.size`). `DataTable` already renders it below the table (and not in the empty state, where there's nothing meaningful to count), so a screen using `DataTable` never renders it itself.
 
-Both are re-exported from the `src/components/index.ts` barrel — import from `'./components'`, not each file's own path:
+All are re-exported from the `src/components/index.ts` barrel — import from `'./components'`, not each file's own path:
 
 ```ts
-import { ConfirmationDialog, DataTable, useRowSelection, type ColumnDef } from './components';
+import { ConfirmationDialog, DataTable, ListPagesToolbar, useRowSelection, type ColumnDef } from './components';
 ```
 
 **If you add a new reusable component**, add its `export`/`export type` pair to that barrel too, and import it from `'./components'` in whatever uses it. A barrel nothing imports from is dead code.

@@ -26,7 +26,7 @@ import {
 	type InputOnChangeData,
 	type TextareaOnChangeData,
 } from '@fluentui/react-components';
-import { useSkillStyles } from './styles';
+import { useSkillStyles } from '../../../styles';
 
 /**
  * The shape PHP's `wp_localize_script( 'credpl-skill-form',

@@ -29,17 +29,12 @@ import { __, _n, sprintf } from '@wordpress/i18n';
 import {
 	FluentProvider,
 	webLightTheme,
-	Toolbar,
-	ToolbarButton,
-	ToolbarDivider,
-	Card,
 	Link,
 	Tooltip,
 } from '@fluentui/react-components';
-import { ArrowLeftRegular, AddRegular, EditRegular, DeleteRegular, ArrowSyncRegular } from '@fluentui/react-icons';
-import { useMsCertificationsListStyles, useToolbarCardStyles } from './styles';
-import { ConfirmationDialog, DataTable, useRowSelection, type ColumnDef } from './components';
-import { EM_DASH, getCurrentSortDirection, buildNextSortUrl, buildBulkDeleteUrl } from './tools';
+import { useMsCertificationsListStyles } from '../../../styles';
+import { ConfirmationDialog, DataTable, ListPagesToolbar, useRowSelection, type ColumnDef } from '../../../components';
+import { EM_DASH, getCurrentSortDirection, buildNextSortUrl, buildBulkDeleteUrl } from '../../../tools';
 
 interface MsCertificationRow {
 	id: number;
@@ -180,7 +175,6 @@ const columns: ColumnDef<MsCertificationRow>[] = [
 ];
 
 function MsCertificationsList() {
-	const toolbarCardStyles = useToolbarCardStyles();
 	const { selectedIds, setSelectedIds, singleSelectedRow } = useRowSelection( config.rows );
 	const [ pendingDeleteIds, setPendingDeleteIds ] = useState<number[] | null>( null );
 	const [ pendingSync, setPendingSync ] = useState( false );
@@ -263,76 +257,23 @@ function MsCertificationsList() {
 	);
 
 	const toolbar = (
-		<Card className={ toolbarCardStyles.toolbarCard }>
-			<Toolbar aria-label={ __( 'Microsoft Certifications actions', 'credentials-manager-plugin' ) }>
-				<Tooltip
-					content={ __( 'Go back to the Credentials Manager page.', 'credentials-manager-plugin' ) }
-					relationship="label"
-					withArrow
-				>
-					<ToolbarButton
-						icon={ <ArrowLeftRegular /> }
-						onClick={ () => {
-							window.location.href = config.backUrl;
-						} }
-					/>
-				</Tooltip>
-				<ToolbarDivider />
-				<Tooltip
-					content={ __( 'Create a new Microsoft Certification. Deselect all certifications to enable this button.', 'credentials-manager-plugin' ) }
-					relationship="label"
-					withArrow
-				>
-					<ToolbarButton
-						icon={ <AddRegular /> }
-						disabledFocusable={ selectedIds.size > 0 }
-						onClick={ () => {
-							window.location.href = config.addNewUrl;
-						} }
-					/>
-				</Tooltip>
-				<Tooltip
-					content={ __( "Edit the selected Microsoft Certification's details. Select exactly one certification to enable this button.", 'credentials-manager-plugin' ) }
-					relationship="label"
-					withArrow
-				>
-					<ToolbarButton
-						icon={ <EditRegular /> }
-						disabledFocusable={ ! singleSelectedRow }
-						onClick={ () => {
-							if ( singleSelectedRow ) {
-								window.location.href = singleSelectedRow.editUrl;
-							}
-						} }
-					/>
-				</Tooltip>
-				<ToolbarDivider />
-				<Tooltip
-					content={ __( 'Permanently delete the selected Microsoft Certification(s). Select one or more certifications to enable this button.', 'credentials-manager-plugin' ) }
-					relationship="label"
-					withArrow
-				>
-					<ToolbarButton
-						icon={ <DeleteRegular /> }
-						disabledFocusable={ 0 === selectedIds.size }
-						onClick={ () => setPendingDeleteIds( Array.from( selectedIds ) ) }
-					/>
-				</Tooltip>
-				<ToolbarDivider />
-				<Tooltip
-					content={ __( 'Sync Certifications from the Microsoft Learn catalog now.', 'credentials-manager-plugin' ) }
-					relationship="label"
-					withArrow
-				>
-					<ToolbarButton
-						icon={ <ArrowSyncRegular /> }
-						onClick={ () => setPendingSync( true ) }
-					>
-						{ __( 'Sync Certifications', 'credentials-manager-plugin' ) }
-					</ToolbarButton>
-				</Tooltip>
-			</Toolbar>
-		</Card>
+		<ListPagesToolbar
+			ariaLabel={ __( 'Microsoft Certifications actions', 'credentials-manager-plugin' ) }
+			backUrl={ config.backUrl }
+			addNewUrl={ config.addNewUrl }
+			addNewTooltip={ __( 'Create a new Microsoft Certification. Deselect all certifications to enable this button.', 'credentials-manager-plugin' ) }
+			addNewDisabled={ selectedIds.size > 0 }
+			editTooltip={ __( "Edit the selected Microsoft Certification's details. Select exactly one certification to enable this button.", 'credentials-manager-plugin' ) }
+			editUrl={ singleSelectedRow?.editUrl }
+			deleteTooltip={ __( 'Permanently delete the selected Microsoft Certification(s). Select one or more certifications to enable this button.', 'credentials-manager-plugin' ) }
+			deleteDisabled={ 0 === selectedIds.size }
+			onDelete={ () => setPendingDeleteIds( Array.from( selectedIds ) ) }
+			sync={ {
+				tooltip: __( 'Sync Certifications from the Microsoft Learn catalog now.', 'credentials-manager-plugin' ),
+				label: __( 'Sync Certifications', 'credentials-manager-plugin' ),
+				onClick: () => setPendingSync( true ),
+			} }
+		/>
 	);
 
 	return (

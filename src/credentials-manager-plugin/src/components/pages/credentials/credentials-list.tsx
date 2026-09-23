@@ -23,18 +23,13 @@ import { __, _n, sprintf } from '@wordpress/i18n';
 import {
 	FluentProvider,
 	webLightTheme,
-	Toolbar,
-	ToolbarButton,
-	ToolbarDivider,
-	Card,
 	Badge,
 	Link,
 	Tooltip,
 } from '@fluentui/react-components';
-import { ArrowLeftRegular, AddRegular, EditRegular, DeleteRegular } from '@fluentui/react-icons';
-import { useCredentialsListStyles, useToolbarCardStyles } from './styles';
-import { ConfirmationDialog, DataTable, useRowSelection, type ColumnDef } from './components';
-import { EM_DASH, getCurrentSortDirection, buildNextSortUrl, buildBulkDeleteUrl } from './tools';
+import { useCredentialsListStyles } from '../../../styles';
+import { ConfirmationDialog, DataTable, ListPagesToolbar, useRowSelection, type ColumnDef } from '../../../components';
+import { EM_DASH, getCurrentSortDirection, buildNextSortUrl, buildBulkDeleteUrl } from '../../../tools';
 
 interface CredentialRow {
 	id: number;
@@ -234,7 +229,6 @@ const columns: ColumnDef<CredentialRow>[] = [
 ];
 
 function CredentialsList() {
-	const toolbarCardStyles = useToolbarCardStyles();
 	const { selectedIds, setSelectedIds, singleSelectedRow } = useRowSelection( config.rows );
 	const [ pendingDeleteIds, setPendingDeleteIds ] = useState<number[] | null>( null );
 
@@ -307,63 +301,18 @@ function CredentialsList() {
 	);
 
 	const toolbar = (
-		<Card className={ toolbarCardStyles.toolbarCard }>
-			<Toolbar aria-label={ __( 'Credentials actions', 'credentials-manager-plugin' ) }>
-				<Tooltip
-					content={ __( 'Go back to the Credentials Manager page.', 'credentials-manager-plugin' ) }
-					relationship="label"
-					withArrow
-				>
-					<ToolbarButton
-						icon={ <ArrowLeftRegular /> }
-						onClick={ () => {
-							window.location.href = config.backUrl;
-						} }
-					/>
-				</Tooltip>
-				<ToolbarDivider />
-				<Tooltip
-					content={ __( 'Create a new credential. Deselect all credentials to enable this button.', 'credentials-manager-plugin' ) }
-					relationship="label"
-					withArrow
-				>
-					<ToolbarButton
-						icon={ <AddRegular /> }
-						disabledFocusable={ selectedIds.size > 0 }
-						onClick={ () => {
-							window.location.href = config.addNewUrl;
-						} }
-					/>
-				</Tooltip>
-				<Tooltip
-					content={ __( "Edit the selected credential's details. Select exactly one credential to enable this button.", 'credentials-manager-plugin' ) }
-					relationship="label"
-					withArrow
-				>
-					<ToolbarButton
-						icon={ <EditRegular /> }
-						disabledFocusable={ ! singleSelectedRow }
-						onClick={ () => {
-							if ( singleSelectedRow ) {
-								window.location.href = singleSelectedRow.editUrl;
-							}
-						} }
-					/>
-				</Tooltip>
-				<ToolbarDivider />
-				<Tooltip
-					content={ __( 'Permanently delete the selected credential(s). Select one or more credentials to enable this button.', 'credentials-manager-plugin' ) }
-					relationship="label"
-					withArrow
-				>
-					<ToolbarButton
-						icon={ <DeleteRegular /> }
-						disabledFocusable={ 0 === selectedIds.size }
-						onClick={ () => setPendingDeleteIds( Array.from( selectedIds ) ) }
-					/>
-				</Tooltip>
-			</Toolbar>
-		</Card>
+		<ListPagesToolbar
+			ariaLabel={ __( 'Credentials actions', 'credentials-manager-plugin' ) }
+			backUrl={ config.backUrl }
+			addNewUrl={ config.addNewUrl }
+			addNewTooltip={ __( 'Create a new credential. Deselect all credentials to enable this button.', 'credentials-manager-plugin' ) }
+			addNewDisabled={ selectedIds.size > 0 }
+			editTooltip={ __( "Edit the selected credential's details. Select exactly one credential to enable this button.", 'credentials-manager-plugin' ) }
+			editUrl={ singleSelectedRow?.editUrl }
+			deleteTooltip={ __( 'Permanently delete the selected credential(s). Select one or more credentials to enable this button.', 'credentials-manager-plugin' ) }
+			deleteDisabled={ 0 === selectedIds.size }
+			onDelete={ () => setPendingDeleteIds( Array.from( selectedIds ) ) }
+		/>
 	);
 
 	return (

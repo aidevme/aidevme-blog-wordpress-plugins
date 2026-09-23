@@ -4,9 +4,10 @@
  * (list + add/edit). See SPECIFICATION.md §6.10.
  *
  * Same shape as Credpl_Admin_Blocks — a React/Fluent UI 9 list
- * (src/skills-list.tsx) and a React add/edit form (src/skill.tsx), both
- * hydrated from data localized here, with the form submitting as a plain
- * HTML POST to admin-post.php.
+ * (src/components/pages/skills/skills-list.tsx) and a React add/edit form
+ * (src/components/pages/skills/skill.tsx), both hydrated from data
+ * localized here, with the form submitting as a plain HTML POST to
+ * admin-post.php.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -154,7 +155,7 @@ class Credpl_Admin_Skills {
 
 	/**
 	 * The "Skills" list screen: page chrome in plain PHP, then a mount
-	 * point for the React list from src/skills-list.tsx.
+	 * point for the React list from src/components/pages/skills/skills-list.tsx.
 	 */
 	public static function render_list_page() {
 		if ( ! current_user_can( Credpl_Admin_Menu::CAPABILITY ) ) {
@@ -172,8 +173,8 @@ class Credpl_Admin_Skills {
 
 	/**
 	 * The "Add Skill" / "Edit Skill" screen: a mount point for the React
-	 * form from src/skill.tsx (see enqueue_edit_form_assets() for the
-	 * localized data it hydrates from).
+	 * form from src/components/pages/skills/skill.tsx (see
+	 * enqueue_edit_form_assets() for the localized data it hydrates from).
 	 */
 	public static function render_edit_page() {
 		if ( ! current_user_can( Credpl_Admin_Menu::CAPABILITY ) ) {

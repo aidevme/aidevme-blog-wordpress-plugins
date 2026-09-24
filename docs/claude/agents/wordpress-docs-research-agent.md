@@ -1,6 +1,6 @@
 # wordpress-docs-research-agent
 
-Syncs the local WordPress Plugin Handbook mirror in `docs/wordpress/wordpress-plugins/` against its live source on `developer.wordpress.org`, using a real headless browser (Playwright MCP) instead of guessing content.
+Syncs the local WordPress documentation mirrors — the Plugin Handbook in `docs/wordpress/wordpress-plugins/` and the WP-CLI command reference in `docs/wordpress/api-reference/wp-cli-commands/` — against their live sources on `developer.wordpress.org`, using a real headless browser (Playwright MCP) instead of guessing content.
 
 Source definition: [`.claude/agents/wordpress-docs-research-agent.md`](../../../.claude/agents/wordpress-docs-research-agent.md)
 
@@ -10,9 +10,9 @@ Source definition: [`.claude/agents/wordpress-docs-research-agent.md`](../../../
 | --- | --- |
 | **Role** | Handbook mirror sync / research |
 | **Model** | `sonnet` |
-| **Writes** | Files under `docs/wordpress/wordpress-plugins/` and the Index table in its `index.md` |
-| **Reads** | `docs/wordpress/wordpress-plugins/index.md` and the live pages listed in its **Reference Url** column |
-| **Invoked via** | The `/sync-wordpress-plugin-docs` slash command, or directly by name |
+| **Writes** | Files under `docs/wordpress/wordpress-plugins/` and `docs/wordpress/api-reference/wp-cli-commands/`, and the Index table in each mirror's `index.md` |
+| **Reads** | Each mirror's `index.md` and the live pages listed in its **Reference Url** column |
+| **Invoked via** | The `/sync-wordpress-plugin-docs` (Plugin Handbook) or `/sync-wordpress-wp-cli-commands` (WP-CLI) slash command, or directly by name |
 | **Tools** | `Read`, `Edit`, `Write`, `Grep`, `Glob`, `Bash`, plus `mcp__playwright__browser_navigate`, `browser_snapshot`, `browser_evaluate`, `browser_close`, `browser_wait_for` |
 
 ## Purpose
@@ -57,6 +57,17 @@ Trigger phrases from the agent's description: "sync the WordPress docs", "refres
    6. Closes the page with `browser_close` before the next row so tabs don't pile up.
 4. Reports a compact summary: rows checked, files whose content actually changed versus already current, and any failures (404, moved permanently, couldn't extract) with what is needed to resolve them.
 
+## WP-CLI commands mirror
+
+`docs/wordpress/api-reference/wp-cli-commands/index.md` has the same Index columns but a flat layout: **Index** is a two-digit number (`01`-`46`), **Name** is the md file name without extension (`wp_ability`), **Document** links to `NN-wp_name/wp_name.md`, and **Reference Url** is `https://developer.wordpress.org/cli/commands/<command>/`.
+
+Run it with `/sync-wordpress-wp-cli-commands [scope]` ([`.claude/commands/sync-wordpress-wp-cli-commands.md`](../../../.claude/commands/sync-wordpress-wp-cli-commands.md)); the scope argument accepts an `Index` (`09`) or `Name` (`wp_core`), and no argument syncs every row. A direct request mentioning WP-CLI also selects this mirror. Per row the agent does the same navigate / extract / write / update-row / close cycle, with these differences:
+
+- It extracts the full command page (description, synopsis, subcommands, options, examples) and fetches linked subcommand pages, putting each under its own `##` heading in the command's single md file rather than creating new files.
+- Skeleton: `# wp {command}`, `Reference: <url>`, then `##` sections following the page's headings, with shell usage in `bash` code blocks.
+- Folders and numbering are fixed by the Index table; the agent never adds, renames or renumbers them, and reports a command that vanished from the live site instead.
+- A stub or 404 page gets `Sync failed - {reason}` in **Notes** and its file is left untouched.
+
 ## Output format of a mirror file
 
 - `# {Heading}` as the first line
@@ -95,5 +106,5 @@ The server is enabled through `.claude/settings.local.json` (`enabledMcpjsonServ
 
 ## Boundaries
 
-- It is the only agent that writes under `docs/wordpress/wordpress-plugins/`; [`architect`](architect.md), [`developer`](developer.md) and [`documenter`](documenter.md) are all told never to touch that folder.
+- It is the only agent that writes under `docs/wordpress/wordpress-plugins/` and `docs/wordpress/api-reference/wp-cli-commands/`; [`architect`](architect.md), [`developer`](developer.md) and [`documenter`](documenter.md) are all told never to touch that folder.
 - It writes local files only and does not touch plugin code under `src/`.

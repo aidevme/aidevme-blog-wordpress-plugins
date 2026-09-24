@@ -46,7 +46,7 @@ class Credpl_Admin_Blocks {
 	/**
 	 * Load the React-built Add/Edit Credential Block form (Title field +
 	 * the two-column drag-and-drop Credentials picker, both in
-	 * src/credentials-block.tsx).
+	 * src/components/pages/credentials-blocks/credentials-block.tsx).
 	 */
 	private static function enqueue_edit_form_assets() {
 		$asset_file = CREDPL_PLUGIN_DIR . 'build/credentials-block.asset.php';
@@ -183,7 +183,8 @@ class Credpl_Admin_Blocks {
 
 	/**
 	 * The "Credential Blocks" list screen: a mount point for the
-	 * React-built DataGrid-style list from src/credentials-blocks-list.tsx
+	 * React-built DataGrid-style list from
+	 * src/components/pages/credentials-blocks/credentials-blocks-list.tsx
 	 * (see enqueue_list_assets() for the localized row data it hydrates
 	 * from), replacing the earlier `Credpl_Blocks_List_Table`-rendered
 	 * HTML table (§10 v59, mirroring the Credentials list's own
@@ -207,7 +208,8 @@ class Credpl_Admin_Blocks {
 
 	/**
 	 * The "Add Credential Block" / "Edit Credential Block" screen: a mount
-	 * point for the React form built from src/credentials-block.tsx (see
+	 * point for the React form built from
+	 * src/components/pages/credentials-blocks/credentials-block.tsx (see
 	 * enqueue_assets() for the localized data it hydrates from) — no
 	 * PHP-rendered form markup here anymore, aside from the read-only
 	 * shortcode display above it, which isn't part of the form. The React

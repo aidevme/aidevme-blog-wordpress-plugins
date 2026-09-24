@@ -1,0 +1,89 @@
+name: Bug report
+description: Report a problem with one of the WordPress plugins in this repo
+title: "fix: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please fill out the sections below so it can be reproduced and fixed quickly.
+
+  - type: dropdown
+    id: plugin
+    attributes:
+      label: Affected plugin
+      description: Which plugin under `src/` does this bug affect?
+      options:
+        - credentials-manager-plugin
+        - aidevme-category-visualization-plugin
+        - aidevme-configuration-manager-plugin
+        - wordpress-react-plugin-template
+        - wordpress-standard-plugin-template
+        - docs/wordpress-plugins mirror
+        - Repo-wide / tooling (workflows, agents, docs styles)
+        - Other / not sure
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Plugin version
+      description: The plugin version this occurs on (see the plugin's header comment or CHANGE_LOG.md), and the WordPress version if relevant.
+      placeholder: e.g. credentials-manager-plugin v0.0.86, WordPress 6.6
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What you expected to happen instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Exact steps another person could follow to reproduce this, including any relevant admin screen, shortcode, or REST/AJAX call.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error messages / logs
+      description: Paste any PHP errors, browser console errors, or `debug.log` output. This will be formatted as code automatically.
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Anything relevant about where this happened (PHP version, browser, server, other active plugins that might conflict).
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Anything else that might help — screenshots, related issues, etc.
+    validations:
+      required: false

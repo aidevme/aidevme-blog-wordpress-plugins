@@ -192,7 +192,8 @@ class Credpl_Admin_Ms_Certifications {
 
 	/**
 	 * The "Microsoft Certifications" list screen: a mount point for the
-	 * React-built list from src/ms-certifications-list.tsx (see
+	 * React-built list from
+	 * src/components/pages/ms-certifications/ms-certifications-list.tsx (see
 	 * enqueue_list_assets() for the localized row data it hydrates from),
 	 * replacing the earlier `Credpl_Ms_Certifications_List_Table`-rendered
 	 * HTML table (§10 v60, mirroring Credentials' own conversion, §10 v34).
@@ -216,7 +217,8 @@ class Credpl_Admin_Ms_Certifications {
 	/**
 	 * The "Add New Microsoft Certification" / "Edit Microsoft
 	 * Certification" screen: a mount point for the React form built from
-	 * src/ms-certification.tsx (see enqueue_assets() for the localized
+	 * src/components/pages/ms-certifications/ms-certification.tsx (see
+	 * enqueue_assets() for the localized
 	 * data it hydrates from) — no PHP-rendered form markup here. The React
 	 * form submits as a plain HTML form POST to admin-post.php, so save()
 	 * below is unchanged by anything about how the form is rendered. When

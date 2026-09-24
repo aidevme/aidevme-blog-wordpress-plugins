@@ -193,7 +193,8 @@ class Credpl_Admin_Ms_Exams {
 
 	/**
 	 * The "Microsoft Exams" list screen: a mount point for the React-built
-	 * list from src/ms-exams-list.tsx (see enqueue_list_assets() for the
+	 * list from src/components/pages/ms-exams/ms-exams-list.tsx (see
+	 * enqueue_list_assets() for the
 	 * localized row data it hydrates from), replacing the earlier
 	 * `Credpl_Ms_Exams_List_Table`-rendered HTML table (§10 v61, mirroring
 	 * Credentials' own conversion, §10 v34). No `page-title-action`
@@ -216,7 +217,8 @@ class Credpl_Admin_Ms_Exams {
 
 	/**
 	 * The "Add New Microsoft Exam" / "Edit Microsoft Exam" screen: a mount
-	 * point for the React form built from src/ms-exam.tsx (see
+	 * point for the React form built from
+	 * src/components/pages/ms-exams/ms-exam.tsx (see
 	 * enqueue_assets() for the localized data it hydrates from) — no
 	 * PHP-rendered form markup here. The React form submits as a plain
 	 * HTML form POST to admin-post.php, so save() below is unchanged by

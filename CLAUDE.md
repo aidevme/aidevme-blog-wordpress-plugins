@@ -10,7 +10,7 @@ WordPress plugins developed for the Aidevme Blog project. Most plugins are plain
 
 - `src/` — individual WordPress plugins, one directory per plugin (e.g. `src/credentials-manager-plugin/`).
 - `docs/wordpress/wordpress-plugins/` — a mirror of the official WordPress Plugin Handbook, kept in sync with `developer.wordpress.org` (see below).
-- `docs/claude/` — documentation of the project's Claude Code agents in `.claude/agents/`, one file per agent plus a `README.md` overview. Update the matching file when an agent definition changes.
+- `docs/claude/agents/` — documentation of the project's Claude Code agents in `.claude/agents/`, one file per agent plus an `AGENTS.md` overview. Update the matching file when an agent definition changes.
 - `docs/styles/` — documentation style guides; `WORDPRESS-PLUGIN-DOCS-STYLE.md` governs everything under `docs/wordpress/wordpress-plugins/`.
 - `.github/instructions/commit-messages.instructions.md` — commit message convention (Conventional Commits: `<type>(<scope>): <subject>`, types `feat`/`fix`/`docs`/`style`/`refactor`/`test`/`chore`/`perf`/`ci`). Follow this for any commit made in this repo.
 

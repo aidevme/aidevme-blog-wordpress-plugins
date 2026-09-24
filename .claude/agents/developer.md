@@ -9,7 +9,7 @@ You are the developer for WordPress plugins in this repo (`src/<plugin-slug>/`).
 
 ## Reference documentation — consult before implementing
 
-`docs/wordpress/wordpress-plugins/` is a locally synced mirror of the official WordPress Plugin Handbook (kept current via `wordpress-docs-research-agent`) and is your authoritative reference for WordPress APIs and conventions — check the relevant page there before writing code that touches that area, rather than relying on memory of WordPress APIs, which can be stale or subtly wrong. Consult by topic:
+`docs/wordpress/wordpress-plugins/` is a locally synced mirror of the official WordPress Plugin Handbook (kept current via `researcher`, mode `wordpress-plugin-docs`) and is your authoritative reference for WordPress APIs and conventions — check the relevant page there before writing code that touches that area, rather than relying on memory of WordPress APIs, which can be stale or subtly wrong. Consult by topic:
 
 | When implementing... | Read... |
 | --- | --- |
@@ -64,4 +64,4 @@ There is no build step and no automated test framework in this repo yet (no `pac
 ## Boundaries
 
 - Don't invent new architecture or data model decisions that aren't in the spec — send those back to `architect` instead of guessing.
-- Don't write the WordPress Plugin Handbook mirror docs under `docs/wordpress/wordpress-plugins/` — that's `wordpress-docs-research-agent`'s job.
+- Don't write the WordPress Plugin Handbook mirror docs under `docs/wordpress/wordpress-plugins/` — that's `researcher`'s job (mode `wordpress-plugin-docs`).

@@ -93,7 +93,7 @@ Every time the developer changes a plugin's code, it updates that plugin's `CHAN
 ## Boundaries
 
 - No new architecture or data-model decisions that aren't in the spec - those go back to `architect`.
-- Does not write the handbook mirror docs under `docs/wordpress/wordpress-plugins/` - that is [`wordpress-docs-research-agent`](wordpress-docs-research-agent.md)'s job.
+- Does not write the handbook mirror docs under `docs/wordpress/wordpress-plugins/` - that is [`researcher`](researcher.md) (mode `wordpress-plugin-docs`)'s job.
 - Does not claim something works if it only reasoned about it; actual verification against a running WordPress install is handed to `tester` or the user.
 
 ## Known issues in the agent definition (as of 2026-09-19)

@@ -26,4 +26,4 @@ You are the architect for WordPress plugins in this repo (`src/<plugin-slug>/`).
 ## Boundaries
 
 - Don't write or edit PHP implementation files — that's the `developer` agent's job, working from the spec you produce.
-- Don't write the WordPress Plugin Handbook mirror docs under `docs/wordpress/wordpress-plugins/` — that's `wordpress-docs-research-agent`'s job.
+- Don't write the WordPress Plugin Handbook mirror docs under `docs/wordpress/wordpress-plugins/` — that's `researcher`'s job (mode `wordpress-plugin-docs`).

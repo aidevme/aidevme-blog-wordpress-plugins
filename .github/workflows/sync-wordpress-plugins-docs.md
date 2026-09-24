@@ -37,7 +37,7 @@ Keep the Plugin Handbook mirror in `docs/wordpress/wordpress-plugins/` in sync w
 
 ## Rules
 
-`.claude/agents/wordpress-docs-research-agent.md` is the source of truth for how this mirror is synced, and `docs/styles/WORDPRESS-PLUGIN-DOCS-STYLE.md` defines the folder layout, Index format, document skeleton and content-fidelity rules. Read both first and follow the Plugin Handbook parts exactly (the "Source of truth (Plugin Handbook)", "What to do when invoked" and "Rules" sections). Ignore the "WP-CLI commands mirror" section, its instructions about slash commands, and `mcp__playwright__*` tool names; use the Playwright browser tool available in this workflow instead.
+`.claude/agents/researcher.md` is the source of truth for how this mirror is synced, and `docs/styles/WORDPRESS-PLUGIN-DOCS-STYLE.md` defines the folder layout, Index format, document skeleton and content-fidelity rules. Read both first and follow the **"Mirror modes — shared procedure"** and **"Mode `wordpress-plugin-docs`"** sections exactly. Ignore the other modes and any tool names such as `mcp__playwright__*`; use the Playwright browser tool available in this workflow instead.
 
 ## Scope
 

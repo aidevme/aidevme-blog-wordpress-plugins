@@ -3,7 +3,7 @@ description: Sync docs/wordpress/api-reference/wordpress-rest-apis/ against deve
 argument-hint: [optional: Index number(s) or Name(s) to limit the sync, e.g. "4.1", "6.3" or "key-concepts"]
 ---
 
-Invoke the `wordpress-docs-research-agent` subagent (via the Agent tool) to sync the WordPress REST API Handbook mirror under `docs/wordpress/api-reference/wordpress-rest-apis/` against its live source on developer.wordpress.org. Tell the agent to use the "REST API mirror" rules in its definition and to work only from `docs/wordpress/api-reference/wordpress-rest-apis/index.md`, not the Plugin Handbook or WP-CLI indexes.
+Invoke the `researcher` subagent (via the Agent tool) in mode `wordpress-rest-api-docs` to sync the WordPress REST API Handbook mirror under `docs/wordpress/api-reference/wordpress-rest-apis/` against its live source on developer.wordpress.org. Tell the agent to work only from `docs/wordpress/api-reference/wordpress-rest-apis/index.md`, not the Plugin Handbook or WP-CLI indexes.
 
 Scope: $ARGUMENTS
 

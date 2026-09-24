@@ -18,9 +18,9 @@ WordPress plugins developed for the Aidevme Blog project. Most plugins are plain
 
 `docs/wordpress/wordpress-plugins/index.md` is the source of truth: it has an `## Index` table (`Index | Name | Document | Reference Url | Last Synced On | Notes`) mapping each handbook section to a local `.md` file and the live page it was sourced from.
 
-- Run `/sync-wordpress-plugin-docs` (invokes the `wordpress-docs-research-agent` subagent) to refresh some or all rows against their live source, using Playwright MCP browser tools to fetch actual rendered content — never paraphrase from memory.
-- Full conventions (folder/file layout, Index table format, document skeleton, content-fidelity rules, formatting mechanics) live in `docs/styles/WORDPRESS-PLUGIN-DOCS-STYLE.md`. If you change a convention there, update `.claude/agents/wordpress-docs-research-agent.md` to match — the two are meant to stay identical.
-- This repo's `.mcp.json` defines its own headless `playwright` MCP server (`mcp__playwright__*`, run with `--headless`). The `wordpress-docs-research-agent` is scoped to that server specifically — do not substitute a different Playwright MCP server (e.g. one provided by another plugin), since its headlessness isn't guaranteed.
+- Run `/sync-wordpress-plugin-docs` (invokes the `researcher` subagent in mode `wordpress-plugin-docs`; `/sync-wordpress-rest-api-docs` and `/sync-wordpress-wp-cli-command-docs` do the same for the other two mirrors under `docs/wordpress/api-reference/`) to refresh some or all rows against their live source, using Playwright MCP browser tools to fetch actual rendered content — never paraphrase from memory.
+- Full conventions (folder/file layout, Index table format, document skeleton, content-fidelity rules, formatting mechanics) live in `docs/styles/WORDPRESS-PLUGIN-DOCS-STYLE.md`. If you change a convention there, update the Plugin Handbook mode of `.claude/agents/researcher.md` to match — the two are meant to stay identical.
+- This repo's `.mcp.json` defines its own headless `playwright` MCP server (`mcp__playwright__*`, run with `--headless`). The `researcher` agent is scoped to that server specifically — do not substitute a different Playwright MCP server (e.g. one provided by another plugin), since its headlessness isn't guaranteed.
 
 ## The `credentials-manager-plugin`
 

@@ -84,7 +84,7 @@ The full convention is in [`.github/instructions/commit-messages.instructions.md
 
 Files under `docs/wordpress/wordpress-plugins/` and `docs/wordpress/api-reference/wp-cli-commands/` are **copies of pages on developer.wordpress.org**, refreshed by tooling, not written by hand. Do not edit them manually; edits are overwritten on the next sync. To refresh them:
 
-- Locally, with Claude Code: `/sync-wordpress-plugin-docs` or `/sync-wordpress-wp-cli-commands`, optionally with an Index number or name to limit the scope.
+- Locally, with Claude Code: `/sync-wordpress-plugin-docs` or `/sync-wordpress-wp-cli-command-docs`, optionally with an Index number or name to limit the scope.
 - In GitHub, the scheduled agentic workflows `sync-wordpress-plugins-docs` and `sync-wp-cli-docs` open draft pull requests automatically. Review their diffs like any other change.
 
 Conventions for these mirrors are in [`docs/styles/WORDPRESS-PLUGIN-DOCS-STYLE.md`](docs/styles/WORDPRESS-PLUGIN-DOCS-STYLE.md). Documentation outside the mirrors (READMEs, specifications, agent docs) is normal hand-written content and welcome as a contribution.

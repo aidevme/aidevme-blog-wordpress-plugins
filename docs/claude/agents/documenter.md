@@ -12,7 +12,7 @@ Source definition: [`.claude/agents/documenter.md`](../../../.claude/agents/docu
 | **Model** | `sonnet` |
 | **Writes** | `src/<plugin-slug>/README.md`, `SPECIFICATION.md` corrections, PHP docblocks, root `CLAUDE.md`, root `README.md` |
 | **Reads** | The actual current code, plus existing docs, before describing any behavior |
-| **Never touches** | `docs/wordpress/wordpress-plugins/` (owned by [`wordpress-docs-research-agent`](wordpress-docs-research-agent.md)) |
+| **Never touches** | `docs/wordpress/wordpress-plugins/` (owned by [`researcher`](researcher.md) (mode `wordpress-plugin-docs`)) |
 | **Tools** | `Read`, `Write`, `Edit`, `Grep`, `Glob`, `Bash`, plus `microsoft_docs_search` and `microsoft_docs_fetch` (no code-sample search) |
 
 ## Purpose

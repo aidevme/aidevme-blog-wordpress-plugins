@@ -1,6 +1,6 @@
 # wordpress-docs-research-agent
 
-Syncs the local WordPress documentation mirrors — the Plugin Handbook in `docs/wordpress/wordpress-plugins/` and the WP-CLI command reference in `docs/wordpress/api-reference/wp-cli-commands/` — against their live sources on `developer.wordpress.org`, using a real headless browser (Playwright MCP) instead of guessing content.
+Syncs the local WordPress documentation mirrors — the Plugin Handbook in `docs/wordpress/wordpress-plugins/`, the WP-CLI command reference in `docs/wordpress/api-reference/wp-cli-commands/` and the REST API Handbook in `docs/wordpress/api-reference/wordpress-rest-apis/` — against their live sources on `developer.wordpress.org`, using a real headless browser (Playwright MCP) instead of guessing content.
 
 Source definition: [`.claude/agents/wordpress-docs-research-agent.md`](../../../.claude/agents/wordpress-docs-research-agent.md)
 
@@ -10,9 +10,9 @@ Source definition: [`.claude/agents/wordpress-docs-research-agent.md`](../../../
 | --- | --- |
 | **Role** | Handbook mirror sync / research |
 | **Model** | `sonnet` |
-| **Writes** | Files under `docs/wordpress/wordpress-plugins/` and `docs/wordpress/api-reference/wp-cli-commands/`, and the Index table in each mirror's `index.md` |
+| **Writes** | Files under `docs/wordpress/wordpress-plugins/`, `docs/wordpress/api-reference/wp-cli-commands/` and `docs/wordpress/api-reference/wordpress-rest-apis/`, and the Index table in each mirror's `index.md` |
 | **Reads** | Each mirror's `index.md` and the live pages listed in its **Reference Url** column |
-| **Invoked via** | The `/sync-wordpress-plugin-docs` (Plugin Handbook) or `/sync-wordpress-wp-cli-commands` (WP-CLI) slash command, or directly by name |
+| **Invoked via** | The `/sync-wordpress-plugin-docs` (Plugin Handbook) `/sync-wordpress-wp-cli-commands` (WP-CLI) or `/sync-wordpress-rest-api-docs` (REST API) slash command, or directly by name |
 | **Tools** | `Read`, `Edit`, `Write`, `Grep`, `Glob`, `Bash`, plus `mcp__playwright__browser_navigate`, `browser_snapshot`, `browser_evaluate`, `browser_close`, `browser_wait_for` |
 
 ## Purpose
@@ -68,6 +68,18 @@ Run it with `/sync-wordpress-wp-cli-commands [scope]` ([`.claude/commands/sync-w
 - Folders and numbering are fixed by the Index table; the agent never adds, renames or renumbers them, and reports a command that vanished from the live site instead.
 - A stub or 404 page gets `Sync failed - {reason}` in **Notes** and its file is left untouched.
 
+## REST API mirror
+
+`docs/wordpress/api-reference/wordpress-rest-apis/index.md` has the same Index columns in a hierarchical layout: **Index** is `1`-`9` for top-level sections and `4.1`, `5.2`, `6.40`, ... for sub-pages, **Name** is the md file name without extension, **Document** links to `NN-slug/<name>.md` (sub-pages share their section's folder), and **Reference Url** is `https://developer.wordpress.org/rest-api/<slug>/` (sub-pages: `.../<section>/<name>/`).
+
+Run it with `/sync-wordpress-rest-api-docs [scope]` ([`.claude/commands/sync-wordpress-rest-api-docs.md`](../../../.claude/commands/sync-wordpress-rest-api-docs.md)); the scope argument accepts an `Index` (`4.1`) or `Name` (`key-concepts`), and no argument syncs every row. A direct request mentioning the REST API also selects this mirror. Differences from the other mirrors:
+
+- Tables (endpoint and argument tables on the Reference pages) become markdown tables with every column kept; JSON, PHP, JavaScript and `curl` examples stay in fenced, language-tagged code blocks.
+- Endpoint paths, argument names and types are copied exactly as rendered.
+- Each sub-page is its own file; a section overview is never merged with its children.
+- Folders, files and numbering are fixed by the Index table. If a live slug differs from the table (an underscore name hyphenated on the site, for example), the agent updates the **Reference Url** cell and notes it rather than renaming files, and reports missing or vanished pages in its summary.
+- A stub or 404 page gets `Sync failed - {reason}` in **Notes** and its file is left untouched.
+
 ## Output format of a mirror file
 
 - `# {Heading}` as the first line
@@ -106,5 +118,5 @@ The server is enabled through `.claude/settings.local.json` (`enabledMcpjsonServ
 
 ## Boundaries
 
-- It is the only agent that writes under `docs/wordpress/wordpress-plugins/` and `docs/wordpress/api-reference/wp-cli-commands/`; [`architect`](architect.md), [`developer`](developer.md) and [`documenter`](documenter.md) are all told never to touch that folder.
+- It is the only agent that writes under `docs/wordpress/wordpress-plugins/` `docs/wordpress/api-reference/wp-cli-commands/` and `docs/wordpress/api-reference/wordpress-rest-apis/`; [`architect`](architect.md), [`developer`](developer.md) and [`documenter`](documenter.md) are all told never to touch that folder.
 - It writes local files only and does not touch plugin code under `src/`.

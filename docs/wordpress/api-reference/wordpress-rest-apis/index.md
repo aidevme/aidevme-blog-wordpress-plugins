@@ -4,65 +4,65 @@ Reference: <https://developer.wordpress.org/rest-api/>
 
 | Index | Name | Document | Reference Url | Last Synced On | Notes |
 | --- | --- | --- | --- | --- | --- |
-| 1 | rest-api-handbook | [rest-api-handbook.md](01-rest-api-handbook/rest-api-handbook.md) | <https://developer.wordpress.org/rest-api/> |  |  |
-| 2 | key-concepts | [key-concepts.md](02-key-concepts/key-concepts.md) | <https://developer.wordpress.org/rest-api/key-concepts/> |  |  |
-| 3 | frequently-asked-questions | [frequently-asked-questions.md](03-frequently-asked-questions/frequently-asked-questions.md) | <https://developer.wordpress.org/rest-api/frequently-asked-questions/> |  |  |
-| 4 | using-the-rest-api | [using-the-rest-api.md](04-using-the-rest-api/using-the-rest-api.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/> |  |  |
-| 4.1 | authentication | [authentication.md](04-using-the-rest-api/authentication.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/> |  |  |
-| 4.2 | backbone-javascript-client | [backbone-javascript-client.md](04-using-the-rest-api/backbone-javascript-client.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/backbone-javascript-client/> |  |  |
-| 4.3 | client-libraries | [client-libraries.md](04-using-the-rest-api/client-libraries.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/client-libraries/> |  |  |
-| 4.4 | discovery | [discovery.md](04-using-the-rest-api/discovery.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/discovery/> |  |  |
-| 4.5 | global-parameters | [global-parameters.md](04-using-the-rest-api/global-parameters.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/global-parameters/> |  |  |
-| 4.6 | linking-and-embedding | [linking-and-embedding.md](04-using-the-rest-api/linking-and-embedding.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/linking-and-embedding/> |  |  |
-| 4.7 | pagination | [pagination.md](04-using-the-rest-api/pagination.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/pagination/> |  |  |
-| 5 | extending-the-rest-api | [extending-the-rest-api.md](05-extending-the-rest-api/extending-the-rest-api.md) | <https://developer.wordpress.org/rest-api/extending-the-rest-api/> |  |  |
-| 5.1 | adding-custom-endpoints | [adding-custom-endpoints.md](05-extending-the-rest-api/adding-custom-endpoints.md) | <https://developer.wordpress.org/rest-api/extending-the-rest-api/adding-custom-endpoints/> |  |  |
-| 5.2 | adding-rest-api-support-for-custom-content-types | [adding-rest-api-support-for-custom-content-types.md](05-extending-the-rest-api/adding-rest-api-support-for-custom-content-types.md) | <https://developer.wordpress.org/rest-api/extending-the-rest-api/adding-rest-api-support-for-custom-content-types/> |  |  |
-| 5.3 | controller-classes | [controller-classes.md](05-extending-the-rest-api/controller-classes.md) | <https://developer.wordpress.org/rest-api/extending-the-rest-api/controller-classes/> |  |  |
-| 5.4 | modifying-responses | [modifying-responses.md](05-extending-the-rest-api/modifying-responses.md) | <https://developer.wordpress.org/rest-api/extending-the-rest-api/modifying-responses/> |  |  |
-| 5.5 | routes-and-endpoints | [routes-and-endpoints.md](05-extending-the-rest-api/routes-and-endpoints.md) | <https://developer.wordpress.org/rest-api/extending-the-rest-api/routes-and-endpoints/> |  |  |
-| 5.6 | schema | [schema.md](05-extending-the-rest-api/schema.md) | <https://developer.wordpress.org/rest-api/extending-the-rest-api/schema/> |  |  |
-| 6 | reference | [reference.md](06-reference/reference.md) | <https://developer.wordpress.org/rest-api/reference/> |  |  |
-| 6.1 | application-passwords | [application-passwords.md](06-reference/application-passwords.md) | <https://developer.wordpress.org/rest-api/reference/application-passwords/> |  |  |
-| 6.2 | block-directory-items | [block-directory-items.md](06-reference/block-directory-items.md) | <https://developer.wordpress.org/rest-api/reference/block-directory-items/> |  |  |
-| 6.3 | block-pattern-categories | [block-pattern-categories.md](06-reference/block-pattern-categories.md) | <https://developer.wordpress.org/rest-api/reference/block-pattern-categories/> |  |  |
-| 6.4 | block-patterns | [block-patterns.md](06-reference/block-patterns.md) | <https://developer.wordpress.org/rest-api/reference/block-patterns/> |  |  |
-| 6.5 | block-revisions | [block-revisions.md](06-reference/block-revisions.md) | <https://developer.wordpress.org/rest-api/reference/block-revisions/> |  |  |
-| 6.6 | block-types | [block-types.md](06-reference/block-types.md) | <https://developer.wordpress.org/rest-api/reference/block-types/> |  |  |
-| 6.7 | categories | [categories.md](06-reference/categories.md) | <https://developer.wordpress.org/rest-api/reference/categories/> |  |  |
-| 6.8 | comments | [comments.md](06-reference/comments.md) | <https://developer.wordpress.org/rest-api/reference/comments/> |  |  |
-| 6.9 | editor-blocks | [editor-blocks.md](06-reference/editor-blocks.md) | <https://developer.wordpress.org/rest-api/reference/editor-blocks/> |  |  |
-| 6.10 | global_styles | [global_styles.md](06-reference/global_styles.md) | <https://developer.wordpress.org/rest-api/reference/global_styles/> |  |  |
-| 6.11 | media | [media.md](06-reference/media.md) | <https://developer.wordpress.org/rest-api/reference/media/> |  |  |
-| 6.12 | menu-locations | [menu-locations.md](06-reference/menu-locations.md) | <https://developer.wordpress.org/rest-api/reference/menu-locations/> |  |  |
-| 6.13 | navigation-revisions | [navigation-revisions.md](06-reference/navigation-revisions.md) | <https://developer.wordpress.org/rest-api/reference/navigation-revisions/> |  |  |
-| 6.14 | navigations | [navigations.md](06-reference/navigations.md) | <https://developer.wordpress.org/rest-api/reference/navigations/> |  |  |
-| 6.15 | nav_menus | [nav_menus.md](06-reference/nav_menus.md) | <https://developer.wordpress.org/rest-api/reference/nav_menus/> |  |  |
-| 6.16 | nav_menu_item-revisions | [nav_menu_item-revisions.md](06-reference/nav_menu_item-revisions.md) | <https://developer.wordpress.org/rest-api/reference/nav_menu_item-revisions/> |  |  |
-| 6.17 | nav_menu_items | [nav_menu_items.md](06-reference/nav_menu_items.md) | <https://developer.wordpress.org/rest-api/reference/nav_menu_items/> |  |  |
-| 6.18 | page-revisions | [page-revisions.md](06-reference/page-revisions.md) | <https://developer.wordpress.org/rest-api/reference/page-revisions/> |  |  |
-| 6.19 | pages | [pages.md](06-reference/pages.md) | <https://developer.wordpress.org/rest-api/reference/pages/> |  |  |
-| 6.20 | pattern-directory-items | [pattern-directory-items.md](06-reference/pattern-directory-items.md) | <https://developer.wordpress.org/rest-api/reference/pattern-directory-items/> |  |  |
-| 6.21 | plugins | [plugins.md](06-reference/plugins.md) | <https://developer.wordpress.org/rest-api/reference/plugins/> |  |  |
-| 6.22 | post-revisions | [post-revisions.md](06-reference/post-revisions.md) | <https://developer.wordpress.org/rest-api/reference/post-revisions/> |  |  |
-| 6.23 | posts | [posts.md](06-reference/posts.md) | <https://developer.wordpress.org/rest-api/reference/posts/> |  |  |
-| 6.24 | rendered-blocks | [rendered-blocks.md](06-reference/rendered-blocks.md) | <https://developer.wordpress.org/rest-api/reference/rendered-blocks/> |  |  |
-| 6.25 | search-results | [search-results.md](06-reference/search-results.md) | <https://developer.wordpress.org/rest-api/reference/search-results/> |  |  |
-| 6.26 | sidebars | [sidebars.md](06-reference/sidebars.md) | <https://developer.wordpress.org/rest-api/reference/sidebars/> |  |  |
-| 6.27 | site-settings | [site-settings.md](06-reference/site-settings.md) | <https://developer.wordpress.org/rest-api/reference/site-settings/> |  |  |
-| 6.28 | statuses | [statuses.md](06-reference/statuses.md) | <https://developer.wordpress.org/rest-api/reference/statuses/> |  |  |
-| 6.29 | tags | [tags.md](06-reference/tags.md) | <https://developer.wordpress.org/rest-api/reference/tags/> |  |  |
-| 6.30 | taxonomies | [taxonomies.md](06-reference/taxonomies.md) | <https://developer.wordpress.org/rest-api/reference/taxonomies/> |  |  |
-| 6.31 | template-revisions | [template-revisions.md](06-reference/template-revisions.md) | <https://developer.wordpress.org/rest-api/reference/template-revisions/> |  |  |
-| 6.32 | templates | [templates.md](06-reference/templates.md) | <https://developer.wordpress.org/rest-api/reference/templates/> |  |  |
-| 6.33 | template_part-revisions | [template_part-revisions.md](06-reference/template_part-revisions.md) | <https://developer.wordpress.org/rest-api/reference/template_part-revisions/> |  |  |
-| 6.34 | template_parts | [template_parts.md](06-reference/template_parts.md) | <https://developer.wordpress.org/rest-api/reference/template_parts/> |  |  |
-| 6.35 | themes | [themes.md](06-reference/themes.md) | <https://developer.wordpress.org/rest-api/reference/themes/> |  |  |
-| 6.36 | types | [types.md](06-reference/types.md) | <https://developer.wordpress.org/rest-api/reference/types/> |  |  |
-| 6.37 | users | [users.md](06-reference/users.md) | <https://developer.wordpress.org/rest-api/reference/users/> |  |  |
-| 6.38 | widget-types | [widget-types.md](06-reference/widget-types.md) | <https://developer.wordpress.org/rest-api/reference/widget-types/> |  |  |
-| 6.39 | widgets | [widgets.md](06-reference/widgets.md) | <https://developer.wordpress.org/rest-api/reference/widgets/> |  |  |
-| 6.40 | wp-site-health-tests | [wp-site-health-tests.md](06-reference/wp-site-health-tests.md) | <https://developer.wordpress.org/rest-api/reference/wp-site-health-tests/> |  |  |
-| 7 | requests | [requests.md](07-requests/requests.md) | <https://developer.wordpress.org/rest-api/requests/> |  |  |
-| 8 | glossary | [glossary.md](08-glossary/glossary.md) | <https://developer.wordpress.org/rest-api/glossary/> |  |  |
-| 9 | changelog | [changelog.md](09-changelog/changelog.md) | <https://developer.wordpress.org/rest-api/changelog/> |  |  |
+| 1 | rest-api-handbook | [rest-api-handbook.md](01-rest-api-handbook/rest-api-handbook.md) | <https://developer.wordpress.org/rest-api/> | 2026-09-24T08:23:58Z | Synced |
+| 2 | key-concepts | [key-concepts.md](02-key-concepts/key-concepts.md) | <https://developer.wordpress.org/rest-api/key-concepts/> | 2026-09-24T08:27:41Z | Synced |
+| 3 | frequently-asked-questions | [frequently-asked-questions.md](03-frequently-asked-questions/frequently-asked-questions.md) | <https://developer.wordpress.org/rest-api/frequently-asked-questions/> | 2026-09-24T08:35:40Z | Synced |
+| 4 | using-the-rest-api | [using-the-rest-api.md](04-using-the-rest-api/using-the-rest-api.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/> | 2026-09-24T08:35:40Z | Synced |
+| 4.1 | authentication | [authentication.md](04-using-the-rest-api/authentication.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/> | 2026-09-24T08:35:40Z | Synced |
+| 4.2 | backbone-javascript-client | [backbone-javascript-client.md](04-using-the-rest-api/backbone-javascript-client.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/backbone-javascript-client/> | 2026-09-24T08:35:40Z | Synced |
+| 4.3 | client-libraries | [client-libraries.md](04-using-the-rest-api/client-libraries.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/client-libraries/> | 2026-09-24T08:35:40Z | Synced |
+| 4.4 | discovery | [discovery.md](04-using-the-rest-api/discovery.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/discovery/> | 2026-09-24T08:35:40Z | Synced |
+| 4.5 | global-parameters | [global-parameters.md](04-using-the-rest-api/global-parameters.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/global-parameters/> | 2026-09-24T08:35:40Z | Synced |
+| 4.6 | linking-and-embedding | [linking-and-embedding.md](04-using-the-rest-api/linking-and-embedding.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/linking-and-embedding/> | 2026-09-24T08:35:40Z | Synced |
+| 4.7 | pagination | [pagination.md](04-using-the-rest-api/pagination.md) | <https://developer.wordpress.org/rest-api/using-the-rest-api/pagination/> | 2026-09-24T08:35:40Z | Synced |
+| 5 | extending-the-rest-api | [extending-the-rest-api.md](05-extending-the-rest-api/extending-the-rest-api.md) | <https://developer.wordpress.org/rest-api/extending-the-rest-api/> | 2026-09-24T08:31:58Z | Synced |
+| 5.1 | adding-custom-endpoints | [adding-custom-endpoints.md](05-extending-the-rest-api/adding-custom-endpoints.md) | <https://developer.wordpress.org/rest-api/extending-the-rest-api/adding-custom-endpoints/> | 2026-09-24T08:31:58Z | Synced |
+| 5.2 | adding-rest-api-support-for-custom-content-types | [adding-rest-api-support-for-custom-content-types.md](05-extending-the-rest-api/adding-rest-api-support-for-custom-content-types.md) | <https://developer.wordpress.org/rest-api/extending-the-rest-api/adding-rest-api-support-for-custom-content-types/> | 2026-09-24T08:31:58Z | Synced |
+| 5.3 | controller-classes | [controller-classes.md](05-extending-the-rest-api/controller-classes.md) | <https://developer.wordpress.org/rest-api/extending-the-rest-api/controller-classes/> | 2026-09-24T08:31:58Z | Synced |
+| 5.4 | modifying-responses | [modifying-responses.md](05-extending-the-rest-api/modifying-responses.md) | <https://developer.wordpress.org/rest-api/extending-the-rest-api/modifying-responses/> | 2026-09-24T08:31:58Z | Synced |
+| 5.5 | routes-and-endpoints | [routes-and-endpoints.md](05-extending-the-rest-api/routes-and-endpoints.md) | <https://developer.wordpress.org/rest-api/extending-the-rest-api/routes-and-endpoints/> | 2026-09-24T08:31:58Z | Synced |
+| 5.6 | schema | [schema.md](05-extending-the-rest-api/schema.md) | <https://developer.wordpress.org/rest-api/extending-the-rest-api/schema/> | 2026-09-24T08:31:58Z | Synced |
+| 6 | reference | [reference.md](06-reference/reference.md) | <https://developer.wordpress.org/rest-api/reference/> | 2026-09-24T08:37:20Z | Synced |
+| 6.1 | application-passwords | [application-passwords.md](06-reference/application-passwords.md) | <https://developer.wordpress.org/rest-api/reference/application-passwords/> | 2026-09-24T08:37:20Z | Synced |
+| 6.2 | block-directory-items | [block-directory-items.md](06-reference/block-directory-items.md) | <https://developer.wordpress.org/rest-api/reference/block-directory-items/> | 2026-09-24T08:37:20Z | Synced |
+| 6.3 | block-pattern-categories | [block-pattern-categories.md](06-reference/block-pattern-categories.md) | <https://developer.wordpress.org/rest-api/reference/block-pattern-categories/> | 2026-09-24T08:37:20Z | Synced |
+| 6.4 | block-patterns | [block-patterns.md](06-reference/block-patterns.md) | <https://developer.wordpress.org/rest-api/reference/block-patterns/> | 2026-09-24T08:37:20Z | Synced |
+| 6.5 | block-revisions | [block-revisions.md](06-reference/block-revisions.md) | <https://developer.wordpress.org/rest-api/reference/block-revisions/> | 2026-09-24T08:37:20Z | Synced |
+| 6.6 | block-types | [block-types.md](06-reference/block-types.md) | <https://developer.wordpress.org/rest-api/reference/block-types/> | 2026-09-24T08:37:20Z | Synced |
+| 6.7 | categories | [categories.md](06-reference/categories.md) | <https://developer.wordpress.org/rest-api/reference/categories/> | 2026-09-24T08:37:20Z | Synced |
+| 6.8 | comments | [comments.md](06-reference/comments.md) | <https://developer.wordpress.org/rest-api/reference/comments/> | 2026-09-24T08:37:20Z | Synced |
+| 6.9 | editor-blocks | [editor-blocks.md](06-reference/editor-blocks.md) | <https://developer.wordpress.org/rest-api/reference/blocks/> | 2026-09-24T08:37:20Z | Synced |
+| 6.10 | global_styles | [global_styles.md](06-reference/global_styles.md) | <https://developer.wordpress.org/rest-api/reference/wp_global_styles/> | 2026-09-24T08:37:20Z | Synced |
+| 6.11 | media | [media.md](06-reference/media.md) | <https://developer.wordpress.org/rest-api/reference/media/> | 2026-09-24T08:37:20Z | Synced |
+| 6.12 | menu-locations | [menu-locations.md](06-reference/menu-locations.md) | <https://developer.wordpress.org/rest-api/reference/menu-locations/> | 2026-09-24T08:37:20Z | Synced |
+| 6.13 | navigation-revisions | [navigation-revisions.md](06-reference/navigation-revisions.md) | <https://developer.wordpress.org/rest-api/reference/wp_navigation-revisions/> | 2026-09-24T08:37:20Z | Synced |
+| 6.14 | navigations | [navigations.md](06-reference/navigations.md) | <https://developer.wordpress.org/rest-api/reference/wp_navigations/> | 2026-09-24T08:37:20Z | Synced |
+| 6.15 | nav_menus | [nav_menus.md](06-reference/nav_menus.md) | <https://developer.wordpress.org/rest-api/reference/nav_menus/> | 2026-09-24T08:37:20Z | Synced |
+| 6.16 | nav_menu_item-revisions | [nav_menu_item-revisions.md](06-reference/nav_menu_item-revisions.md) | <https://developer.wordpress.org/rest-api/reference/nav_menu_item-revisions/> | 2026-09-24T08:37:20Z | Synced |
+| 6.17 | nav_menu_items | [nav_menu_items.md](06-reference/nav_menu_items.md) | <https://developer.wordpress.org/rest-api/reference/nav_menu_items/> | 2026-09-24T08:37:20Z | Synced |
+| 6.18 | page-revisions | [page-revisions.md](06-reference/page-revisions.md) | <https://developer.wordpress.org/rest-api/reference/page-revisions/> | 2026-09-24T08:37:20Z | Synced |
+| 6.19 | pages | [pages.md](06-reference/pages.md) | <https://developer.wordpress.org/rest-api/reference/pages/> | 2026-09-24T08:37:20Z | Synced |
+| 6.20 | pattern-directory-items | [pattern-directory-items.md](06-reference/pattern-directory-items.md) | <https://developer.wordpress.org/rest-api/reference/pattern-directory-items/> | 2026-09-24T08:37:20Z | Synced |
+| 6.21 | plugins | [plugins.md](06-reference/plugins.md) | <https://developer.wordpress.org/rest-api/reference/plugins/> | 2026-09-24T08:37:20Z | Synced |
+| 6.22 | post-revisions | [post-revisions.md](06-reference/post-revisions.md) | <https://developer.wordpress.org/rest-api/reference/post-revisions/> | 2026-09-24T08:37:20Z | Synced |
+| 6.23 | posts | [posts.md](06-reference/posts.md) | <https://developer.wordpress.org/rest-api/reference/posts/> | 2026-09-24T08:37:20Z | Synced |
+| 6.24 | rendered-blocks | [rendered-blocks.md](06-reference/rendered-blocks.md) | <https://developer.wordpress.org/rest-api/reference/rendered-blocks/> | 2026-09-24T08:37:20Z | Synced |
+| 6.25 | search-results | [search-results.md](06-reference/search-results.md) | <https://developer.wordpress.org/rest-api/reference/search-results/> | 2026-09-24T08:37:20Z | Synced |
+| 6.26 | sidebars | [sidebars.md](06-reference/sidebars.md) | <https://developer.wordpress.org/rest-api/reference/sidebars/> | 2026-09-24T08:37:20Z | Synced |
+| 6.27 | site-settings | [site-settings.md](06-reference/site-settings.md) | <https://developer.wordpress.org/rest-api/reference/settings/> | 2026-09-24T08:37:20Z | Synced |
+| 6.28 | statuses | [statuses.md](06-reference/statuses.md) | <https://developer.wordpress.org/rest-api/reference/post-statuses/> | 2026-09-24T08:37:20Z | Synced |
+| 6.29 | tags | [tags.md](06-reference/tags.md) | <https://developer.wordpress.org/rest-api/reference/tags/> | 2026-09-24T08:37:20Z | Synced |
+| 6.30 | taxonomies | [taxonomies.md](06-reference/taxonomies.md) | <https://developer.wordpress.org/rest-api/reference/taxonomies/> | 2026-09-24T08:37:20Z | Synced |
+| 6.31 | template-revisions | [template-revisions.md](06-reference/template-revisions.md) | <https://developer.wordpress.org/rest-api/reference/wp_template-revisions/> | 2026-09-24T08:37:20Z | Synced |
+| 6.32 | templates | [templates.md](06-reference/templates.md) | <https://developer.wordpress.org/rest-api/reference/wp_templates/> | 2026-09-24T08:37:20Z | Synced |
+| 6.33 | template_part-revisions | [template_part-revisions.md](06-reference/template_part-revisions.md) | <https://developer.wordpress.org/rest-api/reference/wp_template_part-revisions/> | 2026-09-24T08:37:20Z | Synced |
+| 6.34 | template_parts | [template_parts.md](06-reference/template_parts.md) | <https://developer.wordpress.org/rest-api/reference/wp_template_parts/> | 2026-09-24T08:37:20Z | Synced |
+| 6.35 | themes | [themes.md](06-reference/themes.md) | <https://developer.wordpress.org/rest-api/reference/themes/> | 2026-09-24T08:37:20Z | Synced |
+| 6.36 | types | [types.md](06-reference/types.md) | <https://developer.wordpress.org/rest-api/reference/post-types/> | 2026-09-24T08:37:20Z | Synced |
+| 6.37 | users | [users.md](06-reference/users.md) | <https://developer.wordpress.org/rest-api/reference/users/> | 2026-09-24T08:37:20Z | Synced |
+| 6.38 | widget-types | [widget-types.md](06-reference/widget-types.md) | <https://developer.wordpress.org/rest-api/reference/widget-types/> | 2026-09-24T08:37:20Z | Synced |
+| 6.39 | widgets | [widgets.md](06-reference/widgets.md) | <https://developer.wordpress.org/rest-api/reference/widgets/> | 2026-09-24T08:37:20Z | Synced |
+| 6.40 | wp-site-health-tests | [wp-site-health-tests.md](06-reference/wp-site-health-tests.md) | <https://developer.wordpress.org/rest-api/reference/wp-site-health-tests/> | 2026-09-24T08:37:20Z | Synced |
+| 7 | requests | [requests.md](07-requests/requests.md) | <https://developer.wordpress.org/rest-api/requests/> | 2026-09-24T08:37:20Z | Synced |
+| 8 | glossary | [glossary.md](08-glossary/glossary.md) | <https://developer.wordpress.org/rest-api/glossary/> | 2026-09-24T08:37:20Z | Synced |
+| 9 | changelog | [changelog.md](09-changelog/changelog.md) | <https://developer.wordpress.org/rest-api/changelog/> | 2026-09-24T08:37:20Z | Synced |

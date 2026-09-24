@@ -6,13 +6,13 @@ Reference: <https://developer.wordpress.org/cli/commands/ability/>
 
 Lists, inspects, and executes abilities registered via the WordPress Abilities API.
 
-The Abilities API, introduced in WordPress 6.9, provides a standardized way to register and discover distinct units of functionality within a WordPress site.
-
 ## Synopsis
 
 ```bash
 wp ability <command>
 ```
+
+The Abilities API, introduced in WordPress 6.9, provides a standardized way to register and discover distinct units of functionality within a WordPress site.
 
 ## Examples
 
@@ -63,15 +63,17 @@ Success: Input is valid.
 
 ## Subcommands
 
-- `wp ability can-run` - Checks if the current user can execute an ability.
-- `wp ability category` - Lists and inspects ability categories registered via the WordPress Abilities API.
-- `wp ability exists` - Checks whether an ability is registered.
-- `wp ability get` - Gets details about a registered ability.
-- `wp ability list` - Lists all registered abilities.
-- `wp ability run` - Executes a registered ability.
-- `wp ability validate` - Validates input against an ability's schema.
+| Name | Description |
+| --- | --- |
+| [wp ability can-run](https://developer.wordpress.org/cli/commands/ability/can-run/) | Checks if the current user can execute an ability. |
+| [wp ability category](https://developer.wordpress.org/cli/commands/ability/category/) | Lists and inspects ability categories registered via the WordPress Abilities API. |
+| [wp ability exists](https://developer.wordpress.org/cli/commands/ability/exists/) | Checks whether an ability is registered. |
+| [wp ability get](https://developer.wordpress.org/cli/commands/ability/get/) | Gets details about a registered ability. |
+| [wp ability list](https://developer.wordpress.org/cli/commands/ability/list/) | Lists all registered abilities. |
+| [wp ability run](https://developer.wordpress.org/cli/commands/ability/run/) | Executes a registered ability. |
+| [wp ability validate](https://developer.wordpress.org/cli/commands/ability/validate/) | Validates input against an ability's schema. |
 
-## wp ability can-run
+### wp ability can-run
 
 Reference: <https://developer.wordpress.org/cli/commands/ability/can-run/>
 
@@ -79,13 +81,18 @@ Checks if the current user can execute an ability.
 
 Validates permissions without actually executing the ability. Exits with return code 0 if permitted, 1 if not.
 
-### Options
+#### Options
 
-- `<name>` - The ability name (namespace/ability-name format).
-- `[--input=<json>]` - JSON string containing input data for permission checking.
-- `[--<field>=<value>]` - Individual input fields for permission checking.
+See the [argument syntax](https://make.wordpress.org/cli/handbook/references/argument-syntax/) reference for a detailed explanation of the syntax conventions used.
 
-### Examples
+- `<name>`
+  The ability name (namespace/ability-name format).
+- `[--input=<json>]`
+  JSON string containing input data for permission checking.
+- `[--<field>=<value>]`
+  Individual input fields for permission checking.
+
+#### Examples
 
 ```bash
 # Check if current user can run an ability (as admin).
@@ -104,27 +111,29 @@ $ if wp ability can-run core/get-site-info --user=admin; then
 > fi
 ```
 
-### Global Parameters
+#### Global Parameters
 
-These global parameters have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
+These [global parameters](https://make.wordpress.org/cli/handbook/config/) have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
 
-- `--path=<path>` - Path to the WordPress files.
-- `--url=<url>` - Pretend request came from given URL. In multisite, this argument is how the target site is specified.
-- `--ssh=[<scheme>:][<user>@]<host|container>[:<port>][<path>]` - Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant").
-- `--http=<http>` - Perform operation against a remote WordPress installation over HTTP.
-- `--user=<id|login|email>` - Set the WordPress user.
-- `--skip-plugins[=<plugins>]` - Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded.
-- `--skip-themes[=<themes>]` - Skip loading all themes, or a comma-separated list of themes.
-- `--skip-packages` - Skip loading all installed packages.
-- `--require=<path>` - Load PHP file before running the command (may be used more than once).
-- `--exec=<php-code>` - Execute PHP code before running the command (may be used more than once).
-- `--context=<context>` - Load WordPress in a given context.
-- `--[no-]color` - Whether to colorize the output.
-- `--debug[=<group>]` - Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help.
-- `--prompt[=<assoc>]` - Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values.
-- `--quiet` - Suppress informational messages.
+| **Argument** | **Description** |
+| --- | --- |
+| `--path=<path>` | Path to the WordPress files. |
+| `--url=<url>` | Pretend request came from given URL. In multisite, this argument is how the target site is specified. |
+| `--ssh=[<scheme>:][<user>@]<host\|container>[:<port>][<path>]` | Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant"). |
+| `--http=<http>` | Perform operation against a remote WordPress installation over HTTP. |
+| `--user=<id\|login\|email>` | Set the WordPress user. |
+| `--skip-plugins[=<plugins>]` | Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded. |
+| `--skip-themes[=<themes>]` | Skip loading all themes, or a comma-separated list of themes. |
+| `--skip-packages` | Skip loading all installed packages. |
+| `--require=<path>` | Load PHP file before running the command (may be used more than once). |
+| `--exec=<php-code>` | Execute PHP code before running the command (may be used more than once). |
+| `--context=<context>` | Load WordPress in a given context. |
+| `--[no-]color` | Whether to colorize the output. |
+| `--debug[=<group>]` | Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help. |
+| `--prompt[=<assoc>]` | Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values. |
+| `--quiet` | Suppress informational messages. |
 
-## wp ability category
+### wp ability category <command>
 
 Reference: <https://developer.wordpress.org/cli/commands/ability/category/>
 
@@ -132,13 +141,7 @@ Lists and inspects ability categories registered via the WordPress Abilities API
 
 The Abilities API, introduced in WordPress 6.9, uses categories to organize related abilities for better discoverability.
 
-### Synopsis
-
-```bash
-wp ability category <command>
-```
-
-### Examples
+#### Examples
 
 ```bash
 # List all registered ability categories.
@@ -167,13 +170,15 @@ $ echo $?
 0
 ```
 
-### Subcommands
+#### Subcommands
 
-- `wp ability category exists` - Checks whether an ability category is registered.
-- `wp ability category get` - Gets details about a registered ability category.
-- `wp ability category list` - Lists all registered ability categories.
+| Name | Description |
+| --- | --- |
+| [wp ability category exists](https://developer.wordpress.org/cli/commands/ability/category/exists/) | Checks whether an ability category is registered. |
+| [wp ability category get](https://developer.wordpress.org/cli/commands/ability/category/get/) | Gets details about a registered ability category. |
+| [wp ability category list](https://developer.wordpress.org/cli/commands/ability/category/list/) | Lists all registered ability categories. |
 
-### wp ability category exists
+#### wp ability category exists
 
 Reference: <https://developer.wordpress.org/cli/commands/ability/category/exists/>
 
@@ -181,11 +186,14 @@ Checks whether an ability category is registered.
 
 Exits with return code 0 if the category exists, 1 if it does not.
 
-#### Options
+##### Options
 
-- `<slug>` - The category slug.
+See the [argument syntax](https://make.wordpress.org/cli/handbook/references/argument-syntax/) reference for a detailed explanation of the syntax conventions used.
 
-#### Examples
+- `<slug>`
+  The category slug.
+
+##### Examples
 
 ```bash
 # Check if a category exists.
@@ -204,47 +212,61 @@ $ if wp ability category exists site; then
 > fi
 ```
 
-#### Global Parameters
+##### Global Parameters
 
-These global parameters have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
+These [global parameters](https://make.wordpress.org/cli/handbook/config/) have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
 
-- `--path=<path>` - Path to the WordPress files.
-- `--url=<url>` - Pretend request came from given URL. In multisite, this argument is how the target site is specified.
-- `--ssh=[<scheme>:][<user>@]<host|container>[:<port>][<path>]` - Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant").
-- `--http=<http>` - Perform operation against a remote WordPress installation over HTTP.
-- `--user=<id|login|email>` - Set the WordPress user.
-- `--skip-plugins[=<plugins>]` - Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded.
-- `--skip-themes[=<themes>]` - Skip loading all themes, or a comma-separated list of themes.
-- `--skip-packages` - Skip loading all installed packages.
-- `--require=<path>` - Load PHP file before running the command (may be used more than once).
-- `--exec=<php-code>` - Execute PHP code before running the command (may be used more than once).
-- `--context=<context>` - Load WordPress in a given context.
-- `--[no-]color` - Whether to colorize the output.
-- `--debug[=<group>]` - Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help.
-- `--prompt[=<assoc>]` - Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values.
-- `--quiet` - Suppress informational messages.
+| **Argument** | **Description** |
+| --- | --- |
+| `--path=<path>` | Path to the WordPress files. |
+| `--url=<url>` | Pretend request came from given URL. In multisite, this argument is how the target site is specified. |
+| `--ssh=[<scheme>:][<user>@]<host\|container>[:<port>][<path>]` | Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant"). |
+| `--http=<http>` | Perform operation against a remote WordPress installation over HTTP. |
+| `--user=<id\|login\|email>` | Set the WordPress user. |
+| `--skip-plugins[=<plugins>]` | Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded. |
+| `--skip-themes[=<themes>]` | Skip loading all themes, or a comma-separated list of themes. |
+| `--skip-packages` | Skip loading all installed packages. |
+| `--require=<path>` | Load PHP file before running the command (may be used more than once). |
+| `--exec=<php-code>` | Execute PHP code before running the command (may be used more than once). |
+| `--context=<context>` | Load WordPress in a given context. |
+| `--[no-]color` | Whether to colorize the output. |
+| `--debug[=<group>]` | Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help. |
+| `--prompt[=<assoc>]` | Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values. |
+| `--quiet` | Suppress informational messages. |
 
-### wp ability category get
+#### wp ability category get
 
 Reference: <https://developer.wordpress.org/cli/commands/ability/category/get/>
 
 Gets details about a registered ability category.
 
-#### Options
+##### Options
 
-- `<slug>` - The category slug.
-- `[--field=<field>]` - Instead of returning the whole category, returns the value of a single field.
-- `[--fields=<fields>]` - Limit the output to specific fields. Defaults to all fields.
-- `[--format=<format>]` - Render output in a particular format. Default: table. Options: table, csv, json, yaml.
+See the [argument syntax](https://make.wordpress.org/cli/handbook/references/argument-syntax/) reference for a detailed explanation of the syntax conventions used.
 
-#### Available Fields
+- `<slug>`
+  The category slug.
+- `[--field=<field>]`
+  Instead of returning the whole category, returns the value of a single field.
+- `[--fields=<fields>]`
+  Limit the output to specific fields. Defaults to all fields.
+- `[--format=<format>]`
+  Render output in a particular format.
+  - default: table
+  - options:
+  - table
+  - csv
+  - json
+  - yaml
 
-- `slug`
-- `label`
-- `description`
-- `meta`
+##### Available Fields
 
-#### Examples
+- slug
+- label
+- description
+- meta
+
+##### Examples
 
 ```bash
 # Get details of a specific category.
@@ -267,47 +289,61 @@ $ wp ability category get site --field=label
 Site
 ```
 
-#### Global Parameters
+##### Global Parameters
 
-These global parameters have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
+These [global parameters](https://make.wordpress.org/cli/handbook/config/) have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
 
-- `--path=<path>` - Path to the WordPress files.
-- `--url=<url>` - Pretend request came from given URL. In multisite, this argument is how the target site is specified.
-- `--ssh=[<scheme>:][<user>@]<host|container>[:<port>][<path>]` - Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant").
-- `--http=<http>` - Perform operation against a remote WordPress installation over HTTP.
-- `--user=<id|login|email>` - Set the WordPress user.
-- `--skip-plugins[=<plugins>]` - Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded.
-- `--skip-themes[=<themes>]` - Skip loading all themes, or a comma-separated list of themes.
-- `--skip-packages` - Skip loading all installed packages.
-- `--require=<path>` - Load PHP file before running the command (may be used more than once).
-- `--exec=<php-code>` - Execute PHP code before running the command (may be used more than once).
-- `--context=<context>` - Load WordPress in a given context.
-- `--[no-]color` - Whether to colorize the output.
-- `--debug[=<group>]` - Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help.
-- `--prompt[=<assoc>]` - Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values.
-- `--quiet` - Suppress informational messages.
+| **Argument** | **Description** |
+| --- | --- |
+| `--path=<path>` | Path to the WordPress files. |
+| `--url=<url>` | Pretend request came from given URL. In multisite, this argument is how the target site is specified. |
+| `--ssh=[<scheme>:][<user>@]<host\|container>[:<port>][<path>]` | Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant"). |
+| `--http=<http>` | Perform operation against a remote WordPress installation over HTTP. |
+| `--user=<id\|login\|email>` | Set the WordPress user. |
+| `--skip-plugins[=<plugins>]` | Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded. |
+| `--skip-themes[=<themes>]` | Skip loading all themes, or a comma-separated list of themes. |
+| `--skip-packages` | Skip loading all installed packages. |
+| `--require=<path>` | Load PHP file before running the command (may be used more than once). |
+| `--exec=<php-code>` | Execute PHP code before running the command (may be used more than once). |
+| `--context=<context>` | Load WordPress in a given context. |
+| `--[no-]color` | Whether to colorize the output. |
+| `--debug[=<group>]` | Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help. |
+| `--prompt[=<assoc>]` | Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values. |
+| `--quiet` | Suppress informational messages. |
 
-### wp ability category list
+#### wp ability category list
 
 Reference: <https://developer.wordpress.org/cli/commands/ability/category/list/>
 
 Lists all registered ability categories.
 
-#### Options
+##### Options
 
-- `[--field=<field>]` - Prints the value of a single field for each category.
-- `[--fields=<fields>]` - Limit the output to specific category fields.
-- `[--format=<format>]` - Render output in a particular format. Default: table. Options: table, csv, json, yaml, count.
+See the [argument syntax](https://make.wordpress.org/cli/handbook/references/argument-syntax/) reference for a detailed explanation of the syntax conventions used.
 
-#### Available Fields
+- `[--field=<field>]`
+  Prints the value of a single field for each category.
+- `[--fields=<fields>]`
+  Limit the output to specific category fields.
+- `[--format=<format>]`
+  Render output in a particular format.
+  - default: table
+  - options:
+  - table
+  - csv
+  - json
+  - yaml
+  - count
+
+##### Available Fields
 
 These fields will be displayed by default for each category:
 
-- `slug`
-- `label`
-- `description`
+- slug
+- label
+- description
 
-#### Examples
+##### Examples
 
 ```bash
 # List all categories.
@@ -329,27 +365,29 @@ site
 user
 ```
 
-#### Global Parameters
+##### Global Parameters
 
-These global parameters have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
+These [global parameters](https://make.wordpress.org/cli/handbook/config/) have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
 
-- `--path=<path>` - Path to the WordPress files.
-- `--url=<url>` - Pretend request came from given URL. In multisite, this argument is how the target site is specified.
-- `--ssh=[<scheme>:][<user>@]<host|container>[:<port>][<path>]` - Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant").
-- `--http=<http>` - Perform operation against a remote WordPress installation over HTTP.
-- `--user=<id|login|email>` - Set the WordPress user.
-- `--skip-plugins[=<plugins>]` - Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded.
-- `--skip-themes[=<themes>]` - Skip loading all themes, or a comma-separated list of themes.
-- `--skip-packages` - Skip loading all installed packages.
-- `--require=<path>` - Load PHP file before running the command (may be used more than once).
-- `--exec=<php-code>` - Execute PHP code before running the command (may be used more than once).
-- `--context=<context>` - Load WordPress in a given context.
-- `--[no-]color` - Whether to colorize the output.
-- `--debug[=<group>]` - Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help.
-- `--prompt[=<assoc>]` - Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values.
-- `--quiet` - Suppress informational messages.
+| **Argument** | **Description** |
+| --- | --- |
+| `--path=<path>` | Path to the WordPress files. |
+| `--url=<url>` | Pretend request came from given URL. In multisite, this argument is how the target site is specified. |
+| `--ssh=[<scheme>:][<user>@]<host\|container>[:<port>][<path>]` | Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant"). |
+| `--http=<http>` | Perform operation against a remote WordPress installation over HTTP. |
+| `--user=<id\|login\|email>` | Set the WordPress user. |
+| `--skip-plugins[=<plugins>]` | Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded. |
+| `--skip-themes[=<themes>]` | Skip loading all themes, or a comma-separated list of themes. |
+| `--skip-packages` | Skip loading all installed packages. |
+| `--require=<path>` | Load PHP file before running the command (may be used more than once). |
+| `--exec=<php-code>` | Execute PHP code before running the command (may be used more than once). |
+| `--context=<context>` | Load WordPress in a given context. |
+| `--[no-]color` | Whether to colorize the output. |
+| `--debug[=<group>]` | Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help. |
+| `--prompt[=<assoc>]` | Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values. |
+| `--quiet` | Suppress informational messages. |
 
-## wp ability exists
+### wp ability exists
 
 Reference: <https://developer.wordpress.org/cli/commands/ability/exists/>
 
@@ -357,11 +395,14 @@ Checks whether an ability is registered.
 
 Exits with return code 0 if the ability exists, 1 if it does not.
 
-### Options
+#### Options
 
-- `<name>` - The ability name (namespace/ability-name format).
+See the [argument syntax](https://make.wordpress.org/cli/handbook/references/argument-syntax/) reference for a detailed explanation of the syntax conventions used.
 
-### Examples
+- `<name>`
+  The ability name (namespace/ability-name format).
+
+#### Examples
 
 ```bash
 # Check if an ability exists.
@@ -380,53 +421,67 @@ $ if wp ability exists core/get-site-info; then
 > fi
 ```
 
-### Global Parameters
+#### Global Parameters
 
-These global parameters have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
+These [global parameters](https://make.wordpress.org/cli/handbook/config/) have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
 
-- `--path=<path>` - Path to the WordPress files.
-- `--url=<url>` - Pretend request came from given URL. In multisite, this argument is how the target site is specified.
-- `--ssh=[<scheme>:][<user>@]<host|container>[:<port>][<path>]` - Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant").
-- `--http=<http>` - Perform operation against a remote WordPress installation over HTTP.
-- `--user=<id|login|email>` - Set the WordPress user.
-- `--skip-plugins[=<plugins>]` - Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded.
-- `--skip-themes[=<themes>]` - Skip loading all themes, or a comma-separated list of themes.
-- `--skip-packages` - Skip loading all installed packages.
-- `--require=<path>` - Load PHP file before running the command (may be used more than once).
-- `--exec=<php-code>` - Execute PHP code before running the command (may be used more than once).
-- `--context=<context>` - Load WordPress in a given context.
-- `--[no-]color` - Whether to colorize the output.
-- `--debug[=<group>]` - Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help.
-- `--prompt[=<assoc>]` - Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values.
-- `--quiet` - Suppress informational messages.
+| **Argument** | **Description** |
+| --- | --- |
+| `--path=<path>` | Path to the WordPress files. |
+| `--url=<url>` | Pretend request came from given URL. In multisite, this argument is how the target site is specified. |
+| `--ssh=[<scheme>:][<user>@]<host\|container>[:<port>][<path>]` | Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant"). |
+| `--http=<http>` | Perform operation against a remote WordPress installation over HTTP. |
+| `--user=<id\|login\|email>` | Set the WordPress user. |
+| `--skip-plugins[=<plugins>]` | Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded. |
+| `--skip-themes[=<themes>]` | Skip loading all themes, or a comma-separated list of themes. |
+| `--skip-packages` | Skip loading all installed packages. |
+| `--require=<path>` | Load PHP file before running the command (may be used more than once). |
+| `--exec=<php-code>` | Execute PHP code before running the command (may be used more than once). |
+| `--context=<context>` | Load WordPress in a given context. |
+| `--[no-]color` | Whether to colorize the output. |
+| `--debug[=<group>]` | Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help. |
+| `--prompt[=<assoc>]` | Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values. |
+| `--quiet` | Suppress informational messages. |
 
-## wp ability get
+### wp ability get
 
 Reference: <https://developer.wordpress.org/cli/commands/ability/get/>
 
 Gets details about a registered ability.
 
-### Options
+#### Options
 
-- `<name>` - The ability name (namespace/ability-name format).
-- `[--field=<field>]` - Instead of returning the whole ability, returns the value of a single field.
-- `[--fields=<fields>]` - Limit the output to specific fields. Defaults to all fields.
-- `[--format=<format>]` - Render output in a particular format. Default: table. Options: table, csv, json, yaml.
+See the [argument syntax](https://make.wordpress.org/cli/handbook/references/argument-syntax/) reference for a detailed explanation of the syntax conventions used.
 
-### Available Fields
+- `<name>`
+  The ability name (namespace/ability-name format).
+- `[--field=<field>]`
+  Instead of returning the whole ability, returns the value of a single field.
+- `[--fields=<fields>]`
+  Limit the output to specific fields. Defaults to all fields.
+- `[--format=<format>]`
+  Render output in a particular format.
+  - default: table
+  - options:
+  - table
+  - csv
+  - json
+  - yaml
 
-- `name`
-- `label`
-- `category`
-- `description`
-- `input_schema`
-- `output_schema`
-- `readonly`
-- `destructive`
-- `idempotent`
-- `show_in_rest`
+#### Available Fields
 
-### Examples
+- name
+- label
+- category
+- description
+- input_schema
+- output_schema
+- readonly
+- destructive
+- idempotent
+- show_in_rest
+
+#### Examples
 
 ```bash
 # Get details of a specific ability.
@@ -454,58 +509,76 @@ $ wp ability get core/get-site-info --field=description
 Returns site information configured in WordPress.
 ```
 
-### Global Parameters
+#### Global Parameters
 
-These global parameters have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
+These [global parameters](https://make.wordpress.org/cli/handbook/config/) have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
 
-- `--path=<path>` - Path to the WordPress files.
-- `--url=<url>` - Pretend request came from given URL. In multisite, this argument is how the target site is specified.
-- `--ssh=[<scheme>:][<user>@]<host|container>[:<port>][<path>]` - Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant").
-- `--http=<http>` - Perform operation against a remote WordPress installation over HTTP.
-- `--user=<id|login|email>` - Set the WordPress user.
-- `--skip-plugins[=<plugins>]` - Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded.
-- `--skip-themes[=<themes>]` - Skip loading all themes, or a comma-separated list of themes.
-- `--skip-packages` - Skip loading all installed packages.
-- `--require=<path>` - Load PHP file before running the command (may be used more than once).
-- `--exec=<php-code>` - Execute PHP code before running the command (may be used more than once).
-- `--context=<context>` - Load WordPress in a given context.
-- `--[no-]color` - Whether to colorize the output.
-- `--debug[=<group>]` - Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help.
-- `--prompt[=<assoc>]` - Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values.
-- `--quiet` - Suppress informational messages.
+| **Argument** | **Description** |
+| --- | --- |
+| `--path=<path>` | Path to the WordPress files. |
+| `--url=<url>` | Pretend request came from given URL. In multisite, this argument is how the target site is specified. |
+| `--ssh=[<scheme>:][<user>@]<host\|container>[:<port>][<path>]` | Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant"). |
+| `--http=<http>` | Perform operation against a remote WordPress installation over HTTP. |
+| `--user=<id\|login\|email>` | Set the WordPress user. |
+| `--skip-plugins[=<plugins>]` | Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded. |
+| `--skip-themes[=<themes>]` | Skip loading all themes, or a comma-separated list of themes. |
+| `--skip-packages` | Skip loading all installed packages. |
+| `--require=<path>` | Load PHP file before running the command (may be used more than once). |
+| `--exec=<php-code>` | Execute PHP code before running the command (may be used more than once). |
+| `--context=<context>` | Load WordPress in a given context. |
+| `--[no-]color` | Whether to colorize the output. |
+| `--debug[=<group>]` | Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help. |
+| `--prompt[=<assoc>]` | Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values. |
+| `--quiet` | Suppress informational messages. |
 
-## wp ability list
+### wp ability list
 
 Reference: <https://developer.wordpress.org/cli/commands/ability/list/>
 
 Lists all registered abilities.
 
-### Options
+#### Options
 
-- `[--category=<slug>]` - Filter abilities by category slug.
-- `[--namespace=<prefix>]` - Filter abilities by namespace prefix (e.g., 'core' for 'core/*' abilities).
-- `[--show-in-rest=<bool>]` - Filter abilities by REST API exposure.
-- `[--field=<field>]` - Prints the value of a single field for each ability.
-- `[--fields=<fields>]` - Limit the output to specific ability fields.
-- `[--format=<format>]` - Render output in a particular format. Default: table. Options: table, csv, json, yaml, count, ids.
+See the [argument syntax](https://make.wordpress.org/cli/handbook/references/argument-syntax/) reference for a detailed explanation of the syntax conventions used.
 
-### Available Fields
+- `[--category=<slug>]`
+  Filter abilities by category slug.
+- `[--namespace=<prefix>]`
+  Filter abilities by namespace prefix (e.g., 'core' for 'core/*' abilities).
+- `[--show-in-rest=<bool>]`
+  Filter abilities by REST API exposure.
+- `[--field=<field>]`
+  Prints the value of a single field for each ability.
+- `[--fields=<fields>]`
+  Limit the output to specific ability fields.
+- `[--format=<format>]`
+  Render output in a particular format.
+  - default: table
+  - options:
+  - table
+  - csv
+  - json
+  - yaml
+  - count
+  - ids
+
+#### Available Fields
 
 These fields will be displayed by default for each ability:
 
-- `name`
-- `label`
-- `category`
-- `description`
+- name
+- label
+- category
+- description
 
 These fields are optionally available:
 
-- `readonly`
-- `destructive`
-- `idempotent`
-- `show_in_rest`
+- readonly
+- destructive
+- idempotent
+- show_in_rest
 
-### Examples
+#### Examples
 
 ```bash
 # List all abilities.
@@ -536,40 +609,53 @@ core/get-user-info
 core/get-environment-info
 ```
 
-### Global Parameters
+#### Global Parameters
 
-These global parameters have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
+These [global parameters](https://make.wordpress.org/cli/handbook/config/) have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
 
-- `--path=<path>` - Path to the WordPress files.
-- `--url=<url>` - Pretend request came from given URL. In multisite, this argument is how the target site is specified.
-- `--ssh=[<scheme>:][<user>@]<host|container>[:<port>][<path>]` - Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant").
-- `--http=<http>` - Perform operation against a remote WordPress installation over HTTP.
-- `--user=<id|login|email>` - Set the WordPress user.
-- `--skip-plugins[=<plugins>]` - Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded.
-- `--skip-themes[=<themes>]` - Skip loading all themes, or a comma-separated list of themes.
-- `--skip-packages` - Skip loading all installed packages.
-- `--require=<path>` - Load PHP file before running the command (may be used more than once).
-- `--exec=<php-code>` - Execute PHP code before running the command (may be used more than once).
-- `--context=<context>` - Load WordPress in a given context.
-- `--[no-]color` - Whether to colorize the output.
-- `--debug[=<group>]` - Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help.
-- `--prompt[=<assoc>]` - Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values.
-- `--quiet` - Suppress informational messages.
+| **Argument** | **Description** |
+| --- | --- |
+| `--path=<path>` | Path to the WordPress files. |
+| `--url=<url>` | Pretend request came from given URL. In multisite, this argument is how the target site is specified. |
+| `--ssh=[<scheme>:][<user>@]<host\|container>[:<port>][<path>]` | Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant"). |
+| `--http=<http>` | Perform operation against a remote WordPress installation over HTTP. |
+| `--user=<id\|login\|email>` | Set the WordPress user. |
+| `--skip-plugins[=<plugins>]` | Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded. |
+| `--skip-themes[=<themes>]` | Skip loading all themes, or a comma-separated list of themes. |
+| `--skip-packages` | Skip loading all installed packages. |
+| `--require=<path>` | Load PHP file before running the command (may be used more than once). |
+| `--exec=<php-code>` | Execute PHP code before running the command (may be used more than once). |
+| `--context=<context>` | Load WordPress in a given context. |
+| `--[no-]color` | Whether to colorize the output. |
+| `--debug[=<group>]` | Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help. |
+| `--prompt[=<assoc>]` | Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values. |
+| `--quiet` | Suppress informational messages. |
 
-## wp ability run
+### wp ability run
 
 Reference: <https://developer.wordpress.org/cli/commands/ability/run/>
 
 Executes a registered ability.
 
-### Options
+#### Options
 
-- `<name>` - The ability name (namespace/ability-name format).
-- `[--input=<json>]` - JSON string containing input data for the ability. Use '-' to read from stdin.
-- `[--<field>=<value>]` - Individual input fields. Alternative to --input for simple inputs.
-- `[--format=<format>]` - Render output in a particular format. Default: json. Options: json, yaml, var_export.
+See the [argument syntax](https://make.wordpress.org/cli/handbook/references/argument-syntax/) reference for a detailed explanation of the syntax conventions used.
 
-### Examples
+- `<name>`
+  The ability name (namespace/ability-name format).
+- `[--input=<json>]`
+  JSON string containing input data for the ability. Use '-' to read from stdin.
+- `[--<field>=<value>]`
+  Individual input fields. Alternative to –input for simple inputs.
+- `[--format=<format>]`
+  Render output in a particular format.
+  - default: json
+  - options:
+  - json
+  - yaml
+  - var_export
+
+#### Examples
 
 ```bash
 # Execute an ability.
@@ -601,27 +687,29 @@ description: Just another WordPress site
 $ echo '{"fields":["name"]}' | wp ability run core/get-site-info --input=- --user=admin
 ```
 
-### Global Parameters
+#### Global Parameters
 
-These global parameters have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
+These [global parameters](https://make.wordpress.org/cli/handbook/config/) have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
 
-- `--path=<path>` - Path to the WordPress files.
-- `--url=<url>` - Pretend request came from given URL. In multisite, this argument is how the target site is specified.
-- `--ssh=[<scheme>:][<user>@]<host|container>[:<port>][<path>]` - Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant").
-- `--http=<http>` - Perform operation against a remote WordPress installation over HTTP.
-- `--user=<id|login|email>` - Set the WordPress user.
-- `--skip-plugins[=<plugins>]` - Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded.
-- `--skip-themes[=<themes>]` - Skip loading all themes, or a comma-separated list of themes.
-- `--skip-packages` - Skip loading all installed packages.
-- `--require=<path>` - Load PHP file before running the command (may be used more than once).
-- `--exec=<php-code>` - Execute PHP code before running the command (may be used more than once).
-- `--context=<context>` - Load WordPress in a given context.
-- `--[no-]color` - Whether to colorize the output.
-- `--debug[=<group>]` - Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help.
-- `--prompt[=<assoc>]` - Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values.
-- `--quiet` - Suppress informational messages.
+| **Argument** | **Description** |
+| --- | --- |
+| `--path=<path>` | Path to the WordPress files. |
+| `--url=<url>` | Pretend request came from given URL. In multisite, this argument is how the target site is specified. |
+| `--ssh=[<scheme>:][<user>@]<host\|container>[:<port>][<path>]` | Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant"). |
+| `--http=<http>` | Perform operation against a remote WordPress installation over HTTP. |
+| `--user=<id\|login\|email>` | Set the WordPress user. |
+| `--skip-plugins[=<plugins>]` | Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded. |
+| `--skip-themes[=<themes>]` | Skip loading all themes, or a comma-separated list of themes. |
+| `--skip-packages` | Skip loading all installed packages. |
+| `--require=<path>` | Load PHP file before running the command (may be used more than once). |
+| `--exec=<php-code>` | Execute PHP code before running the command (may be used more than once). |
+| `--context=<context>` | Load WordPress in a given context. |
+| `--[no-]color` | Whether to colorize the output. |
+| `--debug[=<group>]` | Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help. |
+| `--prompt[=<assoc>]` | Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values. |
+| `--quiet` | Suppress informational messages. |
 
-## wp ability validate
+### wp ability validate
 
 Reference: <https://developer.wordpress.org/cli/commands/ability/validate/>
 
@@ -629,13 +717,18 @@ Validates input against an ability's schema.
 
 Validates the input data without executing the ability. Useful for testing input before execution.
 
-### Options
+#### Options
 
-- `<name>` - The ability name (namespace/ability-name format).
-- `[--input=<json>]` - JSON string containing input data to validate.
-- `[--<field>=<value>]` - Individual input fields to validate.
+See the [argument syntax](https://make.wordpress.org/cli/handbook/references/argument-syntax/) reference for a detailed explanation of the syntax conventions used.
 
-### Examples
+- `<name>`
+  The ability name (namespace/ability-name format).
+- `[--input=<json>]`
+  JSON string containing input data to validate.
+- `[--<field>=<value>]`
+  Individual input fields to validate.
+
+#### Examples
 
 ```bash
 # Validate input for an ability (use JSON for array values).
@@ -651,22 +744,24 @@ $ wp ability validate core/get-site-info --input='{"fields":"invalid"}'
 Error: Ability "core/get-site-info" has invalid input. Reason: ...
 ```
 
-### Global Parameters
+#### Global Parameters
 
-These global parameters have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
+These [global parameters](https://make.wordpress.org/cli/handbook/config/) have the same behavior across all commands and affect how WP-CLI interacts with WordPress.
 
-- `--path=<path>` - Path to the WordPress files.
-- `--url=<url>` - Pretend request came from given URL. In multisite, this argument is how the target site is specified.
-- `--ssh=[<scheme>:][<user>@]<host|container>[:<port>][<path>]` - Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant").
-- `--http=<http>` - Perform operation against a remote WordPress installation over HTTP.
-- `--user=<id|login|email>` - Set the WordPress user.
-- `--skip-plugins[=<plugins>]` - Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded.
-- `--skip-themes[=<themes>]` - Skip loading all themes, or a comma-separated list of themes.
-- `--skip-packages` - Skip loading all installed packages.
-- `--require=<path>` - Load PHP file before running the command (may be used more than once).
-- `--exec=<php-code>` - Execute PHP code before running the command (may be used more than once).
-- `--context=<context>` - Load WordPress in a given context.
-- `--[no-]color` - Whether to colorize the output.
-- `--debug[=<group>]` - Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help.
-- `--prompt[=<assoc>]` - Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values.
-- `--quiet` - Suppress informational messages.
+| **Argument** | **Description** |
+| --- | --- |
+| `--path=<path>` | Path to the WordPress files. |
+| `--url=<url>` | Pretend request came from given URL. In multisite, this argument is how the target site is specified. |
+| `--ssh=[<scheme>:][<user>@]<host\|container>[:<port>][<path>]` | Perform operation against a remote server over SSH (or a container using scheme of "docker", "docker-compose", "docker-compose-run", "vagrant"). |
+| `--http=<http>` | Perform operation against a remote WordPress installation over HTTP. |
+| `--user=<id\|login\|email>` | Set the WordPress user. |
+| `--skip-plugins[=<plugins>]` | Skip loading all plugins, or a comma-separated list of plugins. Note: mu-plugins are still loaded. |
+| `--skip-themes[=<themes>]` | Skip loading all themes, or a comma-separated list of themes. |
+| `--skip-packages` | Skip loading all installed packages. |
+| `--require=<path>` | Load PHP file before running the command (may be used more than once). |
+| `--exec=<php-code>` | Execute PHP code before running the command (may be used more than once). |
+| `--context=<context>` | Load WordPress in a given context. |
+| `--[no-]color` | Whether to colorize the output. |
+| `--debug[=<group>]` | Show all PHP errors and add verbosity to WP-CLI output. Built-in groups include: bootstrap, commandfactory, and help. |
+| `--prompt[=<assoc>]` | Prompt the user to enter values for all command arguments, or a subset specified as comma-separated values. |
+| `--quiet` | Suppress informational messages. |

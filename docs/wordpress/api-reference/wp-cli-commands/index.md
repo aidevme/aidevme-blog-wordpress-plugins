@@ -6,15 +6,15 @@ Reference: <https://developer.wordpress.org/cli/commands>
 
 | Index | Name | Document | Reference Url | Last Synced On | Notes |
 | --- | --- | --- | --- | --- | --- |
-| 01 | wp_ability | [wp_ability.md](01-wp_ability/wp_ability.md) | <https://developer.wordpress.org/cli/commands/ability/> | 2026-09-24T07:36:47Z | Synced |
-| 02 | wp_admin | [wp_admin.md](02-wp_admin/wp_admin.md) | <https://developer.wordpress.org/cli/commands/admin/> | 2026-09-24T07:36:47Z | Synced |
-| 03 | wp_block | [wp_block.md](03-wp_block/wp_block.md) | <https://developer.wordpress.org/cli/commands/block/> | 2026-09-24T07:36:47Z | Synced |
-| 04 | wp_cache | [wp_cache.md](04-wp_cache/wp_cache.md) | <https://developer.wordpress.org/cli/commands/cache/> | 2026-09-24T07:36:47Z | Synced |
-| 05 | wp_cap | [wp_cap.md](05-wp_cap/wp_cap.md) | <https://developer.wordpress.org/cli/commands/cap/> | 2026-09-24T07:36:47Z | Synced |
-| 06 | wp_cli | [wp_cli.md](06-wp_cli/wp_cli.md) | <https://developer.wordpress.org/cli/commands/cli/> | 2026-09-24T07:36:47Z | Synced |
-| 07 | wp_comment | [wp_comment.md](07-wp_comment/wp_comment.md) | <https://developer.wordpress.org/cli/commands/comment/> | 2026-09-24T07:36:47Z | Synced |
-| 08 | wp_config | [wp_config.md](08-wp_config/wp_config.md) | <https://developer.wordpress.org/cli/commands/config/> | 2026-09-24T07:36:47Z | Synced |
-| 09 | wp_core | [wp_core.md](09-wp_core/wp_core.md) | <https://developer.wordpress.org/cli/commands/core/> | 2026-09-24T07:36:47Z | Synced |
+| 1 | wp_ability | [wp_ability.md](01-wp_ability/wp_ability.md) | <https://developer.wordpress.org/cli/commands/ability/> | 2026-09-24T07:36:47Z | Synced |
+| 2 | wp_admin | [wp_admin.md](02-wp_admin/wp_admin.md) | <https://developer.wordpress.org/cli/commands/admin/> | 2026-09-24T07:36:47Z | Synced |
+| 3 | wp_block | [wp_block.md](03-wp_block/wp_block.md) | <https://developer.wordpress.org/cli/commands/block/> | 2026-09-24T07:36:47Z | Synced |
+| 4 | wp_cache | [wp_cache.md](04-wp_cache/wp_cache.md) | <https://developer.wordpress.org/cli/commands/cache/> | 2026-09-24T07:36:47Z | Synced |
+| 5 | wp_cap | [wp_cap.md](05-wp_cap/wp_cap.md) | <https://developer.wordpress.org/cli/commands/cap/> | 2026-09-24T07:36:47Z | Synced |
+| 6 | wp_cli | [wp_cli.md](06-wp_cli/wp_cli.md) | <https://developer.wordpress.org/cli/commands/cli/> | 2026-09-24T07:36:47Z | Synced |
+| 7 | wp_comment | [wp_comment.md](07-wp_comment/wp_comment.md) | <https://developer.wordpress.org/cli/commands/comment/> | 2026-09-24T07:36:47Z | Synced |
+| 8 | wp_config | [wp_config.md](08-wp_config/wp_config.md) | <https://developer.wordpress.org/cli/commands/config/> | 2026-09-24T07:36:47Z | Synced |
+| 9 | wp_core | [wp_core.md](09-wp_core/wp_core.md) | <https://developer.wordpress.org/cli/commands/core/> | 2026-09-24T07:36:47Z | Synced |
 | 10 | wp_cron | [wp_cron.md](10-wp_cron/wp_cron.md) | <https://developer.wordpress.org/cli/commands/cron/> | 2026-09-24T07:36:47Z | Synced |
 | 11 | wp_db | [wp_db.md](11-wp_db/wp_db.md) | <https://developer.wordpress.org/cli/commands/db/> | 2026-09-24T07:36:47Z | Synced |
 | 12 | wp_dist-archive | [wp_dist-archive.md](12-wp_dist-archive/wp_dist-archive.md) | <https://developer.wordpress.org/cli/commands/dist-archive/> | 2026-09-24T07:36:47Z | Synced |

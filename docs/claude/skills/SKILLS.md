@@ -77,6 +77,17 @@ Each case is one `case.yaml`: `schema_version: "1.1"`, a `name`, `tags`, an `exe
 
 Runs start in an empty workspace and are limited to read-only tools, so each prompt carries its own scenario (the code, the last change log number) instead of pointing at repo files. That means the cases test the skill's guidance, not the contents of the repo.
 
+### Two eval formats
+
+Each skill carries the same scenarios in two formats, because Claude Code has two separate eval mechanisms:
+
+| File | Used by | Format |
+| --- | --- | --- |
+| `evals/<case>/case.yaml` | `claude plugin eval` | One case per folder; graders (`llm`, `regex`, `tool_used`) score the result automatically |
+| `evals/evals.json` | The skill-creator plugin, for iterating on a skill inside a Claude Code session | `{ "skill_name", "evals": [ { "id", "prompt", "expected_output", "assertions": [...], "files": [] } ] }`; assertions are plain-language statements that a reviewer or model checks |
+
+The two are independent. `claude plugin eval` reads only the case folders and ignores `evals.json`. I confirmed that the `evals.json` files are valid JSON with the expected fields and that the CLI still finds the case folders next to them, but not that skill-creator accepts them, since that plugin is not installed here. When you change a scenario, change it in both files.
+
 ### Running them
 
 Run from the repo root, one skill at a time:
@@ -93,6 +104,26 @@ Two things to remember when reading results:
 
 - The `skill-fired` graders are a signal about the skill's `description`, not part of the score in a with/without-skill comparison, except on the negative cases. If a positive case passes its content graders but `skill-fired` fails, the skill was not chosen, so improve the description's trigger phrases.
 - `claude plugin eval` is documented as an early-access feature and its options may change. The suites were validated only up to discovery (the CLI finds the cases); they have not been run against the model yet, so expect to tune rubrics after the first real run.
+
+## Validating skills
+
+Skill files are checked against the [Agent Skills specification](https://agentskills.io/specification) in three places:
+
+| Where | What it does |
+| --- | --- |
+| [`.github/workflows/validate-skill.yml`](../../../.github/workflows/validate-skill.yml) | On pushes and PRs to `main` or `dev` that touch a `SKILL.md`, validates each changed skill folder with the `Flash-Brew-Digital/validate-skill` action (pinned to a commit). Deleted skills are skipped. |
+| [`scripts/validate-skills.sh`](../../../scripts/validate-skills.sh) | Fast local check with no dependencies: name (format, matches the folder), description (present, at most 1024 characters, single-line, quoted or folded), `SKILL.md` under 500 lines, and a warning for frontmatter keys the open spec does not define. `--strict` makes warnings fail. |
+| [`scripts/validate-skills-official.sh`](../../../scripts/validate-skills-official.sh) | Runs the official `skills-ref` library. Clones it into `~/.cache/agentskills` on first use (set `SKILLS_REF_REF` to a commit to pin it); needs `uv` or Python 3. |
+
+Both scripts take an optional skills directory and default to `.claude/skills`:
+
+```bash
+scripts/validate-skills.sh
+scripts/validate-skills.sh --strict
+scripts/validate-skills-official.sh
+```
+
+Warnings are informational for this repo: Claude Code accepts frontmatter keys such as `skills` (on agents) and `argument-hint` (on commands) that the open spec does not list. A `.gitattributes` rule keeps `*.sh` files on LF endings so they run on Windows checkouts.
 
 ## Adding or changing a skill
 

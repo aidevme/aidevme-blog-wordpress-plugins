@@ -1,0 +1,56 @@
+{
+  "skill_name": "wordpress-plugin-security-checklist",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Can you review this admin handler from one of our plugins for security problems? Just list what is wrong and how to fix each one.\n\n```php\nfunction credpl_save_credential() {\n    global $wpdb;\n    $title = $_POST['title'];\n    $link  = $_POST['credential_link'];\n    $wpdb->query( \"INSERT INTO {$wpdb->prefix}credentials (title, credential_link) VALUES ('$title', '$link')\" );\n    echo '<div class=\"notice\">Saved ' . $title . '</div>';\n}\nadd_action( 'admin_post_credpl_save_credential', 'credpl_save_credential' );\n```",
+      "expected_output": "Should apply the security checklist and report all five gaps: no capability check, no nonce verification, unsanitized $_POST input, unescaped output, and raw interpolated SQL instead of $wpdb->insert() or $wpdb->prepare(). Each point is tied to this code with a concrete fix.",
+      "assertions": [
+        "Identifies the missing capability check (current_user_can)",
+        "Identifies the missing nonce verification (check_admin_referer)",
+        "Identifies that $_POST input is not sanitized",
+        "Identifies that the output is echoed without escaping (esc_html)",
+        "Identifies the raw interpolated SQL and recommends $wpdb->insert() or $wpdb->prepare()",
+        "Ties each finding to the pasted code rather than giving only generic advice"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Please do a security review of this handler against our plugin security rules and tell me whether it passes.\n\n```php\nfunction credpl_save_credential() {\n    if ( ! current_user_can( 'manage_options' ) ) {\n        wp_die( esc_html__( 'You do not have permission to do this.', 'credentials-manager' ) );\n    }\n    check_admin_referer( 'credpl_save_credential' );\n\n    $title = isset( $_POST['title'] ) ? sanitize_text_field( wp_unslash( $_POST['title'] ) ) : '';\n    $link  = isset( $_POST['credential_link'] ) ? esc_url_raw( wp_unslash( $_POST['credential_link'] ) ) : '';\n\n    Credpl_Data::insert_credential( array( 'title' => $title, 'credential_link' => $link ) );\n\n    wp_safe_redirect( admin_url( 'admin.php?page=credpl-credentials&saved=1' ) );\n    exit;\n}\nadd_action( 'admin_post_credpl_save_credential', 'credpl_save_credential' );\n```",
+      "expected_output": "Should conclude the handler meets the checklist (capability check, nonce, sanitization, no unescaped output, writes through the shared data-layer class). Any extra suggestions are clearly optional. It must not invent vulnerabilities.",
+      "assertions": [
+        "Concludes the handler passes or meets the checklist",
+        "Does not claim a missing capability check",
+        "Does not claim a missing nonce",
+        "Does not claim missing sanitization or a SQL injection risk",
+        "Any additional suggestions are labelled optional"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I'm writing the spec for a new \"Export credentials to CSV\" button on an admin list screen in a WordPress plugin. It takes a date range and a status filter from the request. What security decisions should the spec state explicitly?",
+      "expected_output": "Should list concrete security statements for the spec: the required capability (manage_options or narrower, with the choice flagged), nonce protection on the export action, sanitization for each input (date range, and an allow-list for status), and safe handling of the CSV output.",
+      "assertions": [
+        "States the capability required and asks for the choice to be flagged",
+        "Requires nonce protection on the export action",
+        "Names sanitization for the date range and the status filter, ideally an allow-list for status",
+        "Mentions escaping or safe handling of the CSV output",
+        "Gives concrete items rather than saying only 'be secure'"
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "In plain JavaScript, what's the simplest way to format today's date as YYYY-MM-DD?",
+      "expected_output": "Negative case: should simply answer the JavaScript question (for example toISOString().slice(0, 10)) and must not load or apply the WordPress security checklist.",
+      "assertions": [
+        "Gives a working way to format the date as YYYY-MM-DD",
+        "Does not turn the answer into a WordPress security review",
+        "Does not invoke the wordpress-plugin-security-checklist skill"
+      ],
+      "files": []
+    }
+  ]
+}

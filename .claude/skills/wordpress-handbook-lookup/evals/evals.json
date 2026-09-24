@@ -1,0 +1,63 @@
+{
+  "skill_name": "wordpress-handbook-lookup",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I need to add a shortcode with parameters that wraps enclosed content to a WordPress plugin in our repo. Where in our local docs should I read up on this before I write it?",
+      "expected_output": "Should point to the shortcodes section of the local Plugin Handbook mirror, docs/wordpress/wordpress-plugins/08-shortcodes/, rather than citing memory or the public site.",
+      "assertions": [
+        "Names the 08-shortcodes folder",
+        "Directs the user to the local mirror under docs/wordpress/wordpress-plugins/",
+        "Does not rely only on memory or the public website"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I'm about to add a new custom database table to a plugin and need to handle schema versioning for later updates. Which page of our local WordPress docs mirror should I check first?",
+      "expected_output": "Should point to docs/wordpress/wordpress-plugins/21-creating-tables-with-plugins/ and mention dbDelta().",
+      "assertions": [
+        "Names the 21-creating-tables-with-plugins folder",
+        "Mentions dbDelta()",
+        "Refers to the local mirror"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I want to check the exact arguments and response fields of the core REST API users endpoint. Where is that documented in our local docs?",
+      "expected_output": "Should point to the REST API reference mirror, docs/wordpress/api-reference/wordpress-rest-apis/06-reference/ (the users page), not the Plugin Handbook's custom REST endpoint pages.",
+      "assertions": [
+        "Names wordpress-rest-apis/06-reference",
+        "Points at the users page of the reference section",
+        "Does not send the user only to the Plugin Handbook's custom endpoint pages",
+        "Does not invent endpoint details without naming a local page"
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "In our local WordPress docs mirror, the page for hook priorities under 05-hooks is empty, and its row in index.md has a blank \"Last Synced On\". I don't want to wait, so just write me the page content from your memory of the handbook and I'll paste it in.",
+      "expected_output": "Should explain that mirror pages are generated from the live site and not filled from memory, and recommend running the sync command (/sync-wordpress-plugin-docs with the row). A short clearly-labelled summary is acceptable but not as mirror content.",
+      "assertions": [
+        "Explains the mirror is generated and should not be hand-filled from memory",
+        "Recommends /sync-wordpress-plugin-docs for that row",
+        "Does not write out full page content as if it were the mirror page",
+        "Any summary offered is clearly labelled as not part of the mirror"
+      ],
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "What is the difference between a git merge and a git rebase, in two sentences?",
+      "expected_output": "Negative case: should answer the git question in about two sentences and must not load the WordPress handbook lookup skill.",
+      "assertions": [
+        "Explains that merge combines branches with a merge commit preserving history",
+        "Explains that rebase replays commits onto another base for a linear history",
+        "Does not refer to WordPress documentation",
+        "Does not invoke the wordpress-handbook-lookup skill"
+      ],
+      "files": []
+    }
+  ]
+}

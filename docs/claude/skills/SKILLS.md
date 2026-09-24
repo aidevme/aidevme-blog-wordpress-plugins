@@ -111,7 +111,7 @@ Skill files are checked against the [Agent Skills specification](https://agentsk
 
 | Where | What it does |
 | --- | --- |
-| [`.github/workflows/validate-skill.yml`](../../../.github/workflows/validate-skill.yml) | On pushes and PRs to `main` or `dev` that touch a `SKILL.md`, validates each changed skill folder with the `Flash-Brew-Digital/validate-skill` action (pinned to a commit). Deleted skills are skipped. |
+| [`.github/workflows/validate-skill.yml`](../../../.github/workflows/validate-skill.yml) | On pushes and PRs to `main` or `dev` that touch a `SKILL.md`, validates each changed skill folder with the `Flash-Brew-Digital/validate-skill` action (pinned to a commit). Deleted skills are skipped. It can also be run manually (Actions tab, or `gh workflow run validate-skill.yml -f skill=changelog-entry`); leave `skill` empty to validate every skill. |
 | [`scripts/validate-skills.sh`](../../../scripts/validate-skills.sh) | Fast local check with no dependencies: name (format, matches the folder), description (present, at most 1024 characters, single-line, quoted or folded), `SKILL.md` under 500 lines, and a warning for frontmatter keys the open spec does not define. `--strict` makes warnings fail. |
 | [`scripts/validate-skills-official.sh`](../../../scripts/validate-skills-official.sh) | Runs the official `skills-ref` library. Clones it into `~/.cache/agentskills` on first use (set `SKILLS_REF_REF` to a commit to pin it); needs `uv` or Python 3. |
 

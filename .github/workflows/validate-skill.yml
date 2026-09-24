@@ -9,6 +9,12 @@ on:
     branches: [main, dev]
     paths:
       - "**/SKILL.md"
+  workflow_dispatch:
+    inputs:
+      skill:
+        description: "Skill to validate: a name (e.g. changelog-entry) or a path (e.g. .claude/skills/changelog-entry). Leave empty to validate every skill."
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -37,7 +43,32 @@ jobs:
           PR_HEAD: ${{ github.event.pull_request.head.sha }}
           PUSH_BEFORE: ${{ github.event.before }}
           PUSH_AFTER: ${{ github.event.after }}
+          INPUT_SKILL: ${{ github.event.inputs.skill }}
         run: |
+          # Manual run: validate the named skill, or every skill when none is given.
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            if [ -n "$INPUT_SKILL" ]; then
+              case "$INPUT_SKILL" in
+                *..*) echo "::error::The skill input must not contain '..'"; exit 1 ;;
+              esac
+              SKILL_PATH="${INPUT_SKILL%/}"
+              if [ -f ".claude/skills/$SKILL_PATH/SKILL.md" ]; then
+                SKILL_PATH=".claude/skills/$SKILL_PATH"
+              elif [ ! -f "$SKILL_PATH/SKILL.md" ]; then
+                echo "::error::No SKILL.md found for '$INPUT_SKILL' (looked in .claude/skills/$SKILL_PATH and $SKILL_PATH)"
+                exit 1
+              fi
+              SKILLS=$(printf '%s\n' "$SKILL_PATH" | jq -R -s -c 'split("\n") | map(select(length > 0))')
+            else
+              SKILLS=$(find . -name SKILL.md -not -path '*/node_modules/*' -not -path './.git/*' | \
+                sed 's|^\./||' | xargs -r -I {} dirname {} | sort -u | \
+                jq -R -s -c 'split("\n") | map(select(length > 0))')
+            fi
+            echo "skills=$SKILLS" >> "$GITHUB_OUTPUT"
+            echo "Skills to validate: $SKILLS"
+            exit 0
+          fi
+
           if [ "$EVENT_NAME" = "pull_request" ]; then
             BASE="$PR_BASE"
             HEAD="$PR_HEAD"

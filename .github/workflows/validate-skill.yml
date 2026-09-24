@@ -1,0 +1,83 @@
+name: Validate Agent Skill
+
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      - "**/SKILL.md"
+  pull_request:
+    branches: [main, dev]
+    paths:
+      - "**/SKILL.md"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-skill-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-slim
+    if: github.event.pull_request.draft != true && github.actor != 'dependabot[bot]'
+    outputs:
+      skills: ${{ steps.changed-skills.outputs.skills }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Get changed skills
+        id: changed-skills
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PUSH_AFTER: ${{ github.event.after }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            BASE="$PR_BASE"
+            HEAD="$PR_HEAD"
+          else
+            BASE="$PUSH_BEFORE"
+            HEAD="$PUSH_AFTER"
+          fi
+
+          # A new branch or a force push has no usable "before" commit
+          # (all zeros or missing from the clone); fall back to the parent
+          # of the pushed commit so the diff still works.
+          if [ -z "$BASE" ] || echo "$BASE" | grep -Eq '^0+$' || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            BASE="$HEAD~1"
+          fi
+
+          # --diff-filter=d skips deleted files, so a removed SKILL.md does not
+          # put a folder that no longer exists into the validation matrix.
+          SKILLS=$(git diff --name-only --diff-filter=d "$BASE" "$HEAD" | \
+            grep 'SKILL.md$' | \
+            xargs -r -I {} dirname {} | \
+            sort -u | \
+            jq -R -s -c 'split("\n") | map(select(length > 0))')
+
+          echo "skills=$SKILLS" >> "$GITHUB_OUTPUT"
+          echo "Changed skills: $SKILLS"
+
+  validate:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.skills != '[]' && needs.detect-changes.outputs.skills != ''
+    runs-on: ubuntu-slim
+    strategy:
+      fail-fast: false
+      matrix:
+        skill: ${{ fromJson(needs.detect-changes.outputs.skills) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Validate ${{ matrix.skill }}
+        # Pinned to the commit behind tag v1.0.0 (third-party action).
+        uses: Flash-Brew-Digital/validate-skill@39c9da973b7ce3fd4d9632672a0c355bdd733d89
+        with:
+          path: ${{ matrix.skill }}

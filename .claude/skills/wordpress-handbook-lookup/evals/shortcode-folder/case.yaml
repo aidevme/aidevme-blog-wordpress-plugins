@@ -1,0 +1,24 @@
+schema_version: "1.1"
+name: shortcode-folder
+description: A shortcode question should point to the shortcodes folder of the local Plugin Handbook mirror.
+tags: [lookup, smoke]
+execution:
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    I need to add a shortcode with parameters that wraps enclosed content to a WordPress plugin in our repo. Where in our local docs should I read up on this before I write it?
+graders:
+  - name: points-to-shortcodes-folder
+    type: regex
+    weight: 3
+    pattern: '08-shortcodes'
+    target: last_message
+  - name: uses-local-mirror
+    type: llm
+    criteria: |
+      PASS if the response directs the user to the local Plugin Handbook mirror under docs/wordpress/wordpress-plugins/ (specifically its shortcodes section) instead of only citing memory or the public website.
+      FAIL if it does not mention the local docs folder.
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?wordpress-handbook-lookup"'

@@ -28,9 +28,9 @@ A good way to do this is with a prefix. For example, if your plugin is called "E
 - `namespace EasyCustomPostTypes;`
 - `update_option( 'ecpt_settings', $settings );`
 
-Because you are making code as a part of the **WordPress** project, you must avoid the use of prefixes that have a high probability of conflicting with the core WordPress. This includes but is not limited to: `__` (double underscores), `wp_`, `WordPress`, or `_` (single underscore).
+Because you are making code as a part of the **WordPress** project, you must avoid the use of prefixes that have a high probability of conflicting with the core WordPress. This includes but is not limited to: `__` (double underscores), `wp_` , `WordPress`, or `_` (single underscore)
 
-If you are making code for a "sub" plugin (such as a WooCommerce extension), you would similarly need to avoid using any of their normal/common prefixes (i.e. Woo, WooCommerce).
+If you are making code for a 'sub' plugin (such as a WooCommece extension), you would similarly need to avoid using any of their normal/common prefixes (i.e. Woo, WooCommerce).
 
 You can use them *inside* your classes or namespace, but not as stand-alone function/namespace/class.
 
@@ -50,12 +50,12 @@ Code that **must** be prefixed includes:
 
 PHP provides a number of functions to verify existence of variables, functions, classes and constants. All of these will return true if the entity exists.
 
-- **Variables**: `isset()` (includes arrays, objects, etc.)
-- **Functions**: `function_exists()`
-- **Classes**: `class_exists()`
-- **Constants**: `defined()`
+- **Variables**: [isset()](http://php.net/manual/en/function.isset.php) (includes arrays, objects, etc.)
+- **Functions**: [function_exists()](http://php.net/manual/en/function.function-exists.php)
+- **Classes**: [class_exists()](http://php.net/manual/en/function.class-exists.php)
+- **Constants**: [defined()](http://php.net/manual/en/function.defined.php)
 
-Keep in mind that using `if ( ! function_exists( 'NAME' ) ) {` around all your functions and classes sounds like a great idea until you realize the fatal flaw. If something else has a function with the same name and their code loads first, your plugin will break. Using if-exists to replace/override a function or class should be reserved for *shared* libraries only.
+Keep in mind that using` (!function_exists('NAME ')) {` around all your functions and classes sounds like a great idea until you realize the fatal flaw. If something else has a function with the same name and their code loads first, your plugin will break. Using if-exists to replace/override a function or class should be reserved for *shared* libraries only.
 
 #### Example
 
@@ -77,7 +77,7 @@ if ( ! function_exists( 'wporg_get_foo' ) ) {
 
 ### Object Oriented Programming Method
 
-An easier way to tackle the naming collision problem is to use a class for the code of your plugin.
+An easier way to tackle the naming collision problem is to use a [class](http://php.net/manual/en/language.oop5.php) for the code of your plugin.
 
 You will still need to take care of checking whether the name of the class you want is already taken but the rest will be taken care of by PHP.
 
@@ -102,7 +102,7 @@ if ( ! class_exists( 'WPOrg_Plugin' ) ) {
 
 ## File Organization
 
-The root level of your plugin directory should contain your `plugin-name.php` file and, optionally, your uninstall.php file. All other files should be organized into sub folders whenever possible.
+The root level of your plugin directory should contain your `plugin-name.php` file and, optionally, your [uninstall.php](https://developer.wordpress.org/plugin/the-basics/uninstall-methods/) file. All other files should be organized into sub folders whenever possible.
 
 ### Folder Structure
 
@@ -136,7 +136,7 @@ For large plugins with lots of code, start off with classes in mind. Separate st
 
 ### Conditional Loading
 
-It's helpful to separate your admin code from the public code. Use the conditional `is_admin()`. You must still perform capability checks as this doesn't indicate the user is authenticated or has Administrator-level access. See Checking User Capabilities.
+It's helpful to separate your admin code from the public code. Use the conditional [is_admin()](https://codex.wordpress.org/Function_Reference/is_admin). You must still perform capability checks as this doesn't indicate the user is authenticated or has Administrator-level access. See [Checking User Capabilities](https://developer.wordpress.org/plugins/security/checking-user-capabilities/).
 
 For example:
 
@@ -155,7 +155,7 @@ You can implement this by including this code at the top of the file:
 
 ```php
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+    exit; // Exit if accessed directly
 }
 ```
 
@@ -163,16 +163,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 While there are a number of possible architecture patterns, they can broadly be grouped into three variations:
 
-- Single plugin file, containing functions
-- Single plugin file, containing a class, instantiated object and optionally functions
-- Main plugin file, then one or more class files
+- [Single plugin file, containing functions](https://github.com/GaryJones/move-floating-social-bar-in-genesis/blob/master/move-floating-social-bar-in-genesis.php)
+- [Single plugin file, containing a class, instantiated object and optionally functions](https://github.com/norcross/wp-comment-notes/blob/master/wp-comment-notes.php)
+- [Main plugin file, then one or more class files](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate)
 
 ### Architecture Patterns Explained
 
 Specific implementations of the more complex of the above code organizations have already been written up as tutorials and slides:
 
-- Slash - Singletons, Loaders, Actions, Screens, Handlers
-- Implementing the MVC Pattern in WordPress Plugins
+- [Slash – Singletons, Loaders, Actions, Screens, Handlers](https://jjj.blog/2012/12/slash-architecture-my-approach-to-building-wordpress-plugins/)
+- [Implementing the MVC Pattern in WordPress Plugins](http://iandunn.name/wp-mvc)
 
 ## Boilerplate Starting Points
 
@@ -180,9 +180,9 @@ Instead of starting from scratch for each new plugin you write, you may want to 
 
 These also serve as further examples of different yet comparable architectures.
 
-- WordPress Plugin Boilerplate: A foundation for WordPress Plugin Development that aims to provide a clear and consistent guide for building your plugins.
-- WordPress Plugin Bootstrap: Basic bootstrap to develop WordPress plugins using Grunt, Compass, GIT, and SVN.
-- WP Skeleton Plugin: Skeleton plugin that focuses on unit tests and use of composer for development.
-- WP CLI Scaffold: The Scaffold command of WP CLI creates a skeleton plugin with options such as CI configuration files.
+- [WordPress Plugin Boilerplate](https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate): A foundation for WordPress Plugin Development that aims to provide a clear and consistent guide for building your plugins.
+- [WordPress Plugin Bootstrap](https://github.com/claudiosmweb/wordpress-plugin-boilerplate): Basic bootstrap to develop WordPress plugins using Grunt, Compass, GIT, and SVN.
+- [WP Skeleton Plugin](https://github.com/ptahdunbar/wp-skeleton-plugin): Skeleton plugin that focuses on unit tests and use of composer for development.
+- [WP CLI Scaffold](https://developer.wordpress.org/cli/commands/scaffold/plugin/): The Scaffold command of WP CLI creates a skeleton plugin with options such as CI configuration files
 
 Of course, you could take different aspects of these and others to create your own custom boilerplate.

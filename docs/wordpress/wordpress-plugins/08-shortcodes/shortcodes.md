@@ -21,26 +21,26 @@ Advantages:
 
 By default, WordPress includes the following shortcodes:
 
-- `[caption]` - allows you to wrap captions around content
-- `[gallery]` - allows you to show image galleries
-- `[audio]` - allows you to embed and play audio files
-- `[video]` - allows you to embed and play video files
-- `[playlist]` - allows you to display collection of audio or video files
-- `[embed]` - allows you to wrap embedded items
+- `[caption]` – allows you to wrap captions around content
+- `[gallery]` – allows you to show image galleries
+- `[audio]` – allows you to embed and play audio files
+- `[video]` – allows you to embed and play video files
+- `[playlist]` – allows you to display collection of audio or video files
+- `[embed]` – allows you to wrap embedded items
 
 ## Shortcode Best Practices
 
-Best practices for developing shortcodes include the plugin development best practices and the list below:
+Best practices for developing shortcodes include the [plugin development best practices](https://developer.wordpress.org/plugins/the-basics/best-practices/) and the list below:
 
-- Always return! Shortcodes are essentially filters, so creating "side effects" will lead to unexpected bugs.
+- **Always return!**   Shortcodes are essentially filters, so creating "[side effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science))" will lead to unexpected bugs.
 - Prefix your shortcode names to avoid collisions with other plugins.
 - Sanitize the input and escape the output.
 - Provide users with clear documentation on all shortcode attributes.
 
 ## Quick Reference
 
-See the complete example of using a basic shortcode structure, taking care of self-closing and enclosing scenarios, shortcodes within shortcodes and securing output.
+See the complete example of using a [basic shortcode structure, taking care of self-closing and enclosing scenarios, shortcodes within shortcodes and securing output](https://developer.wordpress.org/plugins/shortcodes/shortcodes-with-parameters/#complete-example).
 
 ## External Resources
 
-- WordPress Shortcodes Generator
+- [WordPress Shortcodes Generator](http://generatewp.com/shortcodes/)

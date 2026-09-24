@@ -2,12 +2,8 @@
 
 Reference: <https://developer.wordpress.org/plugins/metadata/rendering-post-metadata/>
 
-## Overview
+Here is a non exhaustive list of functions and [template tags](https://developer.wordpress.org/themes/basics/template-tags/) used to get and render Post Metadata:
 
-This page covers functions and template tags for displaying post metadata in WordPress.
-
-## Key Functions
-
-- `the_meta()` — a template tag that automatically lists all Custom Fields of a post
-- `get_post_custom()` and `get_post_meta()` — these functions retrieve metadata from posts, either individual items or complete sets
-- `get_post_custom_values()` — this function retrieves specific values associated with custom post fields
+- [the_meta()](https://developer.wordpress.org/reference/functions/the_meta/)– Template tag that automatically lists all Custom Fields of a post
+- [get_post_custom()](https://developer.wordpress.org/reference/functions/get_post_custom/) and [get_post_meta()](https://developer.wordpress.org/reference/functions/get_post_meta/) – Retrieves one or all metadata of a post.
+- [get_post_custom_values()](https://developer.wordpress.org/reference/functions/get_post_custom_values/) – Retrieves values for a custom post field.

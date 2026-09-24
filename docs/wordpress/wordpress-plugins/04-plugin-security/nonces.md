@@ -16,9 +16,7 @@ For an example of why a nonce is used, consider that an admin screen might gener
 
 When you go to that URL, WordPress will validate your authentication cookie information and, if you're allowed to delete that post, will proceed to delete it. What an attacker can do with this is make your browser go to that URL without your knowledge. For example, the attacker could craft a disguised link on a 3rd party page like this:
 
-```html
-<img src="http://example.com/wp-admin/post.php?post=123&action=trash" />
-```
+`<img src="http://example.com/wp-admin/post.php?post=123&action=trash" />`
 
 This would trigger your browser to make a request to WordPress, and the browser would automatically attach your authentication cookie and WordPress would consider this a valid request.
 
@@ -38,7 +36,7 @@ Note that the nonces are unique to the current user's session, so if a user logs
 
 ### Customize nonces for guests (non logged-in users)
 
-WordPress core, by default, generates the same nonce for guests as they have the same user ID (value 0). That is, it does not prevent guests from CSRF attacks. To enhance this security aspect for critical actions, you can develop a session mechanism for your guests, and hook to the `nonce_user_logged_out` filter for replacing the user ID value 0 with another random ID from the session mechanism.
+WordPress core, by default, generates the same nonce for guests as they have the same user ID (value `0`). That is, it does not prevent guests from CSRF attacks. To enhance this security aspect for critical actions, you can develop a session mechanism for your guests, and hook to the [nonce_user_logged_out](https://developer.wordpress.org/reference/hooks/nonce_user_logged_out/) filter for replacing the user ID value `0` with another random ID from the session mechanism.
 
 ### Adding a nonce to a URL
 
@@ -66,7 +64,7 @@ wp_nonce_field( 'delete-comment_'.$comment_id );
 
 might echo something like:
 
-```html
+```php
 <input type="hidden" id="_wpnonce" name="_wpnonce" value="796c7766b1" />
 <input type="hidden" name="_wp_http_referer" value="/wp-admin/edit-comments.php" />
 ```
@@ -87,12 +85,11 @@ This simply returns the nonce itself. For example: `295a686963`
 
 For maximum protection, ensure that the string representing the action is as specific as possible.
 
-## Verifying a nonce
+### Verifying a nonce
 
 You can verify a nonce that was passed in a URL, a form in an admin screen, an AJAX request, or in some other context.
 
-### Verifying a nonce passed from an admin screen
-
+Verifying a nonce passed from an admin screen  
 To verify a nonce that was passed in a URL or a form in an admin screen, call `check_admin_referer()` specifying the string representing the action.
 
 For example:
@@ -113,7 +110,7 @@ check_admin_referer( 'delete-comment_'.$comment_id, 'my_nonce' );
 
 ### Verifying a nonce passed in an AJAX request
 
-To verify a nonce that was passed in an AJAX request, call `check_ajax_referer()` specifying the string representing the action. For example:
+To verify a nonce that was passed in an AJAX request, call [check_ajax_referer()](https://developer.wordpress.org/reference/functions/check_ajax_referer/) specifying the string representing the action. For example:
 
 ```php
 check_ajax_referer( 'process-comment' );
@@ -141,7 +138,7 @@ You can modify the nonce system by adding various actions and filters.
 
 ### Modifying the nonce lifetime
 
-By default, a nonce has a lifetime of one day. After that, the nonce is no longer valid even if it matches the action string. To change the lifetime, add a `nonce_life` filter specifying the lifetime in seconds.
+By default, a nonce has a lifetime of one day. After that, the nonce is no longer valid even if it matches the action string. To change the lifetime, add a nonce_life filter specifying the lifetime in seconds.
 
 For example, to change the lifetime to four hours:
 
@@ -172,7 +169,7 @@ You can change the error message sent when a nonce is not valid, by using the tr
 function my_nonce_message ($translation) {
     if ($translation === 'Are you sure you want to do this?') {
        return 'No! No! No!';
-    }
+    } 
 
     return $translation;
 }
@@ -194,7 +191,7 @@ When a nonce is valid, the functions that validate nonces return the current tic
 
 Nonces are generated using a key and salt that are unique to your site if you have installed WordPress correctly. `NONCE_KEY` and `NONCE_SALT` are defined in your `wp-config.php` file, and the file contains comments that provide more information.
 
-Nonces should never be relied on for authentication or authorization, or for access control. Protect your functions using `current_user_can()`, always assume nonces can be compromised.
+Nonces should never be relied on for authentication or authorization, or for access control. Protect your functions using `current_user_can()`, always assume Nonces can be compromised.
 
 ### Replacing the nonce system
 
@@ -204,7 +201,7 @@ To change the way admin requests or AJAX requests are verified, you can replace 
 
 To replace the nonce system with some other nonce system, you can replace `wp_create_nonce()`, `wp_verify_nonce()` and `wp_nonce_tick()`.
 
-## Related
+### Related
 
 Nonce functions: `wp_nonce_ays()`, `wp_nonce_field()`, `wp_nonce_url()`, `wp_verify_nonce()`, `wp_create_nonce()`, `check_admin_referer()`, `check_ajax_referer()`, `wp_referer_field()`
 

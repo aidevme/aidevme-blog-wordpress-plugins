@@ -3,7 +3,7 @@ description: Sync docs/wordpress/api-reference/wp-cli-commands/ against develope
 argument-hint: [optional: Index number(s) or Name(s) to limit the sync, e.g. "09" or "wp_core"]
 ---
 
-Invoke the `wordpress-docs-research-agent` subagent (via the Agent tool) to sync the WP-CLI command reference mirror under `docs/wordpress/api-reference/wp-cli-commands/` against its live source on developer.wordpress.org. Tell the agent to use the "WP-CLI commands mirror" rules in its definition and to work only from `docs/wordpress/api-reference/wp-cli-commands/index.md`, not the Plugin Handbook index.
+Invoke the `researcher` subagent (via the Agent tool) in mode `wordpress-wp-cli-command-docs` to sync the WP-CLI command reference mirror under `docs/wordpress/api-reference/wp-cli-commands/` against its live source on developer.wordpress.org. Tell the agent to work only from `docs/wordpress/api-reference/wp-cli-commands/index.md`, not the Plugin Handbook index.
 
 Scope: $ARGUMENTS
 

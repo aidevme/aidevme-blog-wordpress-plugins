@@ -2,24 +2,14 @@
 
 Reference: <https://developer.wordpress.org/plugins/rest-api/>
 
-## Overview
+WordPress 4.4 introduced the infrastructure for a REST API. The REST API provides an easy way to get data into and out of WordPress. Data can be retrieved and stored by sending HTTP requests to the REST API server. The REST API takes advantage of different HTTP methods.
 
-WordPress version 4.4 introduced REST API infrastructure, enabling straightforward data exchange with WordPress systems. The REST API provides an easy way to get data into and out of WordPress through HTTP requests.
+- `GET` should be used for retrieving data from the API.
+- `POST` should be used for creating new resources (i.e users, posts, taxonomies).
+- `PUT` should be used for updating resources.
+- `DELETE` should be used for deleting resources.
+- `OPTIONS` should be used to provide context about our resources.
 
-## HTTP Methods
+A resource is any single entity or object. A good example of a resource for WordPress would be a post. A post has different properties like its title and content. A response from the API could show us title and content as fields in the response. The REST API enables us to interact with posts and other WordPress resources in a new way. The REST API makes sharing our content with the rest of the web easier, and it provides a structured way to handle complex interactions within WordPress.
 
-The API leverages different HTTP verbs for specific operations:
-
-- **GET** — retrieves existing data
-- **POST** — creates new resources (users, posts, taxonomies)
-- **PUT** — modifies existing resources
-- **DELETE** — removes resources
-- **OPTIONS** — supplies contextual information about resources
-
-## Resources and Structure
-
-A resource represents any individual entity or object. WordPress posts exemplify resources, containing properties such as title and content that appear as fields in API responses.
-
-## Purpose and Benefits
-
-The REST API facilitates WordPress content sharing across the web and establishes a structured approach to managing intricate interactions within WordPress environments.
+In this chapter of the Plugin Handbook, we will explore how the API works and how we can leverage its power to do great things with WordPress!

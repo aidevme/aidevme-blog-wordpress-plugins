@@ -1,0 +1,23 @@
+schema_version: "1.1"
+name: custom-tables-folder
+description: A custom database table question should point to the table-creation section of the Plugin Handbook mirror.
+tags: [lookup]
+execution:
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    I'm about to add a new custom database table to a plugin and need to handle schema versioning for later updates. Which page of our local WordPress docs mirror should I check first?
+graders:
+  - name: points-to-tables-folder
+    type: regex
+    weight: 3
+    pattern: '21-creating-tables-with-plugins'
+    target: last_message
+  - name: mentions-dbdelta
+    type: regex
+    pattern: 'dbDelta'
+    target: last_message
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?wordpress-handbook-lookup"'

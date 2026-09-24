@@ -30,7 +30,7 @@ A pull request was just opened or marked ready for review: `#${{ github.event.pu
 
 Call `noop` instead of updating if the pull request:
 
-- was opened by the `sync-wp-cli-docs` workflow (its title already starts with `docs(wp-cli):` and its body is generated), or
+- was opened by one of the docs sync workflows (`sync-wp-cli-docs`, `sync-wordpress-plugins-docs`; their titles start with `docs(wp-cli):` or `docs(wordpress-plugins):` and their bodies are generated), or
 - already has a description longer than a couple of lines that a person wrote. Only overwrite empty, auto-generated (e.g. a single commit message) or placeholder descriptions.
 
 ## Title

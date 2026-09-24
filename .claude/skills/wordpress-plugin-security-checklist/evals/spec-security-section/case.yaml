@@ -1,0 +1,25 @@
+schema_version: "1.1"
+name: spec-security-section
+description: When designing, the checklist should turn into explicit security statements in the spec.
+tags: [security, design]
+execution:
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    I'm writing the spec for a new "Export credentials to CSV" button on an admin list screen in a WordPress plugin. It takes a date range and a status filter from the request. What security decisions should the spec state explicitly?
+graders:
+  - name: covers-design-items
+    type: llm
+    weight: 3
+    criteria: |
+      PASS if the response tells the spec author to state: the capability required (manage_options or a narrower one, with the choice flagged), nonce protection on the export action, and which sanitization applies to each input (the date range and the status filter, ideally an allow-list for the status), plus escaping or safe handling of the CSV output.
+      FAIL if it omits the capability, the nonce, or input sanitization, or if it only says "be secure" without concrete items.
+  - name: mentions-capability
+    type: regex
+    pattern: 'manage_options|current_user_can|capabilit'
+    flags: i
+    target: last_message
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?wordpress-plugin-security-checklist"'

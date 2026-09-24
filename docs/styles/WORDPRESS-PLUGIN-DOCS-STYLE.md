@@ -1,6 +1,6 @@
 # WordPress Plugin Docs Style Guide
 
-This guide governs every file under `docs/wordpress/wordpress-plugins/`. It mirrors the official [WordPress Plugin Handbook](https://developer.wordpress.org/plugins/) — every document here is a sourced copy of one handbook page (or sub-page), kept in sync via the `wordpress-docs-research-agent`.
+This guide governs every file under `docs/wordpress/wordpress-plugins/`. It mirrors the official [WordPress Plugin Handbook](https://developer.wordpress.org/plugins/) — every document here is a sourced copy of one handbook page (or sub-page), kept in sync via the `researcher` agent (mode `wordpress-plugin-docs`).
 
 ## Folder and file layout
 
@@ -73,4 +73,4 @@ Reference: <{source url}>
 
 ## Keeping this in sync
 
-This style guide, the folder layout, and the Index table conventions are what `.claude/agents/wordpress-docs-research-agent.md` and `/sync-wordpress-plugin-docs` follow when refreshing these docs. If you change a convention here, update that agent definition to match — the two are meant to stay identical.
+This style guide, the folder layout, and the Index table conventions are what the Plugin Handbook mode of `.claude/agents/researcher.md` and `/sync-wordpress-plugin-docs` follow when refreshing these docs. If you change a convention here, update that agent mode to match — the two are meant to stay identical.

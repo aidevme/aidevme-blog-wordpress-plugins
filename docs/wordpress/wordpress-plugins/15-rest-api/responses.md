@@ -26,7 +26,7 @@ $our_headers = $response->get_headers();
 
 The above is pretty straightforward and shows you how to get what you need out of a response. The `WP_REST_Response` takes things a bit further. You can access the matched route for the response to backtrack which endpoint the response came from with `$response->get_matched_route()`. `$response->get_matched_handler()` will return the options registered for the endpoint that produced our response. These could be useful for logging the API among other things. The response class also helps us with error handling.
 
-## Error Handling
+### Error Handling
 
 If something went terribly wrong in our request, we can return `WP_Error` objects in our endpoint callbacks explaining what went wrong, like this:
 
@@ -54,7 +54,19 @@ function prefix_get_an_error( $request ) {
 }
 ```
 
-That is kind of a silly example but it touches on some key things. The most important thing to understand is that the WordPress REST API will automatically handle changing the `WP_Error` object into an HTTP Response containing your data. When you set the status code in the `WP_Error` object your HTTP response status code will take on that value. This comes in really handy when you need to use different error codes like 404 for content that wasn't found, or 403 for forbidden access. All we have to do is have our endpoint callbacks return a request and the `WP_REST_Server` class will handle a lot of really important things for us.
+That is kind of a silly example but it touches on some key things. The most important thing to understand is that the WordPress REST API will automatically handle changing the
+
+WP_Error
+
+object into an HTTP Response containing your data.  When you set the status code in the
+
+WP_Error
+
+object your HTTP response status code will take on that value. This comes in really handy when you need to use different error codes like 404 for content that wasn't found, or 403 for forbidden access. All we have to do is have our endpoint callbacks return a request and the
+
+WP_REST_Server
+
+class will handle a lot of really important things for us.
 
 There are other cool things the response class can help us with, like Linking.
 
@@ -116,8 +128,8 @@ function prefix_prepare_post_links( $post ) {
     $replies_url = rest_url( 'my-namespace/v1/comments' );
     $replies_url = add_query_arg( 'post', $post->ID, $replies_url );
     $links['replies'] = array(
-		'href'         => $replies_url,
-		'embeddable'   => true,
+        'href'         => $replies_url,
+        'embeddable'   => true,
     );
 
     return $links;
@@ -184,24 +196,24 @@ function prefix_prepare_comment_links( $comment ) {
  * @return array Response data, ready for insertion into collection data.
  */
 function prefix_prepare_for_collection( $response ) {
-	if ( ! ( $response instanceof WP_REST_Response ) ) {
-		return $response;
-	}
+    if ( ! ( $response instanceof WP_REST_Response ) ) {
+        return $response;
+    }
 
-	$data = (array) $response->get_data();
-	$server = rest_get_server();
+    $data = (array) $response->get_data();
+    $server = rest_get_server();
 
-	if ( method_exists( $server, 'get_compact_response_links' ) ) {
-		$links = call_user_func( array( $server, 'get_compact_response_links' ), $response );
-	} else {
-		$links = call_user_func( array( $server, 'get_response_links' ), $response );
-	}
+    if ( method_exists( $server, 'get_compact_response_links' ) ) {
+        $links = call_user_func( array( $server, 'get_compact_response_links' ), $response );
+    } else {
+        $links = call_user_func( array( $server, 'get_response_links' ), $response );
+    }
 
-	if ( ! empty( $links ) ) {
-		$data['_links'] = $links;
-	}
+    if ( ! empty( $links ) ) {
+        $data['_links'] = $links;
+    }
 
-	return $data;
+    return $data;
 }
 ```
 

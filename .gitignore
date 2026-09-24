@@ -3,3 +3,6 @@
 
 # Node dependencies (installed via npm; not shipped — only build/ output is)
 node_modules/
+
+# claude plugin eval run results
+.claude/skills/*/evals/results/

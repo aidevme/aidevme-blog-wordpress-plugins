@@ -14,6 +14,7 @@ Source definition: [`.claude/agents/architect.md`](../../../.claude/agents/archi
 | **Reads** | The plugin's existing spec, its `includes/` code, root `CLAUDE.md`, the handbook mirror under `docs/wordpress/wordpress-plugins/` |
 | **Hands off to** | [`developer`](developer.md) (implements the spec) |
 | **Tools** | `Read`, `Write`, `Edit`, `Grep`, `Glob`, `Bash`, plus the three Microsoft Learn tools (`microsoft_docs_search`, `microsoft_docs_fetch`, `microsoft_code_sample_search`) |
+| **Skills** | `wordpress-plugin-security-checklist`, `wordpress-handbook-lookup`, `microsoft-docs-lookup`, see [Skills](../skills/SKILLS.md) |
 
 ## Purpose
 
@@ -58,7 +59,7 @@ Example prompts:
 ## Boundaries
 
 - Does not write or edit PHP implementation files - that is `developer`'s job, working from the spec.
-- Does not write the handbook mirror under `docs/wordpress/wordpress-plugins/` - that is [`wordpress-docs-research-agent`](wordpress-docs-research-agent.md)'s job.
+- Does not write the handbook mirror under `docs/wordpress/wordpress-plugins/` - that is [`researcher`](researcher.md) (mode `wordpress-plugin-docs`)'s job.
 - These limits are set by the agent's instructions; its `Write`/`Edit` tools are not path-restricted.
 
 ## Known issues in the agent definition (as of 2026-09-19)

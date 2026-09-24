@@ -2,9 +2,7 @@
 
 Reference: <https://developer.wordpress.org/plugins/taxonomies/split-terms-wp-4-2/>
 
-## Overview
-
-This information is here for historical purposes; if you're not interested in how terms worked prior to 2015, you can skip this section.
+This information is here for historical purposes. If you're not interested in how terms worked prior to 2015, you can skip this section.
 
 ## Prior to WordPress 4.2
 
@@ -12,21 +10,27 @@ Terms in different taxonomies with the same slug shared a single term ID. For in
 
 ## WordPress 4.2+
 
-Beginning with 4.2, when one of these shared terms is updated, it is split: the updated term is assigned a new term ID.
+Beginning with 4.2, when one of these shared terms is updated, it will be split: the updated term will be assigned a new term ID.
 
 ## What does it mean for you?
 
-In the vast majority of situations, this update was seamless and uneventful. However, some plugins and themes that store term IDs in options, post meta, user meta, or elsewhere may have been affected.
+In the vast majority of situations, this update was seamless and uneventful. However, some plugins and themes who store term IDs in options, post meta, user meta, or elsewhere might have been affected.
 
 ## Handling the Split
 
-WordPress 4.2 includes two different tools to help plugin and theme authors with the transition.
+WordPress 4.2 includes two different tools to help authors of plugins and themes with the transition.
 
-### The `split_shared_term` hook
+### The split_shared_term hook
 
-When a shared term is assigned a new term ID, a new `split_shared_term` action is fired. Using this hook is the preferred method for processing term ID changes.
+When a shared term is assigned a new term ID, a new `split_shared_term` action is fired.
 
-For example, if a plugin stores an option called `featured_tags` containing an array of term IDs used to query featured posts, it can hook `split_shared_term` to check whether the updated term ID is in that array and update it if necessary:
+Here are a few examples of how plugin and theme authors can leverage this hook to ensure that stored term IDs are updated.
+
+#### Term ID stored in an option
+
+Let's say your plugin stores an option called `featured_tags` that contains an array of term IDs (`[4, 6, 10]`) that serve as the query parameter for your homepage featured posts section.
+
+In this example, you'll hook to `split_shared_term` action, check whether the updated term ID is in the array, and update if necessary.
 
 ```php
 /**
@@ -57,7 +61,11 @@ function wporg_featured_tags_split( int $term_id, int $new_term_id, int $term_ta
 add_action( 'split_shared_term', 'wporg_featured_tags_split', 10, 4 );
 ```
 
-Similarly, a plugin storing a term ID in post meta (for example, to show related posts for a page) can use `get_posts()` to find the affected pages and update the stored meta value:
+#### Term ID stored in post meta
+
+Let's say your plugin stores a term ID in post meta for pages so that you can show related posts for a certain page.
+
+In this case, you need to use the `get_posts()` function to get the pages with your `meta_key` and update the `meta_value` matching the split term ID.
 
 ```php
 /**
@@ -89,13 +97,23 @@ function wporg_page_related_posts_split( int $term_id, int $new_term_id, int $te
 add_action( 'split_shared_term', 'wporg_page_related_posts_split', 10, 4 );
 ```
 
-### The `wp_get_split_term()` function
+### The wp_get_split_term function
 
-There may be cases where terms are split without your plugin having a chance to hook `split_shared_term`. WordPress 4.2 stores information about split taxonomy terms and provides `wp_get_split_term()` to retrieve it — useful, for example, in a validation routine run on plugin update:
+> Using the
+> 
+> split_shared_term
+> 
+> hook is the preferred method for processing Term ID changes.
+> 
+> However, there may be cases where Terms are split without your plugin having a chance to hook to the `split_shared_term` action.
+
+WordPress 4.2 stores information about taxonomy terms that have been split, and provides the `wp_get_split_term()` utility function to help developers retrieve this information.
+
+Consider the case above, where your plugin stores term IDs in an option named `featured_tags`. You may want to build a function that validates these tag IDs (perhaps to be run on plugin update), to be sure that none of the featured tags has been split:
 
 ```php
 /**
- * Retrieve information about split terms and update the featured_tags option with the new term IDs.
+ * Retrieve information about split terms and udpates the featured_tags option with the new term IDs.
  *
  * @return void
  */
@@ -116,4 +134,6 @@ function wporg_featured_tags_check_split() {
 }
 ```
 
-`wp_get_split_term()` takes two parameters, `$old_term_id` and `$taxonomy`, and returns an integer. To retrieve a list of all split terms associated with an old term ID regardless of taxonomy, use `wp_get_split_terms()`.
+Note that `wp_get_split_term()` takes two parameters, `$old_term_id` and `$taxonomy` and returns an integer.
+
+If you need to retrieve a list of all split terms associated with an old Term ID, regardless of taxonomy, use `wp_get_split_terms()`.

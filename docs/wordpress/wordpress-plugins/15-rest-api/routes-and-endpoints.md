@@ -4,7 +4,7 @@ Reference: <https://developer.wordpress.org/plugins/rest-api/routes-endpoints/>
 
 ## Overview
 
-The REST API provides a way to match URIs to various resources in our WordPress installation. By default, if you have pretty permalinks enabled, the WordPress REST API "lives" at `/wp-json/`. At our WordPress site https://ourawesomesite.com, we can access the REST API's index by making a GET request to https://ourawesomesite.com/wp-json/. The index provides information regarding what routes are available for that particular WordPress install, along with what HTTP methods are supported and what endpoints are registered.
+The REST API provides a way to match URIs to various resources in our WordPress installation. By default, if you have pretty permalinks enabled, the WordPress REST API "lives" at `/wp-json/`. At our WordPress site `https://ourawesomesite.com`, we can access the REST API's index by making a `GET` request to `https://ourawesomesite.com/wp-json/`. The index provides information regarding what routes are available for that particular WordPress install, along with what HTTP methods are supported and what endpoints are registered.
 
 If we wanted to create an endpoint that would return the phrase "Hello World, this is the WordPress REST API", we would first need to register the route for that endpoint. To register routes you should use the `register_rest_route()` function. It needs to be called on the `rest_api_init` action hook. `register_rest_route()` handles all of the mapping for routes to endpoints. Let's try to create a "Hello World, this is the WordPress REST API" route.
 
@@ -37,11 +37,11 @@ The first argument passed into `register_rest_route()` is the namespace, which p
 
 The third argument also allows us to provide a permissions callback, which can restrict access for the endpoint to only certain users. The third argument also offers a way to register arguments for the endpoint so that requests can modify the response of our endpoint. We will get into those concepts in the endpoints section of this guide.
 
-When we go to https://ourawesomesite.com/wp-json/hello-world/v1/phrase we can now see our REST API greeting us kindly. Let's take a look at routes a bit more in depth.
+When we go to `https://ourawesomesite.com/wp-json/hello-world/v1/phrase` we can now see our REST API greeting us kindly. Let's take a look at routes a bit more in depth.
 
 ## Routes
 
-Routes in the REST API are represented by URIs. The route itself is what is tacked onto the end of `https://ourawesomesite.com/wp-json`. The index route for the API is `'/'` which is why https://ourawesomesite.com/wp-json/ returns all of the available information for the API. All routes should be built onto this route, the wp-json portion can be changed, but in general, it is advised to keep it the same.
+Routes in the REST API are represented by URIs. The route itself is what is tacked onto the end of `https://ourawesomesite.com/wp-json`. The index route for the API is `'/'` which is why `https://ourawesomesite.com/wp-json/` returns all of the available information for the API. All routes should be built onto this route, the `wp-json` portion can be changed, but in general, it is advised to keep it the same.
 
 We want to make sure that our routes are unique. For instance we could have a route for books like this: `/books`. Our books route would now live at `https://ourawesomesite.com/wp-json/books`. However, this is not a good practice as we would end up polluting potential routes for the API. What if another plugin we wanted to register a books route as well? We would be in big trouble in that case, as the two routes would conflict with each other and only one could be used. The fourth parameter to `register_rest_field()` is a boolean for whether the route should override an existing route.
 
@@ -51,11 +51,15 @@ The override parameter does not really solve our problem either, as both routes 
 
 It is extremely important to add namespaces to your routes. The "core" endpoints, which are awaiting to be merged into WordPress core, use the `/wp/v2` namespace.
 
-DO NOT PLACE ANYTHING INTO THE `/wp` NAMESPACE UNLESS YOU ARE MAKING ENDPOINTS WITH THE INTENTION OF MERGING THEM INTO CORE.
+> DO NOT PLACE ANYTHING INTO THE
+> 
+> /wp
+> 
+> NAMESPACE UNLESS YOU ARE MAKING ENDPOINTS WITH THE INTENTION OF MERGING THEM INTO CORE.
 
 There are some key things to take notice of in the core endpoint namespace. The first part of the namespace is `/wp`, which represents the vendor name; WordPress. For our plugins we will want to come up with unique names for what we call the vendor portion of the namespace. In the example above we used `hello-world`.
 
-Following the vendor portion is the version portion of the namespace. The "core" endpoints utilize `v2` to represent version 2 of the WordPress REST API. If you are writing a plugin, you can maintain backwards compatibility of your REST API endpoints by simply creating new endpoints and bumping up the version number you provide. This way both the original v1 and v2 endpoints can be accessed.
+Following the vendor portion is the version portion of the namespace. The "core" endpoints utilize `v2` to represent version 2 of the WordPress REST API. If you are writing a plugin, you can maintain backwards compatibility of your REST API endpoints by simply creating new endpoints and bumping up the version number you provide. This way both the original `v1` and `v2` endpoints can be accessed.
 
 The part of the route that follows the namespace is the resource path.
 
@@ -150,7 +154,7 @@ Although this section is about routes, we have covered quite a bit about endpoin
 
 ## Endpoints
 
-Endpoints are the destination that a route needs to map to. For any given route, you could have a number of different endpoints registered to it. We will expand on our fictitious eCommerce plugin, to better show the distinction between routes and endpoints. We are going to create two endpoints that exist at the `/wp-json/my-shop/v1/products/` route. One endpoint uses the HTTP verb GET to get products, and the other endpoint uses the HTTP verb POST to create a new product.
+Endpoints are the destination that a route needs to map to. For any given route, you could have a number of different endpoints registered to it. We will expand on our fictitious eCommerce plugin, to better show the distinction between routes and endpoints. We are going to create two endpoints that exist at the `/wp-json/my-shop/v1/products/` route. One endpoint uses the HTTP verb `GET` to get products, and the other endpoint uses the HTTP verb `POST` to create a new product.
 
 ```php
 /**
@@ -203,7 +207,7 @@ function prefix_register_product_routes() {
 add_action( 'rest_api_init', 'prefix_register_product_routes' );
 ```
 
-Depending on what HTTP Method we use for the route `/wp-json/my-shop/v1/products`, we are matched to a different endpoint and a different callback is fired. When we use POST we trigger the `prefix_create_product()` callback, and when we use GET we trigger the `prefix_get_products()` callback.
+Depending on what HTTP Method we use for the route `/wp-json/my-shop/v1/products`, we are matched to a different endpoint and a different callback is fired. When we use `POST` we trigger the `prefix_create_product()` callback, and when we use `GET` we trigger the `prefix_get_products()` callback.
 
 There are a number of different HTTP methods and the REST API can make use of any of them.
 
@@ -211,13 +215,13 @@ There are a number of different HTTP methods and the REST API can make use of an
 
 HTTP methods are sometimes referred to as HTTP verbs. They are simply just different ways to communicate via HTTP. The main ones used by the WordPress REST API are:
 
-- GET should be used for retrieving data from the API.
-- POST should be used for creating new resources (i.e users, posts, taxonomies).
-- PUT should be used for updating resources.
-- DELETE should be used for deleting resources.
-- OPTIONS should be used to provide context about our resources.
+- `GET` should be used for retrieving data from the API.
+- `POST` should be used for creating new resources (i.e users, posts, taxonomies).
+- `PUT` should be used for updating resources.
+- `DELETE` should be used for deleting resources.
+- `OPTIONS` should be used to provide context about our resources.
 
-It is important to note that these methods are not supported by every client, as they were introduced in HTTP 1.1. Luckily, the API provides a workaround for these unfortunate cases. If you want to delete a resource but can't send a DELETE request, then you can use the `_method` parameter or the `X-HTTP-Method-Override` header in your request. How this works is you will send a POST request to `https://ourawesomesite.com/wp-json/my-shop/v1/products/1?_method=DELETE`. Now you will have deleted product number 1, even though your client could not send the proper HTTP method in the request, or maybe there was a firewall in place that blocks out DELETE requests.
+It is important to note that these methods are not supported by every client, as they were introduced in HTTP 1.1. Luckily, the API provides a workaround for these unfortunate cases. If you want to delete a resource but can't send a `DELETE` request, then you can use the `_method` parameter or the `X-HTTP-Method-Override` header in your request. How this works is you will send a `POST` request to `https://ourawesomesite.com/wp-json/my-shop/v1/products/1?_method=DELETE`. Now you will have deleted product number 1, even though your client could not send the proper HTTP method in the request, or maybe there was a firewall in place that blocks out DELETE requests.
 
 The HTTP method, in combination with the route and callbacks, are what make up the core of an endpoint.
 
@@ -231,7 +235,7 @@ The main callback for a delete endpoint should only delete the resource and retu
 
 Idempotence, in the context of a REST API, means that if you make the same request to an endpoint the server will process the request the same way. Imagine if our read endpoint was not idempotent. Whenever we made a request to it the state of our server would be modified by the request, even though we were only trying to get data. This could be catastrophic. Any time someone fetched data from your server something would change internally. It is important to make sure that read, update, and delete endpoints do not have nasty side effects and just stick to what they are intended to do.
 
-In a REST API, the concept of idempotence is tied to HTTP methods instead of endpoint callbacks. Any callback using GET, HEAD, TRACE, OPTIONS, PUT, or DELETE, should not produce any side effects. POST requests are not idempotent, and are typically used for creating resources. If you created an idempotent creation method then you would only ever create one resource because when you make the same request there would be no more side effects to the server. For creating, if you make the same request over and over the server should generate new resources each time.
+In a REST API, the concept of idempotence is tied to HTTP methods instead of endpoint callbacks. Any callback using `GET`, `HEAD`, `TRACE`, `OPTIONS`, `PUT`, or `DELETE`, should not produce any side effects. `POST` requests are not idempotent, and are typically used for creating resources. If you created an idempotent creation method then you would only ever create one resource because when you make the same request there would be no more side effects to the server. For creating, if you make the same request over and over the server should generate new resources each time.
 
 To restrict usage of endpoints we need to register a permissions callback.
 
@@ -347,7 +351,7 @@ function prefix_register_example_routes() {
 add_action( 'rest_api_init', 'prefix_register_example_routes' );
 ```
 
-We have now specified a filter argument for this example. We can specify the argument as a query parameter when we request the endpoint. If we make a GET request to `https://ourawesomesitem.com/my-colors/v1/colors?filter=blue`, we will be returned only the blue colors in our collection. You could also pass these as body parameters in the request body, instead of in the query string. To understand the distinction between query parameters and body parameters you should read about the HTTP spec. Query parameters live in the query string tacked onto the URL and body parameters are directly embedded in the body of an HTTP request.
+We have now specified a `filter` argument for this example. We can specify the argument as a query parameter when we request the endpoint. If we make a `GET` request to `https://ourawesomesitem.com/my-colors/v1/colors?filter=blue`, we will be returned only the blue colors in our collection. You could also pass these as body parameters in the request body, instead of in the query string. To understand the distinction between query parameters and body parameters you should read about the HTTP spec. Query parameters live in the query string tacked onto the URL and body parameters are directly embedded in the body of an HTTP request.
 
 We have created an argument for our endpoint, but how do we verify that the argument is a string and tell whether it matches the value red, green, or blue. To do this we need to specify a validation callback for our argument.
 
@@ -355,7 +359,7 @@ We have created an argument for our endpoint, but how do we verify that the argu
 
 Validation and sanitization are extremely important for security in the API. The validate callback (in WP 4.6+), fires before the sanitize callback. You should use the `validate_callback` for your arguments to verify whether the input you are receiving is valid. The `sanitize_callback` should be used to transform the argument input or clean out unwanted parts out of the argument, before the argument is processed by the main callback.
 
-In the example above, we need to verify that the filter parameter is a string, and it matches the value red, green, or blue. Let's look at what the code looks like after adding in a `validate_callback`.
+In the example above, we need to verify that the `filter` parameter is a string, and it matches the value red, green, or blue. Let's look at what the code looks like after adding in a `validate_callback`.
 
 ```php
 /**

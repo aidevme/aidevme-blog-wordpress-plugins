@@ -2,7 +2,7 @@
 
 Reference: <https://developer.wordpress.org/plugins/shortcodes/shortcodes-with-parameters/>
 
-Now that we know how to create a basic shortcode and how to use it as self-closing and enclosing, we will look at using parameters in shortcode `[$tag]` and handler function.
+Now that we know how to create a [basic shortcode](https://developer.wordpress.org/plugins/shortcodes/basic-shortcodes/) and how to use it as [self-closing and enclosing](https://developer.wordpress.org/plugins/shortcodes/enclosing-shortcodes/), we will look at using parameters in shortcode `[$tag]` and handler function.
 
 Shortcode `[$tag]` can accept parameters, known as attributes:
 
@@ -14,9 +14,9 @@ Having fun with WordPress.org shortcodes.
 
 Shortcode handler function can accept 3 parameters:
 
-- `$atts` - array - `[$tag]` attributes
-- `$content` - string - The content inside your shortcode. In the example above, it will be "Having fun with WordPress.org shortcodes."
-- `$tag` - string - the name of the `[$tag]` (i.e. the name of the shortcode)
+- `$atts` – array – [$tag] attributes
+- `$content` – string – The content inside your shortcode. In the example above, it will be "Having fun with WordPress.org shortcodes."
+- `$tag` – string – the name of the [$tag] (i.e. the name of the shortcode)
 
 ```php
 function wporg_shortcode( $atts = array(), $content = null, $tag = '' ) {}
@@ -31,9 +31,9 @@ For plugin developers, there is no way to enforce a policy on the use of attribu
 To gain control of how the shortcodes are used:
 
 - Declare default parameters for the handler function
-- Performing normalization of the key case for the attributes array with `array_change_key_case()`
-- Parse attributes using `shortcode_atts()` providing default values array and user `$atts`
-- Secure the output before returning it
+- Performing normalization of the key case for the attributes array with [array_change_key_case()](http://php.net/manual/en/function.array-change-key-case.php)
+- Parse attributes using [shortcode_atts()](https://developer.wordpress.org/reference/functions/shortcode_atts/) providing default values array and user `$atts`
+- [Secure the output](https://developer.wordpress.org/plugins/security/securing-output/) before returning it
 
 ## Complete Example
 
@@ -53,42 +53,42 @@ A `[wporg]` shortcode that will accept a title and will display a box that we ca
  * @return string Shortcode output.
  */
 function wporg_shortcode( $atts = [], $content = null, $tag = '' ) {
-	// normalize attribute keys, lowercase
-	$atts = array_change_key_case( (array) $atts, CASE_LOWER );
+    // normalize attribute keys, lowercase
+    $atts = array_change_key_case( (array) $atts, CASE_LOWER );
 
-	// override default attributes with user attributes
-	$wporg_atts = shortcode_atts(
-		array(
-			'title' => 'WordPress.org',
-		), $atts, $tag
-	);
+    // override default attributes with user attributes
+    $wporg_atts = shortcode_atts(
+        array(
+            'title' => 'WordPress.org',
+        ), $atts, $tag
+    );
 
-	// start box
-	$o = '<div class="wporg-box">';
+    // start box
+    $o = '<div class="wporg-box">';
 
-	// title
-	$o .= '<h2>' . esc_html( $wporg_atts['title'] ) . '</h2>';
+    // title
+    $o .= '<h2>' . esc_html( $wporg_atts['title'] ) . '</h2>';
 
-	// enclosing tags
-	if ( ! is_null( $content ) ) {
-		// $content here holds everything in between the opening and the closing tags of your shortcode. eg.g [my-shortcode]content[/my-shortcode].
+    // enclosing tags
+    if ( ! is_null( $content ) ) {
+        // $content here holds everything in between the opening and the closing tags of your shortcode. eg.g [my-shortcode]content[/my-shortcode].
         // Depending on what your shortcode supports, you will parse and append the content to your output in different ways.
-		// In this example, we just secure output by executing the_content filter hook on $content.
-		$o .= apply_filters( 'the_content', $content );
-	}
+        // In this example, we just secure output by executing the_content filter hook on $content.
+        $o .= apply_filters( 'the_content', $content );
+    }
 
-	// end box
-	$o .= '</div>';
+    // end box
+    $o .= '</div>';
 
-	// return output
-	return $o;
+    // return output
+    return $o;
 }
 
 /**
  * Central location to create all shortcodes.
  */
 function wporg_shortcodes_init() {
-	add_shortcode( 'wporg', 'wporg_shortcode' );
+    add_shortcode( 'wporg', 'wporg_shortcode' );
 }
 
 add_action( 'init', 'wporg_shortcodes_init' );

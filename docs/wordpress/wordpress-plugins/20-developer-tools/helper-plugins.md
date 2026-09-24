@@ -2,18 +2,16 @@
 
 Reference: <https://developer.wordpress.org/plugins/developer-tools/helper-plugins/>
 
-## Overview
-
-This page describes two essential helper plugins for WordPress development.
-
 ## Plugin Check
 
-Plugin Check is a testing utility designed to verify that plugins meet WordPress.org directory standards. The tool provides the ability to run most of the checks used for new submissions, and helps developers identify violations related to internationalization, accessibility, performance, and security practices.
+Plugin Check is a tool for testing whether your plugin meets the required standards for the WordPress.org plugin directory. With this plugin you will be able to run most of the checks used for new submissions, and check if your plugin meets the requirements.
 
-Access: [Plugin Check](https://wordpress.org/plugins/plugin-check/)
+Additionally, the tool flags violations or concerns around plugin development best practices, from basic requirements like correct usage of internationalization functions to accessibility, performance, and security best practices.
+
+[Visit Plugin Check](https://wordpress.org/plugins/plugin-check/)
 
 ## Query Monitor
 
-Query Monitor functions as a debugging plugin offering visibility into database queries, hooks, conditionals, HTTP requests, and redirects. Notable features include automated AJAX debugging and the ability to filter results by specific plugins or themes.
+Query Monitor is a debugging plugin for anyone developing with WordPress. You can view debugging and performance information on database queries, hooks, conditionals, HTTP requests, redirects and more. It has some advanced features not available in other debugging plugins, including automatic AJAX debugging and the ability to narrow down things by plugin or theme.
 
-Access: [Query Monitor](https://wordpress.org/plugins/query-monitor/)
+[Visit Query Monitor](https://wordpress.org/plugins/query-monitor/)

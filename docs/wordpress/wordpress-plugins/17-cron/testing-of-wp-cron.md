@@ -2,22 +2,18 @@
 
 Reference: <https://developer.wordpress.org/plugins/cron/simple-testing/>
 
-## Overview
-
-This guide covers methods for testing WordPress cron jobs through various tools and functions.
-
 ## WP-CLI
 
-The command-line interface offers dedicated cron commands. Users can "list" scheduled jobs and "run {job name}" to execute specific tasks. Additional details are available in the official WP-CLI documentation.
+Cron jobs can be tested using [WP-CLI](https://wp-cli.org/). It offers commands like `wp cron event list` and `wp cron event run {job name}`. [Check the documentation](https://developer.wordpress.org/cli/commands/cron/) for more details.
 
 ## WP-Cron Management Plugins
 
-Multiple plugins accessible through the WordPress.org Plugin Directory provide interfaces for viewing, editing, and managing scheduled cron events and available schedules.
+[Several plugins are available on the WordPress.org Plugin Directory for viewing, editing, and controlling the scheduled cron events and available schedules on your site.](https://wordpress.org/plugins/tags/cron/)
 
 ## _get_cron_array()
 
-This function returns an array of all currently scheduled cron events. It serves developers needing to examine the complete list of active jobs programmatically.
+[The `_get_cron_array()` function](https://developer.wordpress.org/reference/functions/_get_cron_array/) returns an array of all currently scheduled cron events. Use this function if you need to inspect the raw list of events.
 
 ## wp_get_schedules()
 
-This function returns an array of available event recurrence schedules. Developers use it to inspect the raw collection of available scheduling intervals.
+[The `wp_get_schedules()` function](https://developer.wordpress.org/reference/functions/wp_get_schedules/) returns an array of available event recurrence schedules. Use this function if you need to inspect the raw list of available schedules.

@@ -2,32 +2,29 @@
 
 Reference: <https://developer.wordpress.org/plugins/wordpress-org/transferring-your-plugin-to-a-new-owner/>
 
-## Overview
+While any plugin can have an unlimited number of committers and support reps, there is only one official owner of a plugin at any time. This is akin to how a post on WordPress can only have one official post author.
 
-A WordPress plugin can have multiple committers and support representatives, but only one official owner at any given time. This ownership structure parallels how a single author is designated for a WordPress post.
+## For Plugins With Under 10,000 Users
 
-## For Plugins Under 10,000 Users
+If you're transferring your plugin to a new owner, there are two steps that must take place.
 
-The transfer process requires two sequential actions:
+First, add the new user as a **committer** to the plugin:
 
-**Step 1: Add the new owner as a committer**
+- go to `https://wordpress.org/plugins/YOURPLUGIN/advanced` and add their username in as a committer
+- update the `readme.txt` to add their userID as an author
 
-- Access the advanced settings at `https://wordpress.org/plugins/YOURPLUGIN/advanced`
-- Input their username as a committer
-- Update `readme.txt` to include their user ID in the author field
+Next, go to the Advanced tab and scroll down to the Danger Zone. There you will see a section for **Transfer Your Plugin**. Pick someone from the dropdown and click the button.
 
-**Step 2: Complete the transfer**
+If there are no other committers, the plugin will not be available to be transferred, so you must do that first.
 
-Navigate to the Advanced tab's "Danger Zone" section. You'll find a dropdown menu labeled "Transfer Your Plugin" where you can select the new owner and confirm the action.
+## For Plugins with OVER 10,000 Users (or are beta/featured)
 
-If there are no other committers, the plugin will not be available to be transferred, so you must add one first.
+In order to prevent abuse, larger plugins and those officially recognized as featured/beta are restricted from these changes.
 
-## For Larger Plugins (10,000+ Users or Featured/Beta Status)
+To transfer a plugin in this case, you will need to email `plugins@wordpress.org` from the **CURRENT** owner's email the following information:
 
-High-traffic and officially recognized plugins require manual processing to prevent misuse. Contact `plugins@wordpress.org` from the current owner's registered email address with:
+1. A *brief* explanation of the reason for the transfer
+2. The user ID of the new owner
+3. If applicable, any changes to the status of being a featured/beta plugin
 
-1. A concise explanation for the transfer
-2. The new owner's user ID
-3. Any applicable status changes regarding featured or beta designation
-
-Requests are typically approved promptly, though denial or delays may occur if the plugin is deemed critical to WordPress.org infrastructure or if authenticity concerns arise.
+Most requests are processed without issue, however should a plugin be determined to be critical to the WordPress.org project, or should there be reason to believe the request was invalid (i.e. not sent from the current owner's email, or an email address positively connected back to them), it may be denied or delayed.

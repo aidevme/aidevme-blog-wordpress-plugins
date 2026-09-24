@@ -22,12 +22,12 @@ Using the heartbeat API requires two separate pieces of functionality: send and 
 
 ### Sending Data to the Server
 
-When Heartbeat sends data to the server, you can include custom data. This can be any data you want to send to the server, or a simple `true` value to indicate you are expecting data.
+When Heartbeat sends data to the server, you can include custom data. This can be any data you want to send to the server, or a simple true value to indicate you are expecting data.
 
 ```js
 jQuery( document ).on( 'heartbeat-send', function ( event, data ) {
-	// Add additional data to Heartbeat data.
-	data.myplugin_customfield = 'some_data';
+    // Add additional data to Heartbeat data.
+    data.myplugin_customfield = 'some_data';
 });
 ```
 
@@ -47,16 +47,16 @@ On the server side, you can then detect this data, and add additional data to th
  * @return array
  */
 function myplugin_receive_heartbeat( array $response, array $data ) {
-	// If we didn't receive our data, don't send any back.
-	if ( empty( $data['myplugin_customfield'] ) ) {
-		return $response;
-	}
+    // If we didn't receive our data, don't send any back.
+    if ( empty( $data['myplugin_customfield'] ) ) {
+        return $response;
+    }
 
-	// Calculate our data and pass it back. For this example, we'll hash it.
-	$received_data = $data['myplugin_customfield'];
+    // Calculate our data and pass it back. For this example, we'll hash it.
+    $received_data = $data['myplugin_customfield'];
 
-	$response['myplugin_customfield_hashed'] = sha1( $received_data );
-	return $response;
+    $response['myplugin_customfield_hashed'] = sha1( $received_data );
+    return $response;
 }
 add_filter( 'heartbeat_received', 'myplugin_receive_heartbeat', 10, 2 );
 ```
@@ -67,12 +67,12 @@ Back on the frontend, you can then handle receiving this data back.
 
 ```js
 jQuery( document ).on( 'heartbeat-tick', function ( event, data ) {
-	// Check for our data, and use it.
-	if ( ! data.myplugin_customfield_hashed ) {
-		return;
-	}
+    // Check for our data, and use it.
+    if ( ! data.myplugin_customfield_hashed ) {
+        return;
+    }
 
-	alert( 'The hash is ' + data.myplugin_customfield_hashed );
+    alert( 'The hash is ' + data.myplugin_customfield_hashed );
 });
 ```
 

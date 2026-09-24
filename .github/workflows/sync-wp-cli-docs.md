@@ -37,7 +37,7 @@ Keep the WP-CLI command reference mirror in `docs/wordpress/api-reference/wp-cli
 
 ## Rules
 
-`.claude/agents/wordpress-docs-research-agent.md` is the source of truth for how this mirror is synced. Read it first and follow its **"WP-CLI commands mirror"** section and its **Rules** section exactly (file skeleton, subcommands under their own `##` headings, Index table columns, `Last Synced On` and `Notes` conventions, failure handling). Ignore its Plugin Handbook parts and its instructions about slash commands and `mcp__playwright__*` tool names; use the Playwright browser tool available in this workflow instead.
+`.claude/agents/researcher.md` is the source of truth for how this mirror is synced. Read it first and follow its **"Mirror modes — shared procedure"** and **"Mode `wordpress-wp-cli-command-docs`"** sections exactly (file skeleton, subcommands under their own `##` headings, Index table columns, `Last Synced On` and `Notes` conventions, failure handling). Ignore the other modes and any tool names such as `mcp__playwright__*`; use the Playwright browser tool available in this workflow instead.
 
 ## Scope
 

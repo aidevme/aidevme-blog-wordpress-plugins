@@ -1,0 +1,40 @@
+{
+  "skill_name": "microsoft-docs-lookup",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our WordPress plugin needs to call Microsoft Graph from PHP to read a signed-in user's profile. I'm going to spec the endpoint, the auth flow and the permission scope. How should we make sure the API details in the spec are right?",
+      "expected_output": "Should say to verify the Graph endpoint, authentication flow and permission scopes against Microsoft Learn (search first, fetch the specific page, use official code samples) and cite the documentation page in the spec, instead of asserting details from memory.",
+      "assertions": [
+        "Says to check endpoint, auth flow and scopes against Microsoft Learn documentation",
+        "Describes searching Microsoft Learn first and fetching the specific page",
+        "Says to cite the documentation page in the spec",
+        "Does not state endpoints or scopes as settled fact from memory"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I'm implementing a WordPress plugin function that posts a JSON payload to an Azure REST API and reads the response. What should I look at, both for the WordPress side of making the request and for the Azure side?",
+      "expected_output": "Should separate the concerns: WordPress conventions for the outbound request (WordPress HTTP API such as wp_remote_post(), local Plugin Handbook) and the Azure API's request/response shape verified against Microsoft Learn.",
+      "assertions": [
+        "Mentions the WordPress HTTP API (wp_remote_post or similar) for the request",
+        "Points to the local Plugin Handbook or WordPress docs for the WordPress side",
+        "Says to verify the Azure request and response shape in Microsoft Learn",
+        "Covers both sides, not only one"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "How do I register a simple shortcode called [greeting] in a WordPress plugin that outputs \"Hello\"?",
+      "expected_output": "Negative case: should answer with add_shortcode() and must not load the Microsoft docs lookup skill or mention Microsoft Learn.",
+      "assertions": [
+        "Uses add_shortcode() in the answer",
+        "Does not mention Microsoft Learn",
+        "Does not invoke the microsoft-docs-lookup skill"
+      ],
+      "files": []
+    }
+  ]
+}

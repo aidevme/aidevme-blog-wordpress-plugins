@@ -2,9 +2,9 @@
 
 Reference: <https://developer.wordpress.org/plugins/plugin-basics/including-a-software-license/>
 
-Most WordPress plugins are released under the GPL, which is the same license that WordPress itself uses. However, there are other compatible options available. It is always best to clearly indicate the license your plugin uses.
+Most WordPress plugins are released under the [GPL](http://www.gnu.org/licenses/gpl.html), which is the same license that [WordPress itself uses](https://wordpress.org/about/license/). However, there are other compatible options available. It is always best to clearly indicate the license your plugin uses.
 
-In the Header Requirements section, we briefly mentioned how you can indicate your plugin's license within the plugin header comment. Another common, and encouraged, practice is to place a license block comment near the top of your main plugin file (the same one that has the plugin header comment).
+In the [Header Requirements](https://developer.wordpress.org/plugins/the-basics/header-requirements/) section, we briefly mentioned how you can indicate your plugin's license within the plugin header comment. Another common, and encouraged, practice is to place a license block comment near the top of your main plugin file (the same one that has the plugin header comment).
 
 This license block comment usually looks something like this:
 

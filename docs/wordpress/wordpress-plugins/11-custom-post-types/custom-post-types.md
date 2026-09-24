@@ -2,13 +2,6 @@
 
 Reference: <https://developer.wordpress.org/plugins/post-types/>
 
-## Overview
+WordPress stores the Post Types in the `posts` table allowing developers to register Custom Post Types along the ones that already exist.
 
-WordPress maintains Post Types in the `posts` table, enabling developers to register Custom Post Types alongside existing ones.
-
-## Chapter Contents
-
-This section covers two primary topics:
-
-1. How to register Custom Post Types
-2. How to retrieve and display their content publicly
+This chapter will show you how to [register Custom Post Types](https://developer.wordpress.org/plugins/post-types/registering-custom-post-types/), how to [retrieve their content from the database, and how to render them to the public](https://developer.wordpress.org/plugins/post-types/working-with-custom-post-types/).

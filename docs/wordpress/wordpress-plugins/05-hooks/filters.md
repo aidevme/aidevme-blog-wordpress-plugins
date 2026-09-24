@@ -2,52 +2,54 @@
 
 Reference: <https://developer.wordpress.org/plugins/hooks/filters/>
 
-## Overview
+**Filters** are one of the two types of [Hooks](https://developer.wordpress.org/plugins/hooks/).
 
-Filters represent one of the two Hook types in WordPress development. They enable functions to modify data during WordPress Core, plugin, and theme execution. Unlike Actions, filters are meant to work in an isolated manner, and should never have side effects.
+They provide a way for functions to modify data during the execution of WordPress Core, plugins, and themes. They are the counterpart to [Actions](https://developer.wordpress.org/plugins/hooks/actions/).
 
-## Adding Filters
+Unlike [Actions](https://developer.wordpress.org/plugins/hooks/actions/), filters are meant to work in an isolated manner, and should never have [side effects](https://en.wikipedia.org/wiki/Side_effect_(computer_science)) such as affecting global variables and output. Filters expect to have something returned back to them.
 
-Implementation requires two steps:
+## Add Filter
 
-1. Create a callback function to execute when the filter runs.
-2. Register it using `add_filter()` with the hook name and callback function.
+The process of adding a filter includes two steps.
 
-### Basic Implementation
+First, you need to create a Callback function which will be called when the filter is run. Second, you need to add your Callback function to a hook which will perform the calling of the function.
 
-The fundamental structure uses two required parameters:
+You will use the [add_filter()](https://developer.wordpress.org/reference/functions/add_filter/) function, passing at least two parameters:
 
-- `string $hook_name`: the filter identifier
-- `callable $callback`: your callback function reference
+1. `string $hook_name` which is the name of the filter you're hooking to, and
+2. `callable $callback` the name of your callback function.
 
-Simple example:
+The example below will run when the `the_title` filter is executed.
 
 ```php
 function wporg_filter_title( $title ) {
-	return 'The ' . $title . ' was filtered';
+    return 'The ' . $title . ' was filtered';
 }
 add_filter( 'the_title', 'wporg_filter_title' );
 ```
 
-This transforms "Learning WordPress" into "The Learning WordPress was filtered."
+Lets say we have a post title, "Learning WordPress", the above example will modify it to be "The Learning WordPress was filtered".
+
+You can refer to the [Hooks](https://developer.wordpress.org/plugins/hooks/) chapter for a list of available hooks.
+
+As you gain more experience, looking through WordPress Core source code will allow you to find the most appropriate hook.
 
 ### Additional Parameters
 
-The `add_filter()` function accepts two optional parameters:
+[add_filter()](https://developer.wordpress.org/reference/functions/add_filter/) can accept two additional parameters, `int $priority` for the priority given to the callback function, and `int $accepted_args` for the number of arguments that will be passed to the callback function.
 
-- `int $priority`: callback execution order
-- `int $accepted_args`: number of arguments passed to callback
+For detailed explanation of these parameters please read the article on [Actions](https://developer.wordpress.org/plugins/hooks/actions/).
 
-## Practical Example
+### Example
 
-Adding CSS classes conditionally:
+To add a CSS class to the `<body>` tag when a certain condition is met:
 
 ```php
 function wporg_css_body_class( $classes ) {
-	if ( ! is_admin() ) {
-		$classes[] = 'wporg-is-awesome';
-	}
-	return $classes;
+    if ( ! is_admin() ) {
+        $classes[] = 'wporg-is-awesome';
+    }
+    return $classes;
 }
 add_filter( 'body_class', 'wporg_css_body_class' );
 ```

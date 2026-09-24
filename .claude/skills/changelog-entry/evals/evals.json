@@ -1,0 +1,60 @@
+{
+  "skill_name": "changelog-entry",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I just fixed a bug in credentials-manager-plugin: searching the Credentials list with no matches still showed \"1 of 1\" in the pagination. The fix was in Credpl_Credentials_List_Table::prepare_items(), which now sets total_items to 0 when the search returns nothing. The last entry in src/credentials-manager-plugin/CHANGE_LOG.md is v88, and this change touches section 6.2 of the spec. Write the change log entry for it.",
+      "expected_output": "A top-level bullet numbered v89 with a bold headline, referencing spec section 6.2, naming Credpl_Credentials_List_Table::prepare_items() and total_items, explaining what changed and why, and stating there is no database or upgrade impact.",
+      "assertions": [
+        "Entry is numbered v89",
+        "Starts as a bullet with a bold headline of the form **v89 ...**",
+        "References spec section 6.2",
+        "Names Credpl_Credentials_List_Table::prepare_items() and total_items",
+        "Explains what changed and why",
+        "States that no database or upgrade action is needed",
+        "Does not invent schema or migration changes"
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I added a nullable \"notes text\" column to the credentials table in credentials-manager-plugin. dbDelta() picks it up automatically, and I bumped CREDPL_DB_VERSION from 1.7 to 1.8 so Credpl_Installer::maybe_upgrade() runs it on existing sites. The last entry in CHANGE_LOG.md is v88 and the change is described in spec section 4.1. Write the change log entry.",
+      "expected_output": "A v89 entry naming the new column and table, saying dbDelta() adds it automatically, noting the CREDPL_DB_VERSION bump 1.7 to 1.8 and Credpl_Installer::maybe_upgrade(), and stating that existing sites need no manual step.",
+      "assertions": [
+        "Entry is numbered v89",
+        "Names the new notes column and the credentials table",
+        "Says dbDelta() adds the column automatically",
+        "Mentions the CREDPL_DB_VERSION bump from 1.7 to 1.8",
+        "Mentions Credpl_Installer::maybe_upgrade()",
+        "States what an existing site must do (nothing manual)",
+        "Does not claim a manual migration is required"
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I just made my first code change to a brand new plugin, src/aidevme-category-visualization-plugin: I added the main plugin file and an admin menu page. There is no CHANGE_LOG.md in that plugin yet. What should I do about the change log, and what would the file look like?",
+      "expected_output": "Should say to create src/aidevme-category-visualization-plugin/CHANGE_LOG.md with a heading like '# <Plugin name> - Change Log', a short explanation that it holds the version-by-version history while SPECIFICATION.md describes the plugin as it currently is, and a first entry numbered v1.",
+      "assertions": [
+        "Says to create the CHANGE_LOG.md in the plugin's own folder",
+        "Shows a heading like '# <Plugin name> - Change Log'",
+        "Explains that the file holds the history and the spec describes the plugin as it currently is",
+        "First entry is numbered v1 and describes the main plugin file and admin menu page",
+        "Does not say a change log is unnecessary for a new plugin"
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "I only renamed a private helper method and moved a few functions between two files in one of our plugins. Nothing user-visible changed. I assume I can skip the change log for something this small, right?",
+      "expected_output": "Should say the entry is still required because every plugin code change, including refactors and internal-only changes, gets a CHANGE_LOG.md entry, and describe what it should contain (what moved or was renamed, behavior unchanged).",
+      "assertions": [
+        "Says the change log entry is still required",
+        "Explains that refactors and internal-only changes also get an entry",
+        "Describes what the entry should contain (what was renamed or moved, behavior unchanged)",
+        "Does not agree the entry can be skipped"
+      ],
+      "files": []
+    }
+  ]
+}

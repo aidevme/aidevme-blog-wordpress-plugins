@@ -3,7 +3,7 @@ description: Sync docs/wordpress/wordpress-plugins/ against developer.wordpress.
 argument-hint: [optional: section number(s) or name(s) to limit the sync, e.g. "19" or "Hooks"]
 ---
 
-Invoke the `wordpress-docs-research-agent` subagent (via the Agent tool) to sync the WordPress Plugin Handbook mirror under `docs/wordpress/wordpress-plugins/` against its live source on developer.wordpress.org.
+Invoke the `researcher` subagent (via the Agent tool) in mode `wordpress-plugin-docs` to sync the WordPress Plugin Handbook mirror under `docs/wordpress/wordpress-plugins/` against its live source on developer.wordpress.org.
 
 Scope: $ARGUMENTS
 

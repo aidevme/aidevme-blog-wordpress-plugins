@@ -1,0 +1,25 @@
+schema_version: "1.1"
+name: hybrid-wordpress-http-plus-azure
+description: A mixed question should use WordPress conventions for the HTTP call and Microsoft documentation for the Azure API shape.
+tags: [microsoft, hybrid]
+execution:
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    I'm implementing a WordPress plugin function that posts a JSON payload to an Azure REST API and reads the response. What should I look at, both for the WordPress side of making the request and for the Azure side?
+graders:
+  - name: splits-the-sources
+    type: llm
+    weight: 3
+    criteria: |
+      PASS if the response separates the two concerns: WordPress conventions for the outbound request (the WordPress HTTP API, for example wp_remote_post(), and the local Plugin Handbook or WordPress docs for it) AND the Azure API's request/response shape verified against Microsoft Learn documentation.
+      FAIL if it covers only one side, or describes the Azure API details from memory without pointing to Microsoft documentation.
+  - name: mentions-wp-http-api
+    type: regex
+    pattern: 'wp_remote_(post|request|get)|HTTP API'
+    flags: i
+    target: last_message
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?microsoft-docs-lookup"'

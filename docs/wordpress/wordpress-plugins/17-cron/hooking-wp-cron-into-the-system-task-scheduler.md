@@ -2,47 +2,53 @@
 
 Reference: <https://developer.wordpress.org/plugins/cron/hooking-wp-cron-into-the-system-task-scheduler/>
 
-## Overview
+As previously mentioned, WP-Cron does not run continuously, which can be an issue if there are critical tasks that must run on time. There is an easy solution for this. Simply set up your system's task scheduler to run on the intervals you desire (or at the specific time needed). The easiest solution is to use a tool to make a web request to the `wp-cron.php` file.
 
-WordPress's cron system doesn't operate continuously, potentially causing missed scheduled tasks. The solution involves configuring your operating system's native task scheduler to trigger WordPress cron at regular intervals.
-
-## Implementation Steps
-
-The process requires two actions:
-
-- Configure the system task scheduler to make periodic web requests to `wp-cron.php`
-- Disable WordPress's built-in cron to prevent unnecessary server overhead
-
-To disable automatic WP-Cron execution, add this line to `wp-config.php`:
+After scheduling the task on your system, there is one more step to complete. WordPress will continue to run WP-Cron on each page load. This is no longer necessary and will contribute to extra resource usage on your server. WP-Cron can be disabled in the `wp-config.php` file. Open the `wp-config.php` file for editing and add the following line:
 
 ```php
 define( 'DISABLE_WP_CRON', true );
 ```
 
-## Windows Setup
+## Windows
 
-Windows Task Scheduler can execute this PowerShell command:
+Windows calls their time based scheduling system the Task Scheduler. It can be accessed via the **Administrative Tools** in the control panel.
+
+How you setup the task varies with server setup. One method is to use PowerShell and a Basic Task. After creating a Basic Task the following command can be used to call the WordPress Cron script.
 
 ```powershell
 powershell "Invoke-WebRequest http://YOUR_SITE_URL/wp-cron.php"
 ```
 
-Access Task Scheduler through Administrative Tools in the control panel.
+## MacOS and Linux
 
-## MacOS and Linux Setup
+Mac OS X and Linux both use cron as their time based scheduling system. It is typically access from the terminal with the `crontab -e` command. It should be noted that tasks will be run as a regular user or as root depending on the system user running the command.
 
-Both systems use cron, accessible via `crontab -e` in the terminal. Cron syntax requires five time parameters (minute, hour, day of month, month, day of week) followed by the command.
+Cron has a specific syntax that needs to be followed and contains the following parts:
 
-Use asterisks (*) for wildcard time values. Example for every 15 minutes:
+- Minute
+- Hour
+- Day of month
+- Month
+- Day of week
+- Command to execute
+
+If a command should be run regardless of one of the time sections an asterisk (*) should be used. For example if you wanted to run a command every 15 minutes regardless of the hour, day, or month it would look like:
 
 ```bash
 */15 * * * * command
 ```
 
-Running WordPress cron daily at midnight using `wget`:
+Many servers have `wget` installed and this is an easy tool to call the WordPress Cron script.
+
+```bash
+wget --delete-after http://YOUR_SITE_URL/wp-cron.php
+```
+
+> Note: without –delete-after option, wget would save the output of the HTTP GET request.
+
+A daily call to your site's WordPress Cron that triggers at midnight every night could look similar to:
 
 ```bash
 0 0 * * * wget --delete-after http://YOUR_SITE_URL/wp-cron.php
 ```
-
-The `--delete-after` flag prevents saving the HTTP response output.

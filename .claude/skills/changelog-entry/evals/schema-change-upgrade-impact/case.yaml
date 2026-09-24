@@ -1,0 +1,28 @@
+schema_version: "1.1"
+name: schema-change-upgrade-impact
+description: A schema change must describe how existing sites are upgraded.
+tags: [changelog, migration]
+execution:
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    I added a nullable "notes text" column to the credentials table in credentials-manager-plugin. dbDelta() picks it up automatically, and I bumped CREDPL_DB_VERSION from 1.7 to 1.8 so Credpl_Installer::maybe_upgrade() runs it on existing sites. The last entry in CHANGE_LOG.md is v88 and the change is described in spec section 4.1. Write the change log entry.
+graders:
+  - name: correct-number
+    type: regex
+    pattern: 'v89'
+    target: last_message
+  - name: upgrade-impact
+    type: llm
+    weight: 3
+    criteria: |
+      PASS if the entry is numbered v89, names the new column and table, states that dbDelta() adds the column automatically, mentions the CREDPL_DB_VERSION bump from 1.7 to 1.8 and Credpl_Installer::maybe_upgrade(), and says what an existing site must do (nothing manual, the upgrade runs on load).
+      FAIL if it leaves out how running sites are upgraded, or claims a manual migration is required.
+  - name: mentions-db-version
+    type: regex
+    pattern: 'CREDPL_DB_VERSION'
+    target: last_message
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?changelog-entry"'

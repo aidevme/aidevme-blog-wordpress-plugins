@@ -8,7 +8,7 @@ Reference: <https://developer.wordpress.org/cli/commands>
 | --- | --- | --- | --- | --- | --- |
 | 01 | wp_ability | [wp_ability.md](01-wp_ability/wp_ability.md) | <https://developer.wordpress.org/cli/commands/ability/> | 2026-09-24T06:03:49Z | Synced |
 | 02 | wp_admin | [wp_admin.md](02-wp_admin/wp_admin.md) | <https://developer.wordpress.org/cli/commands/admin/> | 2026-09-24T06:03:49Z | Synced |
-| 03 | wp_block | [wp_block.md](03-wp_block/wp_block.md) | <https://developer.wordpress.org/cli/commands/block/> |  |  |
+| 03 | wp_block | [wp_block.md](03-wp_block/wp_block.md) | <https://developer.wordpress.org/cli/commands/block/> | 2026-09-24T07:27:39Z | Synced — command overview only; nested subcommand pages not mirrored |
 | 04 | wp_cache | [wp_cache.md](04-wp_cache/wp_cache.md) | <https://developer.wordpress.org/cli/commands/cache/> |  |  |
 | 05 | wp_cap | [wp_cap.md](05-wp_cap/wp_cap.md) | <https://developer.wordpress.org/cli/commands/cap/> |  |  |
 | 06 | wp_cli | [wp_cli.md](06-wp_cli/wp_cli.md) | <https://developer.wordpress.org/cli/commands/cli/> |  |  |

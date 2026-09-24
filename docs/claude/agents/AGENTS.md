@@ -50,9 +50,10 @@ These boundaries are enforced by each agent's instructions, not by tool permissi
 
 ## Shared behavior
 
-- **Handbook mirror first.** For WordPress APIs and conventions, `architect`, `developer` and `tester` read the mirror under `docs/wordpress/wordpress-plugins/` rather than relying on memory.
+- **Handbook mirror first.** For WordPress APIs and conventions, `architect`, `developer` and `tester` read the mirror under `docs/wordpress/wordpress-plugins/` rather than relying on memory; the `wordpress-handbook-lookup` skill maps a topic to its folder.
 - **Microsoft Learn only for Microsoft integrations.** `architect`, `developer`, `tester` and `documenter` have the `microsoft-docs` MCP tools for plugins that integrate with Azure, Graph, Entra ID, .NET or Windows; they are not for ordinary WordPress questions. (`documenter` has search and fetch but not code-sample search.)
 - **Flag, don't diverge.** If a request conflicts with the spec, `developer` flags it; if a criterion looks wrong, `tester` flags it for `architect`; if a doc is actively wrong, `documenter` says so explicitly.
+- **Shared rules live in skills.** The security checklist, the Microsoft Learn guidance, the handbook topic map and the `CHANGE_LOG.md` procedure are skills in `.claude/skills/`, listed in each agent's `skills` frontmatter so the wording exists in one place. See [Skills](../skills/SKILLS.md).
 - **No git actions.** None of the agents is instructed to commit or push; the research agent explicitly says it does not.
 
 ## How to invoke an agent

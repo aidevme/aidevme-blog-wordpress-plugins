@@ -1,0 +1,24 @@
+schema_version: "1.1"
+name: new-plugin-creates-file
+description: A plugin with no CHANGE_LOG.md gets one created, starting at v1.
+tags: [changelog, new-file]
+execution:
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    I just made my first code change to a brand new plugin, src/aidevme-category-visualization-plugin: I added the main plugin file and an admin menu page. There is no CHANGE_LOG.md in that plugin yet. What should I do about the change log, and what would the file look like?
+graders:
+  - name: creates-file-with-v1
+    type: llm
+    weight: 3
+    criteria: |
+      PASS if the response says to create src/aidevme-category-visualization-plugin/CHANGE_LOG.md, shows a heading like "# <Plugin name> - Change Log", a short explanation that it holds the version-by-version history while SPECIFICATION.md describes the plugin as it currently is, and a first entry numbered v1 that describes the main plugin file and admin menu page.
+      FAIL if it says no change log is needed for a new plugin, or numbers the first entry anything other than v1.
+  - name: starts-at-v1
+    type: regex
+    pattern: 'v1\b'
+    target: last_message
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?changelog-entry"'

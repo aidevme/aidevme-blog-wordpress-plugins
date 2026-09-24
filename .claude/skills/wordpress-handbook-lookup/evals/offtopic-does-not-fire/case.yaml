@@ -1,0 +1,22 @@
+schema_version: "1.1"
+name: offtopic-does-not-fire
+description: Negative case - a general question with no WordPress topic should not load the handbook lookup skill.
+tags: [negative]
+execution:
+  max_turns: 5
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    What is the difference between a git merge and a git rebase, in two sentences?
+graders:
+  - name: answers-the-question
+    type: llm
+    criteria: |
+      PASS if the response explains in about two sentences that merge combines branches with a merge commit preserving history, while rebase replays commits onto another base for a linear history.
+      FAIL if it is unrelated or refers to WordPress documentation.
+  - name: skill-not-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?wordpress-handbook-lookup"'
+    min: 0
+    max: 0
+    arm: both

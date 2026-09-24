@@ -1,0 +1,40 @@
+schema_version: "1.1"
+name: review-insecure-handler
+description: A reviewer pastes an admin save handler with several security gaps; the skill's checklist should surface all of them.
+tags: [security, review, smoke]
+execution:
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Can you review this admin handler from one of our plugins for security problems? Just list what is wrong and how to fix each one.
+
+    ```php
+    function credpl_save_credential() {
+        global $wpdb;
+        $title = $_POST['title'];
+        $link  = $_POST['credential_link'];
+        $wpdb->query( "INSERT INTO {$wpdb->prefix}credentials (title, credential_link) VALUES ('$title', '$link')" );
+        echo '<div class="notice">Saved ' . $title . '</div>';
+    }
+    add_action( 'admin_post_credpl_save_credential', 'credpl_save_credential' );
+    ```
+graders:
+  - name: finds-all-gaps
+    type: llm
+    weight: 3
+    criteria: |
+      PASS if the response identifies ALL of these problems in the handler: (1) no capability check such as current_user_can(); (2) no nonce verification such as check_admin_referer(); (3) input from $_POST is not sanitized; (4) the value is echoed without escaping such as esc_html(); (5) the database write uses raw interpolated SQL instead of $wpdb->insert() (or $wpdb->prepare()).
+      FAIL if any of these five is missing, or if the response only gives generic advice without tying each point to this code.
+  - name: suggests-safe-writes
+    type: regex
+    pattern: 'wpdb->(insert|prepare)'
+    target: last_message
+  - name: mentions-nonce-and-capability
+    type: regex
+    pattern: 'nonce'
+    flags: i
+    target: last_message
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?wordpress-plugin-security-checklist"'

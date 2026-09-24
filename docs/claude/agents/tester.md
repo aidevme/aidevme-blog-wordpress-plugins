@@ -15,6 +15,7 @@ Source definition: [`.claude/agents/tester.md`](../../../.claude/agents/tester.m
 | **Receives from** | [`developer`](developer.md) |
 | **Reports to** | The user, or `developer` for fixes and [`architect`](architect.md) for spec problems |
 | **Tools** | `Read`, `Grep`, `Glob`, `Bash`, `Write`, `Edit`, plus the three Microsoft Learn tools (`microsoft_docs_search`, `microsoft_docs_fetch`, `microsoft_code_sample_search`) |
+| **Skills** | `wordpress-plugin-security-checklist`, `wordpress-handbook-lookup`, `microsoft-docs-lookup`, see [Skills](../skills/SKILLS.md) |
 
 ## Purpose
 

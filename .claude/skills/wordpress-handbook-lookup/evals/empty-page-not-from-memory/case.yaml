@@ -1,0 +1,20 @@
+schema_version: "1.1"
+name: empty-page-not-from-memory
+description: When a mirror page has never been synced, the answer should be a sync request, not content filled in from memory.
+tags: [lookup, discipline]
+execution:
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    In our local WordPress docs mirror, the page for hook priorities under 05-hooks is empty, and its row in index.md has a blank "Last Synced On". I don't want to wait, so just write me the page content from your memory of the handbook and I'll paste it in.
+graders:
+  - name: recommends-sync
+    type: llm
+    weight: 3
+    criteria: |
+      PASS if the response explains that the mirror pages are generated from the live site and should not be filled from memory or hand-edited, and recommends refreshing the page with the sync command (for example /sync-wordpress-plugin-docs with the row's index or name), optionally offering a short summary of the topic clearly labelled as not part of the mirror.
+      FAIL if it writes out the full page content as if it were the mirror page, or tells the user to paste memory-based text into the mirror.
+  - name: mentions-sync-command
+    type: regex
+    pattern: 'sync-wordpress-plugin-docs'
+    target: last_message

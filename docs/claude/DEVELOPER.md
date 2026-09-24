@@ -6,6 +6,7 @@ This guide is for people working in the repo. The reference pages it links to de
 
 - [Agents overview](agents/AGENTS.md) and one page per agent
 - [Commands overview](commands/COMMANDS.md) and one page per command
+- [Skills overview](skills/SKILLS.md), with a section per skill
 - [Root `CLAUDE.md`](../../CLAUDE.md), the standing instructions Claude Code reads in every session
 
 ## Contents
@@ -41,7 +42,7 @@ What exists in this repo today:
 | --- | --- |
 | Agents | `architect`, `developer`, `tester`, `documenter`, `researcher` |
 | Commands | `/sync-wordpress-plugin-docs`, `/sync-wordpress-rest-api-docs`, `/sync-wordpress-wp-cli-command-docs` |
-| Skills | None defined in the repo yet; see [Skills](#skills) |
+| Skills | `wordpress-plugin-security-checklist`, `wordpress-handbook-lookup`, `microsoft-docs-lookup`, `changelog-entry`; see [Skills](#skills) |
 | Agentic workflows | `sync-wordpress-plugins-docs`, `sync-wp-cli-docs`, `pr-title-and-description` |
 | MCP servers | `playwright` (headless, from `.mcp.json`), `microsoft-docs` (plugin enabled in `.claude/settings.json`) |
 
@@ -258,7 +259,37 @@ If a request could mean more than one mode, the agent asks which you mean instea
 
 A skill is a folder with a `SKILL.md` file that Claude Code loads when a task matches the skill's description, or when you type `/<skill-name>`. Compared with an agent, a skill does not get its own context or tool limits; it adds instructions (and optional reference files or scripts) to the conversation you are already having.
 
-**This repo defines no skills yet** (`.claude/skills/` is empty). What you may still see in a session are skills that ship with Claude Code or come from installed plugins, for example `/code-review` (review a diff) and `/security-review`. Those are not part of this repo and are not documented here.
+### Skills in this repo
+
+Four skills hold the rules that the plugin agents used to repeat. Full descriptions are in [Skills](skills/SKILLS.md).
+
+| Skill | Use it to | Loaded by |
+| --- | --- | --- |
+| `wordpress-plugin-security-checklist` | Design, write or review anything against capability, nonce, sanitize, escape and `$wpdb` rules | `architect`, `developer`, `tester` |
+| `wordpress-handbook-lookup` | Find the right page in the local Plugin Handbook, REST API and WP-CLI mirrors | `architect`, `developer`, `tester` |
+| `microsoft-docs-lookup` | Use the Microsoft Learn tools correctly for Azure, Graph, Entra ID, .NET or Windows integrations | `architect`, `developer`, `tester`, `documenter` |
+| `changelog-entry` | Write the `CHANGE_LOG.md` entry a code change requires | `developer` |
+
+The agents list them in their `skills` frontmatter, so you normally get them without asking. You can also use one directly, with or without an agent:
+
+~~~text
+/wordpress-plugin-security-checklist
+Review src/credentials-manager-plugin/includes/ against it and list the gaps with file and line.
+~~~
+
+~~~text
+Which page in the local mirrors covers registering a REST route with a permission_callback?
+(Claude loads wordpress-handbook-lookup, then reads the page.)
+~~~
+
+~~~text
+/changelog-entry
+I just renamed the Status dropdown values in credentials-manager-plugin. Write the entry.
+~~~
+
+Change the wording of a shared rule in its skill, once; the agents pick it up. Skills do not grant tools, so an agent that uses `microsoft-docs-lookup` must still have the Microsoft Learn tools in its own `tools` list.
+
+Other skills you may see in a session ship with Claude Code or come from installed plugins, for example `/code-review` (review a diff) and `/security-review`. Those are not part of this repo and are not documented here.
 
 ### When a skill is the right choice
 
@@ -271,7 +302,7 @@ A skill is a folder with a `SKILL.md` file that Claude Code loads when a task ma
 
 ### Sample skill: release checklist
 
-This is a suggested example, not something that exists in the repo yet.
+This is a suggested example of a new skill, not something that exists in the repo.
 
 ~~~text
 .claude/skills/plugin-release-checklist/
@@ -358,6 +389,7 @@ Create `.claude/agents/<name>.md`:
 name: <name>
 description: <What it does and when to use it. List trigger phrases ("Use when asked to ..."). Say what it does NOT do if a neighboring agent could be confused with it.>
 tools: Read, Grep, Glob
+skills: <optional: skills from .claude/skills/ this agent should have>
 model: sonnet
 ---
 

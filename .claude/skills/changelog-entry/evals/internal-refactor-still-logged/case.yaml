@@ -1,0 +1,20 @@
+schema_version: "1.1"
+name: internal-refactor-still-logged
+description: An internal-only refactor must still get an entry; the skill should not let it be skipped.
+tags: [changelog, discipline]
+execution:
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    I only renamed a private helper method and moved a few functions between two files in one of our plugins. Nothing user-visible changed. I assume I can skip the change log for something this small, right?
+graders:
+  - name: says-still-required
+    type: llm
+    weight: 3
+    criteria: |
+      PASS if the response says the change log entry is still required, because every code change to a plugin (including refactors and internal-only changes) gets an entry in that plugin's CHANGE_LOG.md, and offers to help write it or describes what it should contain (what moved or was renamed, and that behavior is unchanged).
+      FAIL if it agrees the entry can be skipped.
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?changelog-entry"'

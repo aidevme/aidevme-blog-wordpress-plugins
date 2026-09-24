@@ -14,6 +14,7 @@ Source definition: [`.claude/agents/documenter.md`](../../../.claude/agents/docu
 | **Reads** | The actual current code, plus existing docs, before describing any behavior |
 | **Never touches** | `docs/wordpress/wordpress-plugins/` (owned by [`researcher`](researcher.md) (mode `wordpress-plugin-docs`)) |
 | **Tools** | `Read`, `Write`, `Edit`, `Grep`, `Glob`, `Bash`, plus `microsoft_docs_search` and `microsoft_docs_fetch` (no code-sample search) |
+| **Skills** | `microsoft-docs-lookup`, see [Skills](../skills/SKILLS.md) |
 
 ## Purpose
 

@@ -1,0 +1,25 @@
+schema_version: "1.1"
+name: graph-integration-verifies-docs
+description: For a Microsoft Graph integration, the answer should ground API details in Microsoft Learn instead of asserting them from memory.
+tags: [microsoft, smoke]
+execution:
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Our WordPress plugin needs to call Microsoft Graph from PHP to read a signed-in user's profile. I'm going to spec the endpoint, the auth flow and the permission scope. How should we make sure the API details in the spec are right?
+graders:
+  - name: grounds-in-learn
+    type: llm
+    weight: 3
+    criteria: |
+      PASS if the response says to verify the Graph endpoint, authentication flow and permission scopes against Microsoft Learn documentation (for example by searching Microsoft Learn first and fetching the specific page, or by using official code samples), and to cite the documentation page in the spec.
+      FAIL if it states endpoints, scopes or auth flows as settled fact from memory with no mention of checking official Microsoft documentation.
+  - name: search-before-fetch
+    type: regex
+    pattern: 'microsoft_docs_search|Microsoft Learn'
+    flags: i
+    target: last_message
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?microsoft-docs-lookup"'

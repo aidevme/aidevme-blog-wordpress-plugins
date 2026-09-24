@@ -15,6 +15,7 @@ Source definition: [`.claude/agents/developer.md`](../../../.claude/agents/devel
 | **Receives from** | [`architect`](architect.md) (the spec) |
 | **Hands off to** | [`tester`](tester.md) (verification), [`documenter`](documenter.md) (docs sync) |
 | **Tools** | `Read`, `Write`, `Edit`, `Grep`, `Glob`, `Bash`, plus the three Microsoft Learn tools (`microsoft_docs_search`, `microsoft_docs_fetch`, `microsoft_code_sample_search`) |
+| **Skills** | `wordpress-handbook-lookup`, `wordpress-plugin-security-checklist`, `microsoft-docs-lookup`, `changelog-entry`; see [Skills](../skills/SKILLS.md) |
 
 ## Purpose
 
@@ -34,7 +35,7 @@ Example prompts:
 ## What it does
 
 1. **Reads the spec in full** before writing any code.
-2. **Consults the handbook mirror** for the WordPress area being touched, instead of relying on memory (see the table below).
+2. **Consults the handbook mirror** for the WordPress area being touched, instead of relying on memory (see the table below; the same table now lives in the `wordpress-handbook-lookup` skill, which the agent loads).
 3. **Implements** following the conventions in the next section.
 4. **Updates the plugin's `CHANGE_LOG.md`** for every code change (see below).
 5. **Verifies by re-reading its own diff** against the spec's Acceptance Criteria and states plainly which criteria it did and did not verify.

@@ -1,0 +1,24 @@
+schema_version: "1.1"
+name: rest-reference-mirror
+description: Core REST resource details should point to the REST API mirror's reference section, not the Plugin Handbook.
+tags: [lookup, rest]
+execution:
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    I want to check the exact arguments and response fields of the core REST API users endpoint. Where is that documented in our local docs?
+graders:
+  - name: points-to-rest-reference
+    type: regex
+    weight: 3
+    pattern: 'wordpress-rest-apis/06-reference'
+    target: last_message
+  - name: not-the-plugin-handbook
+    type: llm
+    criteria: |
+      PASS if the response points at the REST API reference mirror (docs/wordpress/api-reference/wordpress-rest-apis/06-reference/, the users page) as the place for endpoint arguments and response fields.
+      FAIL if it only points at the Plugin Handbook's custom REST endpoint pages, or invents endpoint details without naming a local page.
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?wordpress-handbook-lookup"'

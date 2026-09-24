@@ -13,7 +13,8 @@ This guide governs every file under `.claude/agents/` — the project-level Clau
 ```markdown
 ---
 name: <slug>
-description: <trigger-oriented description>
+tools: <comma-separated tool allowlist>
+skills: <optional, comma-separated skill names to preload>
 tools: <comma-separated tool allowlist>
 model: sonnet
 ---
@@ -30,6 +31,7 @@ model: sonnet
   2. `Write, Edit` — placed right after `Read` if the agent's core job is producing/modifying files (`architect`, `developer`, `researcher`), or moved to the end of the local-tool group if the agent is read-mostly and writing is a secondary, occasional capability (compare `tester`'s `Read, Grep, Glob, Bash, Write, Edit` — writing there is only for the rare explicit ask to scaffold tests).
   3. `Grep, Glob, Bash` as a fixed middle cluster.
   4. MCP tools last, grouped by server (e.g. all `mcp__plugin_microsoft-docs_microsoft-learn__*` tools together, all `mcp__playwright__*` tools together).
+- **`skills`** — optional; the skills in `.claude/skills/` the agent should have available (for example `wordpress-plugin-security-checklist`). Put shared checklists and reference tables in a skill and list it here rather than pasting the same text into several agents; the agent body then just says when to apply it. Skills grant no tools, so any tool a skill mentions (such as the Microsoft Learn MCP tools) must also be in the agent's `tools` list.
 - **`model`** — `sonnet` for every agent currently defined in this repo. Don't switch an agent to a different model without a stated reason in the same change.
 
 ## Body structure
@@ -41,7 +43,7 @@ Follow this section order; omit a section only if it genuinely doesn't apply, do
    - Sentence 2: the agent's default operating mode or output in one line (e.g. "Your output is a `SPECIFICATION.md`, not code."; "Your default mode is read-mostly verification and reporting, not fixing.").
 2. **Domain-specific section(s)** — the agent's actual how-to content, e.g. `## Reference documentation — consult before implementing` (developer's topic-to-handbook-folder table), `## Scope` (documenter's owned-artifact list), `## Default process` (tester's numbered steps), `## What to do when invoked` (researcher's numbered steps).
 3. **`## Conventions to follow`** — a bulleted list of repo-specific patterns to match (naming prefixes, the shared data-layer class, table-versioning pattern, security conventions). Cite a concrete file or section as the reference example rather than restating rules that already live in `CLAUDE.md` or `SPECIFICATION.md`.
-4. **Microsoft documentation section** (`architect`, `developer`, `tester`, `documenter` only) — reuse this repo's existing shared paragraph near-verbatim: use the `microsoft-docs` MCP tools (`microsoft_docs_search`, `microsoft_docs_fetch`, and `microsoft_code_sample_search` where the agent has it) only when a plugin genuinely integrates with a Microsoft product or service (Azure, Microsoft Graph, Entra ID/Azure AD, .NET, Windows) — never for ordinary WordPress questions, which the handbook mirror already covers. Keep the wording consistent across agents; if you improve it in one file, port the same wording to the others rather than letting them drift into near-duplicates that say slightly different things.
+4. **Microsoft documentation guidance** (`architect`, `developer`, `tester`, `documenter` only) — now lives in the `microsoft-docs-lookup` skill (listed under `skills`); the agent body keeps one short sentence pointing at it. The skill says: use the `microsoft-docs` MCP tools (`microsoft_docs_search`, `microsoft_docs_fetch`, and `microsoft_code_sample_search` where the agent has it) only when a plugin genuinely integrates with a Microsoft product or service (Azure, Microsoft Graph, Entra ID/Azure AD, .NET, Windows) — never for ordinary WordPress questions, which the handbook mirror already covers. Edit the wording once, in the skill.
 5. **Pre-action checklist** — what to read or verify before acting (`## What to check before proposing`, `## Before writing`) or how to verify after acting (`## Verification`). State plainly what was actually checked by reading code versus what would require a live WordPress install — don't imply verification that didn't happen.
 6. **`## Boundaries`** — always the final section. A bulleted list of what this agent must *not* do, each one handed off to the agent that should do it instead, named in backticks (e.g. "Don't write or edit PHP implementation files — that's the `developer` agent's job."). This is what keeps the five agents' responsibilities non-overlapping; every boundary line should name the file/artifact being protected and the agent that owns it.
 

@@ -1,0 +1,38 @@
+schema_version: "1.1"
+name: secure-handler-no-false-alarm
+description: A correctly secured handler should be reported as meeting the checklist, without invented problems.
+tags: [security, review, precision]
+execution:
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    Please do a security review of this handler against our plugin security rules and tell me whether it passes.
+
+    ```php
+    function credpl_save_credential() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( esc_html__( 'You do not have permission to do this.', 'credentials-manager' ) );
+        }
+        check_admin_referer( 'credpl_save_credential' );
+
+        $title = isset( $_POST['title'] ) ? sanitize_text_field( wp_unslash( $_POST['title'] ) ) : '';
+        $link  = isset( $_POST['credential_link'] ) ? esc_url_raw( wp_unslash( $_POST['credential_link'] ) ) : '';
+
+        Credpl_Data::insert_credential( array( 'title' => $title, 'credential_link' => $link ) );
+
+        wp_safe_redirect( admin_url( 'admin.php?page=credpl-credentials&saved=1' ) );
+        exit;
+    }
+    add_action( 'admin_post_credpl_save_credential', 'credpl_save_credential' );
+    ```
+graders:
+  - name: reports-pass
+    type: llm
+    weight: 3
+    criteria: |
+      PASS if the response concludes the handler meets the checklist (capability check, nonce verification, sanitization on input, no unescaped output, writes through the shared data-layer class) and does not present any real vulnerability. Optional minor suggestions are fine if clearly labelled as optional.
+      FAIL if the response claims the handler has a missing capability check, missing nonce, missing sanitization, or SQL injection risk, since all of these are handled in the code.
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?wordpress-plugin-security-checklist"'

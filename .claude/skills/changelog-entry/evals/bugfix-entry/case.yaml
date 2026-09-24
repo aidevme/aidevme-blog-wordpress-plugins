@@ -1,0 +1,25 @@
+schema_version: "1.1"
+name: bugfix-entry
+description: A bug fix still gets a properly numbered, detailed change log entry.
+tags: [changelog, smoke]
+execution:
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill]
+  prompt: |
+    I just fixed a bug in credentials-manager-plugin: searching the Credentials list with no matches still showed "1 of 1" in the pagination. The fix was in Credpl_Credentials_List_Table::prepare_items(), which now sets total_items to 0 when the search returns nothing. The last entry in src/credentials-manager-plugin/CHANGE_LOG.md is v88, and this change touches section 6.2 of the spec. Write the change log entry for it.
+graders:
+  - name: correct-number
+    type: regex
+    weight: 2
+    pattern: 'v89'
+    target: last_message
+  - name: entry-quality
+    type: llm
+    weight: 3
+    criteria: |
+      PASS if the response gives a change log entry that: starts as a bullet with a bold headline of the form "**v89 ...**"; references the spec section (6.2); names the exact identifiers involved (Credpl_Credentials_List_Table::prepare_items() and total_items); explains what changed and why; and states that nothing about the database or upgrade behavior changes (or that no action is needed on existing sites).
+      FAIL if the number is not v89, the entry is a vague one-liner, or it invents schema or migration changes that did not happen.
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?changelog-entry"'

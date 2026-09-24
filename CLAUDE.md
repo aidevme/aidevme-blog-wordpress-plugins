@@ -10,15 +10,26 @@ WordPress plugins developed for the Aidevme Blog project. Most plugins are plain
 
 - `src/` — individual WordPress plugins, one directory per plugin (e.g. `src/credentials-manager-plugin/`).
 - `docs/wordpress/wordpress-plugins/` — a mirror of the official WordPress Plugin Handbook, kept in sync with `developer.wordpress.org` (see below).
+- `docs/wordpress/api-reference/` — two more mirrors of developer.wordpress.org content, kept in sync the same way: `wp-cli-commands/` (the WP-CLI command reference) and `wordpress-rest-apis/` (the REST API Handbook). Each has its own `index.md` Index table.
 - `docs/claude/agents/` — documentation of the project's Claude Code agents in `.claude/agents/`, one file per agent plus an `AGENTS.md` overview. Update the matching file when an agent definition changes.
-- `docs/styles/` — documentation style guides; `WORDPRESS-PLUGIN-DOCS-STYLE.md` governs everything under `docs/wordpress/wordpress-plugins/`.
+- `docs/claude/commands/` — documentation of the project's slash commands in `.claude/commands/`, one file per command plus a `COMMANDS.md` overview. Update the matching file when a command definition changes.
+- `docs/styles/` — documentation style guides; `WORDPRESS-PLUGIN-DOCS-STYLE.md` governs everything under `docs/wordpress/wordpress-plugins/`, and `CLAUDE-AGENTS-STYLE.md` governs the agent definitions in `.claude/agents/`.
+- `.github/workflows/` — CI workflows plus GitHub agentic workflows (`*.md` compiled to `*.lock.yml` with `gh aw compile`): `sync-wordpress-plugins-docs` and `sync-wp-cli-docs` open weekly draft PRs refreshing the mirrors, and `pr-title-and-description` writes a Conventional Commits title and description for new PRs. Edit the `.md`, recompile, and commit both files; never hand-edit a `.lock.yml`.
+- `CONTRIBUTING.md` — contributor guide (branching from `dev`, commit and PR conventions, the docs mirrors).
 - `.github/instructions/commit-messages.instructions.md` — commit message convention (Conventional Commits: `<type>(<scope>): <subject>`, types `feat`/`fix`/`docs`/`style`/`refactor`/`test`/`chore`/`perf`/`ci`). Follow this for any commit made in this repo.
 
-## Syncing the WordPress Plugin Handbook mirror
+## Syncing the WordPress documentation mirrors
 
-`docs/wordpress/wordpress-plugins/index.md` is the source of truth: it has an `## Index` table (`Index | Name | Document | Reference Url | Last Synced On | Notes`) mapping each handbook section to a local `.md` file and the live page it was sourced from.
+Three mirrors of developer.wordpress.org content live under `docs/wordpress/`. Each has an `index.md` that is its source of truth: an `## Index` table (`Index | Name | Document | Reference Url | Last Synced On | Notes`) mapping each page to a local `.md` file and the live page it was sourced from.
 
-- Run `/sync-wordpress-plugin-docs` (invokes the `researcher` subagent in mode `wordpress-plugin-docs`; `/sync-wordpress-rest-api-docs` and `/sync-wordpress-wp-cli-command-docs` do the same for the other two mirrors under `docs/wordpress/api-reference/`) to refresh some or all rows against their live source, using Playwright MCP browser tools to fetch actual rendered content — never paraphrase from memory.
+| Mirror | Folder | Command | `researcher` mode |
+| --- | --- | --- | --- |
+| Plugin Handbook | `docs/wordpress/wordpress-plugins/` | `/sync-wordpress-plugin-docs` | `wordpress-plugin-docs` |
+| REST API Handbook | `docs/wordpress/api-reference/wordpress-rest-apis/` | `/sync-wordpress-rest-api-docs` | `wordpress-rest-api-docs` |
+| WP-CLI commands | `docs/wordpress/api-reference/wp-cli-commands/` | `/sync-wordpress-wp-cli-command-docs` | `wordpress-wp-cli-command-docs` |
+
+- Run the matching command (optionally with an Index number or Name to limit it to some rows) to refresh rows against their live source. Each command invokes the `researcher` subagent in that mode, which uses Playwright MCP browser tools to fetch actual rendered content — never paraphrase from memory. The `researcher` agent also has a `general` mode for open-ended research that writes nothing by default. Its definition, `.claude/agents/researcher.md`, holds the full sync procedure and per-mode rules; the scheduled GitHub workflows read it too.
+- These mirrors are generated: don't hand-edit files inside them, since the next sync overwrites the edits. The Index tables fix the folder layout and numbering; sync never adds, renames or renumbers anything.
 - Full conventions (folder/file layout, Index table format, document skeleton, content-fidelity rules, formatting mechanics) live in `docs/styles/WORDPRESS-PLUGIN-DOCS-STYLE.md`. If you change a convention there, update the Plugin Handbook mode of `.claude/agents/researcher.md` to match — the two are meant to stay identical.
 - This repo's `.mcp.json` defines its own headless `playwright` MCP server (`mcp__playwright__*`, run with `--headless`). The `researcher` agent is scoped to that server specifically — do not substitute a different Playwright MCP server (e.g. one provided by another plugin), since its headlessness isn't guaranteed.
 

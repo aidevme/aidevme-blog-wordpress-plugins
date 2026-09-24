@@ -2,17 +2,9 @@
 
 Reference: <https://developer.wordpress.org/plugins/shortcodes/basic-shortcodes/>
 
-## Overview
-
-This article covers three fundamental operations for WordPress shortcodes:
-
-- Add a Shortcode
-- Remove a Shortcode
-- Check if a Shortcode Exists
-
 ## Add a Shortcode
 
-The Shortcode API enables developers to create custom shortcodes by registering a callback function to a shortcode tag using `add_shortcode()`. The function signature accepts a tag name and a callable function:
+It is possible to add your own shortcodes by using the Shortcode API. The process involves registering a callback `$func` to a shortcode `$tag` using `add_shortcode()`.
 
 ```php
 add_shortcode(
@@ -21,7 +13,7 @@ add_shortcode(
 );
 ```
 
-Example implementation creates a `[wporg]` shortcode that triggers the `wporg_shortcode` callback:
+`[wporg]` is your new shortcode. The use of the shortcode will trigger the `wporg_shortcode` callback function.
 
 ```php
 add_shortcode('wporg', 'wporg_shortcode');
@@ -34,7 +26,7 @@ function wporg_shortcode( $atts = [], $content = null) {
 
 ## Remove a Shortcode
 
-Shortcodes can be unregistered using the `remove_shortcode()` function, which requires only the tag name as a parameter:
+It is possible to remove shortcodes by using the Shortcode API. The process involves removing a registered `$tag` using [remove_shortcode()](https://developer.wordpress.org/reference/functions/remove_shortcode/) .
 
 ```php
 remove_shortcode(
@@ -42,8 +34,8 @@ remove_shortcode(
 );
 ```
 
-Ensure the shortcode has been registered before removal. Use a higher priority number with `add_action()` or hook into later-executing action hooks to guarantee proper timing.
+Make sure that the shortcode have been registered before attempting to remove. Specify a higher priority number for [add_action()](https://developer.wordpress.org/reference/functions/add_action/) or hook into an action hook that is run later.
 
 ## Check if a Shortcode Exists
 
-Use the `shortcode_exists()` function to verify whether a particular shortcode has been registered in the system.
+To check whether a shortcode has been registered use `shortcode_exists()`.

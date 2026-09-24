@@ -2,85 +2,119 @@
 
 Reference: <https://developer.wordpress.org/plugins/wordpress-org/take-over-an-existing-plugin/>
 
-## Overview
+People cease development on their plugins for a variety of reasons. Instead of letting those plugins stagnate, we encourage people to instead list them for adoption by another, more active, developer.
 
-The WordPress plugin directory allows developers to adopt abandoned plugins rather than letting them become outdated. When taking over a plugin, you assume responsibility for its maintenance, security, and compliance with WordPress guidelines.
+In adopting a plugin, you are promising to be responsible for all future development, to retain its original purpose and functionality and to ensure the plugin (and you) comply with all [plugin guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/).
+
+> Not all requests will be approved, even following a successful review.
 
 ## The Adoption Process
 
-### Step 1: Check the Plugin Status
+There are two ways a plugin can be adopted.
 
-Before proceeding, thoroughly review the plugin's current state:
+1. You ask the developer directly, they say yes and add you
+2. You ask the Plugins Team to assist you
 
-- **Active plugins** — ensure you can maintain the codebase long-term
-- **Closed for inactivity** — contact `plugins@wordpress.org` directly with your proposed version
-- **Closed for security issues** — you must resolve all identified vulnerabilities
-- **Experience requirement** — you should have maintained similar plugins with comparable user bases
+Since you're reading this, you likely are working on the second method, so keep reading. You will be expected to have followed **all** the steps herein.
 
-Larger plugins (100,000+ users) face stricter scrutiny due to their significant user impact.
+> In some specific situations, the Plugins Team might also consider donating the plugin to a different user if the original plugin author gets blocked.
 
-### Step 2: Contact the Original Developer
+### 1. Check the Plugin Status
 
-You must make genuine efforts to reach the original developer through:
+If the plugin is open and active, give it a full review on your own before you go any further. Make sure you feel comfortable and capable of maintaining the code long term.
 
-- Direct email
-- Plugin support page comments
-- GitHub issues
+If a plugin is closed because it was **unused**, you can skip the rest of this and email `plugins@wordpress.org` right away and attach your version of the proposed plugin.
 
-If the developer doesn't respond within 30 days, proceed to the next step. If they agree to transfer, they can grant access directly through their developer account.
+If the plugin was closed for security issues, we require **all** those issues to be resolved, so put your best foot forward and demonstrate you have the impetus to find and fix those issues.
 
-### Step 3: Update the Code
+Closed plugins are *less* likely to be able to be adopted, as the nature of their closures may be more complex and intricate. If a plugin was closed for license issues, for example, we may not be permitted to reopen it for anyone except the license holders.
 
-Your revision must include:
+In any case, we expect you to have already published and maintained plugins with a similar number of active installations. Larger plugins (100k users or more) are also less likely to be adopted, as that is a not-insignificant userbase, and we need to be sure you really are capable of managing a plugin of that size.
 
-- Documentation of new ownership in the readme file, crediting previous contributors
-- Updated copyright information (additive — retain original credits and add yours)
-- Removal of previous owner connections (links, server calls, support channels)
+### 2. Contact the Original Developer
 
-The plugin must maintain its original purpose and functionality while meeting current WordPress standards. Major upgrades require a clear upgrade path for existing users.
+You *must* attempt to contact the original developer, as they can [give you access to the plugin](https://developer.wordpress.org/plugins/wordpress-org/plugin-developer-faq/#plugin-ownership). We recommend trying:
 
-### Step 4: Submit for Review
+- email
+- leaving a comment on the plugin support page
+- opening a GitHub issue
 
-Email `plugins@wordpress.org` with your updated code (as a zip file or via public repository link) and explain your outreach attempts. The team will conduct a thorough security and guidelines review, treating your submission as a new plugin application.
+We expect you to make all reasonable efforts to reach out to them. If the plugin page says the plugin has no active developer, then you're fine.
 
-### Step 5: Original Developer Notification
+If you *do* get in touch with the developer, ask them to [transfer ownership to you](https://developer.wordpress.org/plugins/wordpress-org/plugin-developer-faq/#plugin-ownership). They can do this on their own and, once it's done, you may manage the plugin. If they have issues, have them contact the plugin team via email and we will assist them.
 
-The WordPress team contacts the original developer with your information and request. They allow 30 days for a response.
+If there's no way to get in touch, or they don't reply after 30 days, move to step 3.
 
-### Step 6: Wait for Decision
+### 3. Update The Code
 
-- **Developer approves** — the team facilitates transfer to your account
-- **Developer denies** — you're encouraged to create a fork instead
-- **No response after 30 days** — the team decides based on your history and the plugin's circumstances
+Even if the plugin has been given to you by the developer, you must review the code from the top down to make sure it's safe, secure, and meets our current [guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/).
 
-### Step 7: Update via SVN
+Your update must include:
 
-The plugin is temporarily closed, then reopened under your account after you update the code repository.
+- **Editing the readme to document the new ownership** (and preferably when it takes place). Credit the previous contributors and state clearly that you are adopting the plugin from them. We believe in being good stewards of the open source community, and we encourage you to publicly acknowledge their work.
+- **Updating the copyright information to include you.** Remember, copyright is additive: you keep the old and add yours on. You must not remove the previous contributors' copyright information. If the plugin has none, add appropriate information crediting them.
+- **Removing connections to resources controlled by the previous owners.** This includes links to their site and support channels, but also any calls or connections the plugin makes to their servers.
+
+The plugin must remain the same plugin. It should retain its original purpose and existing functionality while being brought up to current WordPress standards and requirements.
+
+If your update is a major upgrade, you *must* provide an upgrade path. Just wanting a name-slug is not an accepted reason to take over a plugin. We care deeply about our users, and violating their trust in us by breaking their existing sites with your upgrades is to be avoided at all costs.
+
+Remember you need to *increase* the version number so people are prompted to upgrade to your new version.
+
+### 4. Submit Your Code for Review
+
+If you still can't get in touch with the original developer, you'll need to ask the Plugins Team for help.
+
+Once you've finished updating the code, email `plugins@wordpress.org` explaining how you tried to contact the original developer and with your code attached as a zip. If you can't email zips, then upload it to some file service (Google Drive, Dropbox, etc) or provide a link to your code repository (Github, Bitbucket, etc). Make sure the link is public!
+
+After we receive your version of the code as a zip, we will review it and test it. At this point, you will go through a *normal* review process. That is, we will treat you like any new plugin and we will check the whole plugin for security and guidelines. Even if those issues are found in the original plugin, you will be required to fix them.
+
+At this stage, some plugins are determined to have existing security flaws. We may close those plugins, depending on the nature of the issues, and you will be trusted to not publicly disclose those issues.
+
+### 5. We Contact the Original Developer
+
+Once we feel the code is acceptable, and that you are capable of sustaining that specific plugin in a secure manner that adheres to our guidelines, we will contact the original developer on your behalf and give them your information, explaining that you want to take over development.
+
+We'll do everything we can to ensure the original plugin author has been notified, but sometimes that's just not possible.
+
+### 6. Wait Patiently
+
+We give the original developer 30 days (1 month) to reply to our inquiry. Should they reply and deny the request, we will honour their decision and ask you to convert the plugin into a forked version. We do our best to respect them as much as we respect you as a developer, and honor their wishes with their work.
+
+If they approve it, we will assist in transitioning the plugin to your account.
+
+If they don't reply, and you've made it this far, the Plugins Team will make the decision of transfer the plugin to you based in the case, your history in the directory and in the community.
+
+### 7. Update the Plugin
+
+In order to *safely* update the plugin, we will close it before we add you. You will then be required to update via SVN. Once that's done, we'll double check everything is correct and reopen it. The plugin will now be yours.
 
 ## Frequently Asked Questions
 
-**Will old reviews and support posts disappear?**
+### Will old reviews/support posts be removed?
 
-No. All historical reviews and support threads transfer with the plugin.
+No. You inherit the good and the bad.
 
-**Must I retain the original developer as a contributor?**
+### Do I have to keep the original developer on?
 
-You can remove their commit access but must preserve their copyright credits in the code. Keeping them listed as a contributor is recommended.
+No. You can (and in fact should) remove commit access from anyone who is not actively maintaining the plugin. However. Per copyright restrictions, you must retain their credit in the code. We recommend you also leave them listed as a contributor.
 
-**What if the original developer has died?**
+### The original developer is dead. Does that change anything?
 
-While you skip the permission step, the WordPress team reaches out to the developer's colleagues or organization to determine if they wish to continue maintaining the plugin. The team also respects any wishes regarding permanent closure.
+Yes, but not how you're thinking. You (obviously) can skip asking them for permissions first, but we actually reach out to the developers' coworkers and teams to see if they want to continue maintaining the plugin. In some cases, a developer will ask us to permanently close their plugins in the event of their death. We respect their wishes.
 
-**Why might my request be denied?**
+### Why was my request denied?
 
-Common reasons include:
+In cases where we deny an adoption, it's usually for the following reasons.
 
-- Insufficient experience for the plugin's complexity
-- High-risk plugin designation
-- Corporate trademark ownership
-- Legal restrictions on transfer
-- Your history of guideline violations
-- Original developer's refusal
-- Concerns about your community standing
+- The requesting developer does not have the experience we feel the plugin requires
+- The requested plugin is deemed high-risk
+- The existing developer is a company or legal entity who owns the trademark
+- The plugin has legal issues preventing us from from any transfers
+- The requesting developer has had multiple guideline infractions
+- The original developer asked us not to
+- The requesting developer history in the directory and/or the community
 
-If a plugin is unavailable, the team typically recommends submitting your work as a fork instead.
+If we don't feel comfortable handing over a plugin, we will inform you as soon as possible.
+
+There are rare cases where the plugin has already been given to new owners, but they have not yet deployed code. In general, if you're told that a specific plugin is not available, there is a long history concerning the plugin preventing us from permitting takeover. In those cases, we recommend you submit your plugin as a fork.

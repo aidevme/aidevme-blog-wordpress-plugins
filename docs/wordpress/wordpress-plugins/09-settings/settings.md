@@ -2,14 +2,12 @@
 
 Reference: <https://developer.wordpress.org/plugins/settings/>
 
-## Overview
+WordPress provides two core APIs to make the administrative interfaces easy to build, secure, and consistent with the design of WordPress Administration.
 
-WordPress offers two foundational APIs for creating admin interfaces that are secure and aligned with WordPress design standards.
+The [Settings API](https://developer.wordpress.org/plugins/settings/settings-api/) focuses on providing a way for developers to create forms and manage form data.
 
-The **Settings API** enables developers to construct forms and handle form data efficiently.
-
-The **Options API** provides a straightforward key/value approach to data management.
+The [Options API](https://developer.wordpress.org/plugins/settings/options-api/) focuses on managing data using a simple key/value system.
 
 ## Quick Reference
 
-For a complete demonstration, review the guide on building a custom settings page using both APIs together.
+See the complete example of [building a custom settings page](https://developer.wordpress.org/plugins/settings/custom-settings-page/) using the Settings API and Options API.

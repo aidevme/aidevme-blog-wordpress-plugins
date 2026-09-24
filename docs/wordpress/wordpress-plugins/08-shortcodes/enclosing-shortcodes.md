@@ -2,11 +2,9 @@
 
 Reference: <https://developer.wordpress.org/plugins/shortcodes/enclosing-shortcodes/>
 
-## Overview
+The are two scenarios for using shortcodes:
 
-There are two scenarios for using shortcodes:
-
-- The shortcode is a self-closing tag, like we saw in the Basic Shortcodes section.
+- The shortcode is a self-closing tag like we seen in the [Basic Shortcodes](https://developer.wordpress.org/plugins/shortcodes/basic-shortcodes/) section.
 - The shortcode is enclosing content.
 
 ## Enclosing Content
@@ -21,7 +19,7 @@ As seen above, all you need to do in order to enclose a section of content is ad
 
 ## Processing Enclosed Content
 
-Let's get back to our original `[wporg]` shortcode code:
+Lets get back to our original [wporg] shortcode code:
 
 ```php
 function wporg_shortcode( $atts = array(), $content = null ) {
@@ -32,17 +30,21 @@ function wporg_shortcode( $atts = array(), $content = null ) {
 add_shortcode( 'wporg', 'wporg_shortcode' );
 ```
 
-Looking at the callback function we see that we chose to accept two parameters, `$atts` and `$content`. The `$content` parameter is going to hold our enclosed content.
+Looking at the callback function we see that we chose to accept two parameters, `$atts` and `$content`. The `$content` parameter is going to hold our enclosed content. We will talk about `$atts` later.
 
-The default value of `$content` is set to `null` so we can differentiate between a self-closing tag and enclosing tags by using the PHP function `is_null()`.
+The default value of `$content` is set to `null` so we can differentiate between a self-closing tag and enclosing tags by using PHP function [is_null()](http://php.net/is_null).
 
-The shortcode `[$tag]`, including its content and the end `[/$tag]`, will be replaced with the return value of the handler function.
+The shortcode `[$tag]`, including its content and the end `[/$tag]` will be replaced with the **return value** of the handler function.
 
-It is the responsibility of the handler function to secure the output.
+> It is the responsibility of the handler function to
+> 
+> secure the output
+> 
+> .
 
 ## Shortcode-ception
 
-The shortcode parser performs a single pass on the content of the post.
+The shortcode parser performs a **single pass** on the content of the post.
 
 This means that if the `$content` parameter of a shortcode handler contains another shortcode, it won't be parsed. In this example, `[shortcode]` will not be processed:
 
@@ -50,7 +52,7 @@ This means that if the `$content` parameter of a shortcode handler contains anot
 [wporg]another [shortcode] is included[/wporg]
 ```
 
-Using shortcodes inside other shortcodes is possible by calling `do_shortcode()` on the final return value of the handler function.
+Using shortcodes inside other shortcodes is possible by calling `do_shortcode()` on the **final return value** of the handler function.
 
 ```php
 function wporg_shortcode( $atts = array(), $content = null ) {
@@ -71,4 +73,4 @@ The shortcode parser is unable to handle mixing of enclosing and non-enclosing f
 [wporg] non-enclosed content [wporg]enclosed content[/wporg]
 ```
 
-Instead of being treated as two shortcodes separated by the text "non-enclosed content", the parser treats this as a single shortcode enclosing "non-enclosed content [wporg]enclosed content".
+Instead of being treated as two shortcodes separated by the text "`non-enclosed content`", the parser treats this as a single shortcode enclosing "`non-enclosed content [wporg]enclosed content`".

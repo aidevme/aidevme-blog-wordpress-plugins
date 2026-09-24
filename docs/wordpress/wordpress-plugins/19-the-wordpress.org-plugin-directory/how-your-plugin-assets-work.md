@@ -2,59 +2,99 @@
 
 Reference: <https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/>
 
-## Overview
+The `assets` folder in your plugin is where you can store images (like plugin headers, icons, and screenshots) used on your plugin's display page.
 
-The `assets` folder in your WordPress plugin stores images for your plugin's display page, including headers, icons, and screenshots. All files should be placed in the top-level `assets` directory of your SVN repository — not within `trunk` or version-specific folders.
+All files should be placed into the `assets` directory of your SVN directory and will work for all versions of your plugin. This is a top level directory, just like `trunk`. You would **not** place the screenshots into `trunk/assets` or `tags/1.0/assets`.
 
-Images are served through a CDN and cached heavily. Updates may take several minutes to hours to appear, especially during high-traffic periods.
+All images are served through a CDN and cached heavily, so it may take a some time to update when changed or added. Please give the proxy some time to retrieve your images and cache them before reporting it's not working. It should only take a few minutes, but 6 hours is not unheard of when the servers are under high load (like the week before and during a release of a major version of WordPress).
 
 ## Default Image Sizes
 
-Image dimensions must match their filenames exactly. For example, "banner-772x250.png" should be precisely 772x250 pixels. Don't make your images larger or smaller than the existing names indicate, or they will look terrible.
+Image sizes should be the same as implied by the names. That is, `banner-772x250.png` should be 772 pixels wide by 250 pixels high. Similarly, `icon-256x256.png` should be a 256×256 square.
+
+We have **not** defined any new banner sizes so please don't try to be clever and rename yours thinking they'll work. They simply won't show. Similarly, don't make your images larger (or smaller) and use the existing names. Things will look terrible.
 
 ## Plugin Headers
 
-Headers are the banner images displayed at the top of your plugin's page.
+Plugin headers are those images you see at the top of a plugin page:
 
-Filename options:
+When designing your header image, keep in mind the use of international plugin directories. Some of these, like [Hebrew](https://he.wordpress.org/plugins/) and [Arabic](https://ar.wordpress.org/plugins/), use Right-To-Left (RTL) languages. Ideally, design your banner such that the elements included in the image can be positioned from right to left or from left to right. You can create a different image for RTL pages, with `-rtl` in the name.
 
-- Standard: `banner-772x250.(jpg|png)`
-- Retina (High-DPI): `banner-1544x500.(jpg|png)`
-- Localized versions: add language codes like `-rtl`, `-es`, or `-es_ES`
+### Filenames
 
-For right-to-left language directories (Hebrew, Arabic), design banners flexibly or create separate RTL versions. Maximum file size is 4MB.
+- Normal Banner: `banner-772x250.(jpg|png)`
+- Normal Banner (Localized): `banner-772x250-(rtl|es|es_ES).(jpg|png)`
+- High-DPI (Retina): `banner-1544x500.(jpg|png)`
+- High-DPI (Retina Localized): `banner-1544x500-(rtl|es|es_ES).(jpg|png)`
+
+Images can be localised to a specific language, or for all RTL languages.  
+The locale can be specified as a full locale (`es_ES`) or as a partial locale (`es`), if the language is RTL and a locale-specific image isn't provided, the `rtl` image will be checked for.  
+Do not duplicate English images into RTL and locale-specific files without making alterations, the English variant will be used instead.
+
+For example of an RTL image, look at bbPress [in English](https://wordpress.org/plugins/bbpress/) and then [in Arabic](https://ar.wordpress.org/plugins/bbpress/).
+
+For an example of Retina images, [check out Hello Dolly](https://wordpress.org/extend/plugins/hello-dolly/) or [Pluginception](https://wordpress.org/plugins/pluginception/). You *cannot* use the retina image alone, it only works as an "add-on" to the 772×250 image. The larger 'retina' image is only used on displays that can show the higher detail.
+
+4MB is the maximum size for headers images, but smaller is better.
 
 ## Plugin Icons
 
-Icons appear in search results and WordPress administration areas. You can use PNG, JPG, GIF, or SVG formats. If you provide SVG, also include a PNG fallback for older browsers and Facebook compatibility.
+Plugin icons are square images that show on the side of the plugin in searches on WordPress.org but also on the back-end of WordPress.org.
 
-Filename options:
+In addition to JPG and PNG formats, you can also use **SVG**. Vectors are perfect for icons, as they can be scaled to any size and the file itself is small. If you chose to use SVGs, you *must* also use a PNG icon as a fallback, otherwise your plugin icon will not display properly in older browsers or on Facebook.
 
-- Standard: `icon-128x128.(png|jpg|gif)`
-- Retina: `icon-256x256.(png|jpg|gif)`
-- Vector: `icon.svg`
+If you do not use an icon, an auto-generated one will be made for you. Some examples are the circled icons below:
 
-Maximum file size: 1MB.
+1MB is the maximum file size for icons, but as with headers, the smaller the better.
+
+### Filenames
+
+- Normal: `icon-128x128.(png|jpg|gif)`
+- High-DPI (Retina): `icon-256x256.(png|jpg|gif)`
+- SVG: `icon.svg`
+
+There are no plans to change these sizes.
 
 ## Screenshots
 
-Screenshots illustrate your plugin's features and dashboard interface. Include one screenshot for each numbered line in your `readme.txt` file — those lines become captions.
+Screenshots show on the main page of your plugin, and are used to illustrate aspects of the plugin admin dashboard or live examples. There should be **one** screenshot for every line in your `readme.txt` file. The content of the lines will become the captions of the screenshots on your plugin's page.
 
-Filename options:
+For example: `1. This is a monkey`
+
+That would show the caption 'This is a monkey' under the first screenshot. Presumably of a monkey.
+
+Screenshots *must* be local to display. Links to external files won't work.
+
+10MB is maximum file size for screenshots, but as always, the smaller the better.
+
+### Filenames
 
 - `screenshot-1.(png|jpg)`
 - `screenshot-2.(png|jpg)`
-- Localized: `screenshot-1-de.(png|jpg)` (for German, etc.)
 
-All filenames must be lowercase. Maximum file size: 10MB. Screenshots must be local files; external links won't display.
+All filenames should be lowercase; uppercase names won't work.
 
-## Common Issues
+Screenshots can be localized similar to banners, the following filenames would take priority over the above English names when the plugin is viewed in German:
 
-If images download instead of displaying, you need to set proper MIME types via SVN:
+- `screenshot-1-de.(png|jpg)`
+- `screenshot-2-de.(png|jpg)`
+
+## Issues
+
+If you find your images are downloading when people click on them from your WordPress.org Plugin Directory page, you'll need to make a change in how you upload them via SVN. It's due to how some images are sent with the `Content-Type application/octet-stream`.
+
+To fix it, run this command:
 
 ```
 svn propset svn:mime-type image/png *.png
 svn propset svn:mime-type image/jpeg *.jpg
 ```
 
-Alternatively, add these settings to `~/.subversion/config` for future uploads.
+Alternatively, plugin authors can set this in their ~/.subversion/config file:
+
+```
+*.png = svn:mime-type=image/png
+*.jpg = svn:mime-type=image/jpeg
+```
+
+That'll apply to only new files though. Fixing already-committed files will require the command above.

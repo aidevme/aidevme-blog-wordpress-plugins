@@ -2,14 +2,14 @@
 
 Reference: <https://developer.wordpress.org/plugins/administration-menus/>
 
-## Overview
-
 Administration Menus are the interfaces displayed in WordPress Administration. They allow you to add option pages for your plugin.
 
-For details on working with Navigation Menus, refer to the Theme Developer Handbook's Navigation Menus section.
+> For information on managing Navigation Menus, see the Navigation Menus chapter of the Theme Developer Handbook.
 
 ## Top-Level Menus and Sub-Menus
 
-The primary menus appear along the left sidebar of WordPress Administration, with each capable of containing sub-menu items.
+The Top-level menus are rendered along the left side of the WordPress Administration. Each menu may contain a set of Sub-menus.
 
-When choosing between these menu types, developers should carefully evaluate their plugin's requirements and user expectations. Plugins with a single settings page should place it as a sub-menu under existing top-level menus like Settings or Tools, rather than creating a new top-level menu.
+When deciding between [Top-level menus](https://developer.wordpress.org/plugins/administration-menus/top-level-menus/) and [Sub-menus](https://developer.wordpress.org/plugins/administration-menus/sub-menus/) think carefully about the needs of your plugin as well as the needs of your end users.
+
+> We recommend developers with a single option page to add it as Sub-menu to one of the existing Top-level menus; such as Settings or Tools.

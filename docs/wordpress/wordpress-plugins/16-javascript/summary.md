@@ -2,32 +2,81 @@
 
 Reference: <https://developer.wordpress.org/plugins/javascript/summary/>
 
-## Overview
+Here are all the example code snippets from the preceding discussion, assembled into two complete code pages: one for jQuery and the other for PHP.
 
-This page presents complete code examples for implementing AJAX functionality in WordPress plugins, consolidated from the earlier discussion sections.
+## PHP
 
-## PHP Implementation
+This code resides on one of your plugin pages.
 
-The PHP code belongs in your plugin file and handles server-side operations:
+```php
+add_action( 'admin_enqueue_scripts', 'my_enqueue' );
+function my_enqueue( $hook ) {
+   if ( 'myplugin_settings.php' !== $hook ) {
+      return;
+   }
 
-- Enqueues JavaScript files and dependencies using the `admin_enqueue_scripts` hook
-- Establishes a security nonce for safe AJAX communication
-- Uses `wp_localize_script()` to pass the admin AJAX URL and nonce to the frontend
-- Implements an AJAX handler that validates the nonce, processes user data, and returns results
-- Calls `wp_die()` to properly terminate the AJAX request
+   wp_enqueue_script(
+      'ajax-script',
+      plugins_url( '/js/myjquery.js', __FILE__ ),
+      array( 'jquery' ),
+      '1.0.0',
+      true
+   );
 
-## jQuery/JavaScript Implementation
+   $title_nonce = wp_create_nonce( 'title_example' );
+   wp_localize_script(
+      'ajax-script',
+      'my_ajax_obj',
+      array(
+         'ajax_url' => admin_url( 'admin-ajax.php' ),
+         'nonce'    => $title_nonce,
+      )
+   );
+}
 
-The client-side JavaScript file (`js/myjquery.js`) contains:
+add_action( 'wp_ajax_my_tag_count', 'my_ajax_handler' );
+function my_ajax_handler() {
+   check_ajax_referer( 'title_example' );
 
-- A document-ready wrapper for initialization
-- An event listener monitoring changes to preference elements
-- A POST request sending the nonce, action identifier, and user selection
-- A callback function that removes outdated information and inserts the server response
+   $title = wp_unslash( $_POST['title'] );
 
-After processing, the plugin stores user preferences and displays the resulting post count alongside the selected title.
+   update_user_meta( get_current_user_id(), 'title_preference', $title );
 
-## Additional Resources
+   $args = array(
+      'tag' => $title,
+   );
 
-- How To Use AJAX In WordPress (Smashing Magazine)
-- AJAX for WordPress (Glenn Messersmith)
+   $the_query = new WP_Query( $args );
+
+   echo esc_html( $title ) . ' (' . $the_query->post_count . ') ';
+
+   wp_die(); // all ajax handlers should die when finished
+}
+```
+
+## jQuery
+
+This code is in the file `js/myjquery.js` below your plugin folder.
+
+```javascript
+jQuery(document).ready(function($) {        //wrapper
+    $(".pref").change(function() {            //event
+        var this2 = this;                    //use in callback
+        $.post(my_ajax_obj.ajax_url, {        //POST request
+           _ajax_nonce: my_ajax_obj.nonce, //nonce
+            action: "my_tag_count",        //action
+              title: this.value                //data
+          }, function(data) {                   //callback
+            this2.nextSibling.remove();    //remove the current title
+            $(this2).after(data);            //insert server response
+        });
+    });
+});
+```
+
+And after storing the preference, the resulting post count is added to the selected title.
+
+## More Information
+
+- [How To Use AJAX In WordPress](http://wp.smashingmagazine.com/2011/10/18/how-to-use-ajax-in-wordpress/)
+- [AJAX for WordPress](http://www.glennmessersmith.com/pages/wpajax.html)

@@ -2,8 +2,4 @@
 
 Reference: <https://developer.wordpress.org/plugins/javascript/>
 
-## Overview
-
-JavaScript represents a crucial element within WordPress plugin development. The WordPress platform includes a variety of JavaScript libraries bundled with core.
-
-jQuery stands among the most prevalent JavaScript frameworks utilized in WordPress environments. Its lightweight nature and straightforward implementation make it an ideal choice for developers. This library enables plugin creators to interact with DOM elements and facilitate AJAX functionality.
+JavaScript is an important component in many WordPress plugins. WordPress comes with a [variety of JavaScript libraries bundled with core](https://developer.wordpress.org/theme/basics/including-css-javascript/#default-scripts-included-and-registered-by-wordpress). One of the most commonly-used libraries in WordPress is jQuery because it is lightweight and easy to use. jQuery can be used in your plugin to manipulate the DOM object or to perform Ajax actions.

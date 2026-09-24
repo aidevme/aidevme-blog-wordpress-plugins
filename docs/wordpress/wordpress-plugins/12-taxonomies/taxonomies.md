@@ -2,26 +2,14 @@
 
 Reference: <https://developer.wordpress.org/plugins/taxonomies/>
 
-## Overview
+A **Taxonomy** is a fancy word for the classification/grouping of things. Taxonomies can be hierarchical (with parents/children) or flat.
 
-A Taxonomy is a mechanism for classifying and organizing content. These organizational structures can feature hierarchical relationships (parent-child arrangements) or operate as flat classifications.
+WordPress stores the Taxonomies in the `term_taxonomy` database table allowing developers to register Custom Taxonomies along the ones that already exist.
 
-## Key Concepts
+Taxonomies have **Terms** which serve as the topic by which you classify/group things. They are stored inside the `terms` table.
 
-WordPress manages taxonomies within the `term_taxonomy` database table, enabling developers to establish Custom Taxonomies alongside built-in options. Taxonomies have Terms which serve as the topic by which you classify/group things, stored in the `terms` table.
+For example: a Taxonomy named "Art" can have multiple Terms, such as "Modern" and "18th Century".
 
-## Example
+This chapter will show you how to register Custom Taxonomies, how to retrieve their content from the database, and how to render them to the public.
 
-Consider a taxonomy labeled "Art" containing multiple terms such as "Modern" and "18th Century" that categorize related content.
-
-## Scope
-
-This guide covers:
-
-- Registering Custom Taxonomies
-- Retrieving taxonomy data from the database
-- Displaying taxonomies to site visitors
-
-## Historical Note
-
-WordPress versions 3.4 and earlier included a "Links" taxonomy, which was deprecated in version 3.5.
+> WordPress 3.4 and earlier had a Taxonomy named "Links" which was deprecated in WordPress 3.5.

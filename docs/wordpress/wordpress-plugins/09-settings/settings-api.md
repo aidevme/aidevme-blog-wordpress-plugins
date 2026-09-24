@@ -8,11 +8,19 @@ New settings pages can be registered along with sections and fields inside them.
 
 Organizing registration and validation of fields still requires some effort from developers, but avoids a lot of complex debugging of underlying options management.
 
-When using the Settings API, the form POST to `wp-admin/options.php` which provides fairly strict capabilities checking. Users will need the `manage_options` capability (and in Multisite will have to be a Super Admin) to submit the form.
+> When using the Settings API, the form POST to
+> 
+> wp-admin/options.php
+> 
+> which provides fairly strict capabilities checking. Users will need the
+> 
+> manage_options
+> 
+> capability (and in Multisite will have to be a Super Admin) to submit the form.
 
 ## Why Use the Setting API?
 
-A developer could ignore this API and write their own settings page without it. That begs the question, what benefit does this API bring to the table? Following is a quick rundown of some of the benefits.
+A developer *could* ignore this API and write their own settings page without it. That begs the question, what benefit does this API bring to the table? Following is a quick rundown of some of the benefits.
 
 ### Visual Consistency
 
@@ -26,13 +34,16 @@ Since the API is part of WordPress Core, any updates will automatically consider
 
 Of course the most immediate benefit is that the WordPress API does a lot of work for you under the hood. Here are a few examples of things the Settings API does besides applying an awesome-looking, integrated design.
 
-- **Handling Form Submissions** - Let WordPress handle retrieving and storing your `$_POST` submissions.
-- **Include Security Measures** - You get extra security measures such as nonces, etc. for free.
-- **Sanitizing Data** - You get access to the same methods that the rest of WordPress uses for ensuring strings are safe to use.
+- **Handling Form Submissions –** Let WordPress handle retrieving and storing your $_POST submissions.
+- **Include Security Measures –** You get extra security measures such as nonces, etc. for free.
+- **Sanitizing Data –** You get access to the same methods that the rest of WordPress uses for ensuring strings are safe to use.
 
 ## Function Reference
 
-- Setting Register/Unregister: `register_setting()`, `unregister_setting()`
-- Add Field/Section: `add_settings_section()`, `add_settings_field()`
-- Options Form Rendering: `settings_fields()`, `do_settings_sections()`, `do_settings_fields()`
-- Errors: `add_settings_error()`, `get_settings_errors()`, `settings_errors()`
+| Setting Register/Unregister | Add Field/Section |
+| --- | --- |
+| [register_setting()](https://developer.wordpress.org/reference/functions/register_setting/)    [unregister_setting()](https://developer.wordpress.org/reference/functions/unregister_setting/) | [add_settings_section()](https://developer.wordpress.org/reference/functions/add_settings_section/)    [add_settings_field()](https://developer.wordpress.org/reference/functions/add_settings_field/) |
+
+| Options Form Rendering | Errors |
+| --- | --- |
+| [settings_fields()](https://developer.wordpress.org/reference/functions/settings_fields/)    [do_settings_sections()](https://developer.wordpress.org/reference/functions/do_settings_sections/)    [do_settings_fields()](https://developer.wordpress.org/reference/functions/do_settings_fields/) | [add_settings_error()](https://developer.wordpress.org/reference/functions/add_settings_error/)    [get_settings_errors()](https://developer.wordpress.org/reference/functions/get_settings_errors/)    [settings_errors()](https://developer.wordpress.org/reference/functions/settings_errors/) |

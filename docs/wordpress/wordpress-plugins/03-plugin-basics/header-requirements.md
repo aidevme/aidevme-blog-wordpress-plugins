@@ -2,7 +2,7 @@
 
 Reference: <https://developer.wordpress.org/plugins/plugin-basics/header-requirements/>
 
-As described in Getting Started, the main PHP file should include a header comment that tells WordPress that a file is a plugin and provides information about the plugin.
+As described in [Getting Started](https://developer.wordpress.org/plugins/plugin-basics/#getting-started), the main PHP file should include header comment what tells WordPress that a file is a plugin and provides information about the plugin.
 
 ## Minimum Fields
 
@@ -26,13 +26,13 @@ Available header fields:
 - **Requires PHP:** The minimum required PHP version.
 - **Author:** The name of the plugin author. Multiple authors may be listed using commas.
 - **Author URI:** The author's website or profile on another website, such as WordPress.org.
-- **License:** The short name (slug) of the plugin's license (e.g. GPLv2). More information about licensing can be found in the WordPress.org guidelines.
-- **License URI:** A link to the full text of the license (e.g. https://www.gnu.org/licenses/gpl-2.0.html).
-- **Text Domain:** The gettext text domain of the plugin. More information can be found in the Text Domain section of the How to Internationalize your Plugin page.
-- **Domain Path:** The domain path lets WordPress know where to find the translations. More information can be found in the Domain Path section of the How to Internationalize your Plugin page.
-- **Network:** Whether the plugin can only be activated network-wide. Can only be set to *true*, and should be left out when not needed.
-- **Update URI:** Allows third-party plugins to avoid accidentally being overwritten with an update of a plugin of a similar name from the WordPress.org Plugin Directory. For more info read related dev note.
-- **Requires Plugins:** A comma-separated list of WordPress.org-formatted slugs for its dependencies, such as `my-plugin` (`my-plugin/my-plugin.php` is not supported). It does not support commas in plugin slugs. For more info read the related dev note.
+- **License:** The short name (slug) of the plugin's license (e.g. GPLv2). More information about licensing can be found in the [WordPress.org guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#1-plugins-must-be-compatible-with-the-gnu-general-public-license).
+- **License URI:** A link to the full text of the license (e.g. [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)).
+- **Text Domain:** The [gettext](https://www.gnu.org/software/gettext/) text domain of the plugin. More information can be found in the [Text Domain](https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/#text-domains) section of the [How to Internationalize your Plugin](https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/) page.
+- **Domain Path:** The domain path lets WordPress know where to find the translations. More information can be found in the [Domain Path](https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/#domain-path) section of the [How to Internationalize your Plugin](https://developer.wordpress.org/plugins/internationalization/how-to-internationalize-your-plugin/) page.
+- **Network:**Whether the plugin can only be activated network-wide. Can only be set to *true*, and should be left out when not needed.
+- **Update URI:** Allows third-party plugins to avoid accidentally being overwritten with an update of a plugin of a similar name from the WordPress.org Plugin Directory. For more info read related [dev note](https://make.wordpress.org/core/2021/06/29/introducing-update-uri-plugin-header-in-wordpress-5-8/).
+- **Requires Plugins**: A comma-separated list of WordPress.org-formatted slugs for its dependencies, such as `my-plugin` (`my-plugin/my-plugin.php` is not supported). It does not support commas in plugin slugs. For more info read the related [dev note](https://make.wordpress.org/core/2024/03/05/introducing-plugin-dependencies-in-wordpress-6-5/).
 
 A valid PHP file with a header comment might look like this:
 
@@ -85,4 +85,4 @@ Here's another example which allows file-level PHPDoc DocBlock as well as WordPr
 
 ## Notes
 
-When assigning a version number to your project, keep in mind that WordPress uses the PHP `version_compare()` function to compare plugin version numbers. Therefore, before you release a new version of your plugin, you should make sure that this PHP function considers the new version to be "greater" than the old one. For example, 1.02 is actually greater than 1.1.
+> When assigning a version number to your project, keep in mind that WordPress uses the PHP version_compare() function to compare plugin version numbers. Therefore, before you release a new version of your plugin, you should make sure that this PHP function considers the new version to be "greater" than the old one.  For example, 1.02 is actually greater than 1.1.

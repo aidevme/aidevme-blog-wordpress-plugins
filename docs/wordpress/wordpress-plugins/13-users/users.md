@@ -2,16 +2,18 @@
 
 Reference: <https://developer.wordpress.org/plugins/users/>
 
-## Overview
+A *User* is an access account with corresponding capabilities within the WordPress installation. Each WordPress user has, at the bare minimum, a username, password and email address.
 
-A WordPress user represents an access account with specific capabilities within a WordPress installation. Each account requires a username, password, and email address at minimum.
-
-Once created, users can log into the WordPress Admin interface or access WordPress programmatically. The system stores all user data in the `users` table.
+Once a user account is created, that user may log in using the WordPress Admin (or programmatically) to access WordPress functions and data. WordPress stores the Users in the `users` table.
 
 ## Roles and Capabilities
 
-WordPress organizes user permissions through roles, with each role containing a defined set of capabilities. Developers can establish custom roles with tailored capability sets. This system allows programmers to limit the set of actions an account can perform.
+Users are assigned [roles](https://developer.wordpress.org/plugins/users/roles-and-capabilities/#roles), and each role has a set of [capabilities](https://developer.wordpress.org/plugins/users/roles-and-capabilities/#capabilities).
+
+You can create new roles with their own set of capabilities. Custom capabilities can also be created and assigned to existing roles or new roles.
+
+In WordPress, developers can take advantage of user roles to limit the set of actions an account can perform.
 
 ## The Principle of Least Privileges
 
-WordPress follows a security practice of granting users only the essential permissions needed for their specific tasks. When developing plugins, you should apply this same principle by creating appropriate roles and verifying capabilities before executing sensitive operations.
+WordPress adheres to the principal of least privileges, the practice of giving a user *only* the privileges that are essential for performing the desired work. You should follow this lead when possible by creating roles where appropriate and checking capabilities before performing sensitive tasks.

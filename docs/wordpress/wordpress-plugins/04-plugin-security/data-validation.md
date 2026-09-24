@@ -6,16 +6,16 @@ Untrusted data comes from many sources (users, third party sites, even your own 
 
 Remember: Even admins are users, and users will enter incorrect data, either on purpose or accidentally. It's your job to protect them from themselves.
 
-Validating input is the process of testing data against a predefined pattern (or patterns) with a definitive result: valid or invalid. Validation is a more specific approach when compared to sanitization, but both have their roles.
+*Validating* input is the process of testing data against a predefined pattern (or patterns) with a definitive result: valid or invalid. Validation is a more specific approach when compared to sanitization, but both have their roles.
 
 Simple validation examples:
 
 - Check that required fields have not been left blank
 - Check that an entered phone number only contains numbers and punctuation
-- Check that a requested string is one of five valid options
+- Check that an requested string is one of five valid options
 - Check that a quantity field is greater than 0
 
-Data validation should be performed as early as possible. That means validating the data before performing any actions.
+**Data validation should be performed as early as possible.** That means validating the data before performing any actions.
 
 ## Validation Philosophies
 
@@ -27,7 +27,7 @@ Accept data only from a finite list of known and trusted values.
 
 When comparing untrusted data against the safelist, it's important to make sure that strict type checking is used. Otherwise an attacker could craft input in a way that will pass the safelist but still have a malicious effect.
 
-Comparison operator:
+#### Comparison Operator
 
 ```php
 $untrusted_input = '1 malicious string';  // will evaluate to integer 1 during loose comparisons
@@ -39,7 +39,7 @@ if ( 1 === $untrusted_input ) {  // == would have evaluated to true, but === eva
 }
 ```
 
-`in_array()`:
+#### in_array()
 
 ```php
 $untrusted_input = '1 malicious string';  // will evaluate to integer 1 during loose comparisons
@@ -52,7 +52,7 @@ if ( in_array( $untrusted_input, $safe_values, true ) ) {  // `true` enables str
 }
 ```
 
-`switch()`:
+#### switch()
 
 ```php
 $untrusted_input = '1 malicious string';  // will evaluate to integer 1 during loose comparisons
@@ -67,11 +67,11 @@ switch ( true ) {
 }
 ```
 
-### Blocklist
+#### Blocklist
 
-Reject data from a finite list of known untrusted values. This is very rarely a good idea.
+Reject data from finite list of known untrusted values. This is very rarely a good idea.
 
-### Format Detection
+#### Format Detection
 
 Test to see if the data is of the correct format. Only accept it if it is.
 
@@ -85,7 +85,7 @@ if ( preg_match( "/[^0-9.-]/", $data ) ) {
 }
 ```
 
-### Format Correction
+#### Format Correction
 
 Accept most any data, but remove or alter the dangerous pieces.
 
@@ -99,11 +99,11 @@ $trusted_slug = sanitize_title( $untrusted_slug );
 
 Let's say we have an input field designed to accept a US zipcode:
 
-```html
+```php
 <input type="text" id="wporg_zip_code" name="my-zipcode" maxlength="10" />
 ```
 
-Here we've told the browser to only allow up to ten characters of input... but there's no limitation on which characters they can input. They could enter 11221 or `eval()`.
+Here we've told the browser to only allow up to ten characters of input…but there's no limitation on *which* characters they can input. They could enter `11221` or `eval()`.
 
 This is where validation comes in. When processing the form, we write code to check each field for its proper data type, and discard it if it's incorrect.
 
@@ -124,7 +124,7 @@ function wporg_is_valid_us_zip_code( string $zip_code ):bool {
     }
 
     // Scenario 2: more than 10 characters.
-    // The `maxlength` attribute is only enforced by
+    // The `maxlength` attribute is only enforced by 
     // the browser, so we still need to validate the
     // length of the input on the server to protect
     // against a manual submission.
@@ -174,17 +174,17 @@ Passing `true` into the third parameter of `in_array()` enables strict type chec
 
 Most validation is done as part of custom code, but there are some helper functions too. These are in addition to the ones listed on the Sanitization page.
 
-- `balanceTags( $html )` or `force_balance_tags( $html )` - Tries to make sure HTML tags are balanced so that valid XML is output.
+- `balanceTags( $html )` or `force_balance_tags( $html )` – Tries to make sure HTML tags are balanced so that valid XML is output.
 - `count()` for checking how many items are in an array
 - `in_array()` for checking whether something exists in an array
 - `is_email()` will validate whether an email address is valid.
-- `is_array()` for checking whether something is an array
+- [`is_array()`](https://www.php.net/is_array) for checking whether something is an array
 - `mb_strlen()` or `strlen()` for checking that a string has the expected number of characters
 - `preg_match()`, `strpos()` for checking for occurrences of certain strings in other strings
-- `sanitize_html_class( $class, $fallback )` - Sanitizes a html classname to ensure it only contains valid characters. Strips the string down to A-Z,a-z,0-9,'-' and if this results in an empty string then it will return the alternate value supplied.
-- `tag_escape( $html_tag_name )` - Sanitizes an HTML tag name (does not escape anything, despite the name of the function).
+- `sanitize_html_class( $class, $fallback )` – Sanitizes a html classname to ensure it only contains valid characters. Strips the string down to A-Z,a-z,0-9,'-' and if this results in an empty string then it will return the alternate value supplied.
+- `tag_escape( $html_tag_name )` – Sanitizes an HTML tag name (does not escape anything, despite the name of the function).
 - `term_exists()` checks whether a tag, category, or other taxonomy term exists.
 - `username_exists()` checks if username exists.
 - `validate_file()` will validate that an entered file path is a real path (but not whether the file exists).
 
-Check the WordPress code reference for more functions like these. Search for functions with names like these: `*_exists()`, `*_validate()`, and `is_*()`. Not all of these are validation functions, but many are helpful.
+Check the [WordPress code reference](https://developer.wordpress.org/reference/) for more functions like these. Search for functions with names like these: `*_exists()`, `*_validate()`, and `is_*()`. Not all of these are validation functions, but many are helpful.

@@ -2,43 +2,49 @@
 
 Reference: <https://developer.wordpress.org/plugins/settings/options-api/>
 
-## Overview
+The Options API, added in WordPress 1.0, allows creating, reading, updating and deleting of WordPress options. In combination with the [Settings API](https://developer.wordpress.org/plugins/settings/settings-api/) it allows controlling of options defined in settings pages.
 
-The Options API, introduced in WordPress 1.0, enables developers to create, read, update, and delete WordPress options. When paired with the Settings API, it facilitates management of options established through settings pages.
+## Where Options are Stored?
 
-## Storage Location
+Options are stored in the `{$wpdb->prefix}_options` table. `$wpdb->prefix` is defined by the `$table_prefix` variable set in the `wp-config.php` file.
 
-Options are maintained in the `{$wpdb->prefix}_options` database table, where the prefix originates from the `$table_prefix` variable configured in `wp-config.php`.
+## How Options are Stored?
 
-## Storage Methods
+Options may be stored in the WordPress database in one of two ways: as a single value or as an array of values.
 
-Options can be persisted in two formats:
+### Single Value
 
-### Single Value Storage
-
-Individual option names map to singular values:
+When saved as a single value, the option name refers to a single value.
 
 ```php
+// add a new option
 add_option('wporg_custom_option', 'hello world!');
+// get an option
 $option = get_option('wporg_custom_option');
 ```
 
-### Array-Based Storage
+### Array of Values
 
-Option names can reference arrays containing key/value pairs:
+When saved as an array of values, the option name refers to an array, which itself may be comprised key/value pairs.
 
 ```php
-$data_r = array('title' => 'hello world!', 1, false);
+// array of options
+$data_r = array('title' => 'hello world!', 1, false );
+// add a new option
 add_option('wporg_custom_option', $data_r);
+// get an option
 $options_r = get_option('wporg_custom_option');
+// output the title
 echo esc_html($options_r['title']);
 ```
 
-When you store or retrieve an array of options, it happens in a single transaction, which is ideal. Storing related options as arrays minimizes database transactions compared to individual option retrieval.
+If you are working with a large number of related options, storing them as an array can have a positive impact on overall performance.
 
-## Core Functions
+> Accessing data as individual options may result in many individual database transactions, and as a rule, database transactions are expensive operations (in terms of time and server resources). When you store or retrieve an array of options, it happens in a single transaction, which is ideal.
 
-- Add — `add_option()` (single-site), `add_site_option()` (multi-site)
-- Retrieve — `get_option()` (single-site), `get_site_option()` (multi-site)
-- Update — `update_option()` (single-site), `update_site_option()` (multi-site)
-- Remove — `delete_option()` (single-site), `delete_site_option()` (multi-site)
+## Function Reference
+
+| Add Option | Get Option | Update Option | Delete Option |
+| --- | --- | --- | --- |
+| [add_option()](https://developer.wordpress.org/reference/functions/add_option/) | [get_option()](https://developer.wordpress.org/reference/functions/get_option/) | [update_option()](https://developer.wordpress.org/reference/functions/update_option/) | [delete_option()](https://developer.wordpress.org/reference/functions/delete_option/) |
+| [add_site_option()](https://developer.wordpress.org/reference/functions/add_site_option/) | [get_site_option()](https://developer.wordpress.org/reference/functions/get_site_option/) | [update_site_option()](https://developer.wordpress.org/reference/functions/update_site_option/) | [delete_site_option()](https://developer.wordpress.org/reference/functions/delete_site_option/) |

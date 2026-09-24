@@ -4,20 +4,60 @@ Reference: <https://developer.wordpress.org/plugins/users/working-with-user-meta
 
 ## Introduction
 
-WordPress' users table was designed to contain only the essential information about the user.
+WordPress' `users` table was designed to contain only the essential information about the user.
 
-As of WP 4.7 the table contains: ID, user_login, user_pass, user_nicename, user_email, user_url, user_registered, user_activation_key, user_status and display_name.
+> As of WP 4.7 the table contains:
+> 
+> ID
+> 
+> ,
+> 
+> user_login
+> 
+> ,
+> 
+> user_pass
+> 
+> ,
+> 
+> user_nicename
+> 
+> ,
+> 
+> user_email
+> 
+> ,
+> 
+> user_url
+> 
+> ,
+> 
+> user_registered
+> 
+> ,
+> 
+> user_activation_key
+> 
+> ,
+> 
+> user_status
+> 
+> and
+> 
+> display_name
+> 
+> .
 
-Because of this, to store additional data, the usermeta table was introduced, which can store any arbitrary amount of data about a user.
+Because of this, to store additional data, the `usermeta` table was introduced, which can store any arbitrary amount of data about a user.
 
-Both tables are tied together using one-to-many relationship based on the ID in the users table.
+Both tables are tied together using one-to-many relationship based on the `ID` in the `users` table.
 
 ## Manipulating User Metadata
 
 There are two main ways for manipulating User Metadata.
 
-- A form field in the user's profile screen.
-- Programmatically, via a function call.
+1. A form field in the user's profile screen.
+2. Programmatically, via a function call.
 
 ### via a Form Field
 
@@ -25,17 +65,17 @@ The form field option is suitable for cases where the user will have access to t
 
 Before we dive into an example, it's important to understand the hooks involved in the process and why they are there.
 
-**`show_user_profile` hook**
+#### show_user_profile hook
 
-This action hook is fired whenever a user edits it's own user profile.
+This action hook is fired whenever a user edits **it's own** user profile.
 
-Remember, a user that doesn't have the capability of editing his own profile won't fire this hook.
+**Remember,** a user that doesn't have the capability of editing his own profile won't fire this hook.
 
-**`edit_user_profile` hook**
+#### edit_user_profile hook
 
-This action hook is fired whenever a user edits a user profile of somebody else.
+This action hook is fired whenever a user edits a user profile of **somebody else**.
 
-Remember, a user that doesn't have the capability for editing 3rd party profiles won't fire this hook.
+**Remember,** a user that doesn't have the capability for editing 3rd party profiles won't fire this hook.
 
 #### Example Form Field
 
@@ -72,7 +112,7 @@ function wporg_usermeta_form_field_birthday( $user ) {
     </table>
     <?php
 }
-
+ 
 /**
  * The save action.
  *
@@ -85,7 +125,7 @@ function wporg_usermeta_form_field_birthday_update( $user_id ) {
     if ( ! current_user_can( 'edit_user', $user_id ) ) {
         return false;
     }
-
+ 
     // create/update user meta for the $user_id
     return update_user_meta(
         $user_id,
@@ -93,25 +133,25 @@ function wporg_usermeta_form_field_birthday_update( $user_id ) {
         $_POST['birthday']
     );
 }
-
+ 
 // Add the field to user's own profile editing screen.
 add_action(
     'show_user_profile',
     'wporg_usermeta_form_field_birthday'
 );
-
+ 
 // Add the field to user profile editing screen.
 add_action(
     'edit_user_profile',
     'wporg_usermeta_form_field_birthday'
 );
-
+ 
 // Add the save action to user's own profile editing screen update.
 add_action(
     'personal_options_update',
     'wporg_usermeta_form_field_birthday_update'
 );
-
+ 
 // Add the save action to user profile editing screen update.
 add_action(
     'edit_user_profile_update',

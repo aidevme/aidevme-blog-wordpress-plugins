@@ -1,33 +1,22 @@
 # Reporting Plugin Security Issues
 
-Reference: <https://developer.wordpress.org/plugins/wordpress-org/plugin-security/reporting-plugin-security-issues/>
+Reference: <https://developer.wordpress.org/plugins/wordpress-org/reporting-plugin-security-issues/>
 
-## Overview
+> Please do not report security issues with WordPress Core to the plugin team. To report an issue with WordPress itself,
+> 
+> follow the directions for reporting security vulnerabilities.
 
-The WordPress plugin team provides guidance on responsibly disclosing security vulnerabilities found in plugins. This process is distinct from reporting WordPress Core issues.
+If you find a plugin with a security issue, please **do not** post about it publicly anywhere. Even if there's a report filed on one of the official security tracking sites, bringing more awareness to the security issue tends to increase people being hacked, and rarely speeds up the fixing.
 
-## Key Guidelines
+To report a plugin, please email `plugins@wordpress.org` with the following:
 
-Do not report Core issues here — security problems with WordPress itself require following separate procedures outlined in the core security handbook.
+- a clear and concise description of the issue
+- a link to the specific plugin
+- whether or not you have validated the security issue yourself
+- **optional** – links to any public disclosures on 3rd party sites
 
-Maintain confidentiality — do not share vulnerability details publicly, since bringing more awareness to the security issue tends to increase people being hacked.
+In the case of serious exploits, please keep in mind responsible and reasonable disclosure. Every attempt to contact the developer directly should be made *before* you reported the plugin to us (though we understand this can be difficult – check in the source code of the plugin first, many developers list their emails). If you cannot contact them privately, please contact us directly and we'll help out.
 
-## Submission Process
+Most plugins are closed to prevent new downloads until the issue is resolved. As such, you may *not* be alerted of a fix until the plugin is updated. We also **do not** provide assistance with filing CVEs at this time, due to a lack of resources. You're welcome to do so on your own, but we cannot help you.
 
-Report plugin vulnerabilities by emailing `plugins@wordpress.org` with:
-
-- A clear description of the problem
-- The plugin's link
-- Confirmation of whether you've validated the issue
-- Optional links to any public disclosures
-
-## Responsible Disclosure
-
-For serious exploits, attempt contacting the developer directly first (check the plugin source code for contact information). If direct contact proves impossible, WordPress.org will assist.
-
-## Important Notes
-
-- Plugins are typically closed to prevent downloads during remediation
-- Updates may not be announced until resolution occurs
-- WordPress.org doesn't currently assist with CVE filings due to resource constraints
-- If you've already published vulnerability details, retain that documentation — WordPress will share it with developers
+If you've already posted the vulnerability in public and provided a link to your report, please do not delete it! We will pass it on directly to the developers of the plugin.

@@ -16,17 +16,17 @@ This table illustrates the differences between deactivation and uninstall.
 | --- | --- | --- |
 | Flush Cache/Temp | Yes | No |
 | Flush Permalinks | Yes | No |
-| Remove Options from `{$wpdb->prefix}_options` | No | Yes |
-| Remove Tables from `wpdb` | No | Yes |
+| Remove Options from {$[wpdb](https://developer.wordpress.org/reference/classes/wpdb/)->prefix}_options | No | Yes |
+| Remove Tables from [wpdb](https://developer.wordpress.org/reference/classes/wpdb/) | No | Yes |
 
 ## Method 1: register_uninstall_hook
 
-To set up an uninstall hook, use the `register_uninstall_hook()` function:
+To set up an uninstall hook, use the [register_uninstall_hook()](https://developer.wordpress.org/reference/functions/register_uninstall_hook/) function:
 
 ```php
 register_uninstall_hook(
-	__FILE__,
-	'pluginprefix_function_to_run'
+    __FILE__,
+    'pluginprefix_function_to_run'
 );
 ```
 
@@ -36,11 +36,19 @@ To use this method you need to create an `uninstall.php` file inside the root fo
 
 For example: `/plugin-name/uninstall.php`
 
-Always check for the constant `WP_UNINSTALL_PLUGIN` in `uninstall.php` before doing anything. This protects against direct access.
-
-The constant will be defined by WordPress during the `uninstall.php` invocation.
-
-The constant is *not* defined when uninstall is performed by `register_uninstall_hook()`.
+> Always check for the constant
+> 
+> WP_UNINSTALL_PLUGIN
+> 
+> in
+> 
+> uninstall.php
+> 
+> before doing anything. This protects against direct access.
+> 
+> The constant will be defined by WordPress during the `uninstall.php` invocation.
+> 
+> The constant is **NOT** defined when uninstall is performed by [register_uninstall_hook()](https://developer.wordpress.org/reference/functions/register_uninstall_hook/) .
 
 Here is an example deleting option entries and dropping a database table:
 
@@ -62,4 +70,4 @@ global $wpdb;
 $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}mytable" );
 ```
 
-In Multisite, looping through all blogs to delete options can be very resource intensive.
+> In Multisite, looping through all blogs to delete options can be very resource intensive.
